@@ -1,4 +1,5 @@
 // Hex math defined here: http://blog.ruslans.com/2011/02/hexagonal-grid-math.html
+var hexes = [];
 
 function HexagonGrid(canvasId, radius) {
     this.radius = radius;
@@ -38,10 +39,13 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
             }
 
             if (isDebug) {
-                debugText = col + "," + row;
+                //debugText = col + "," + row;
             }
-
-            this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
+			if((hexes.selectedColumn==col && hexes.selectedRow==row) && (typeof hexes.selectedColumn != 'undefined' && typeof hexes.selectedRow != 'undefined')){
+				this.drawHex(currentHexX, currentHexY, "#00F2FF", debugText, false);
+			}else{
+				this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
+			}
         }
         offsetColumn = !offsetColumn;
     }
@@ -87,6 +91,7 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
         this.context.fillStyle = "#000";
         this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4), y0 + (this.height - 5));
     }
+
 };
 
 //Recusivly step up to the body to calculate canvas offset.
@@ -122,8 +127,6 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 	console.log("Row: " + row);
     //Test if on left side of frame            
     if (mouseX > (column * this.side) && mouseX < (column * this.side) + this.width - this.side) {
-
-
         //Now test which of the two triangles we are in 
         //Top left triangle points
         var p1 = new Object();
@@ -204,18 +207,18 @@ HexagonGrid.prototype.clickEvent = function (e) {
     if (tile.column >= 0 && tile.row >= 0) {
         var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
         var drawx = (tile.column * this.side) + this.canvasOriginX;
-		if(tile.column == hexes.selectedColumn){
-			console.log("Is the column " + tile.column + " equal to the column " + hexes.selectedColumn);
-		}
-		console.log("Is the row " + tile.row + " equal to the row " + hexes.selectedRow);
 		if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
-			this.drawHex(drawx, drawy - 6, "", "", true, true);
-			hexes.selectedColumn="";
-			hexes.selectedRow="";
+			//this.drawHex(drawx, drawy - 6, "", "", true, true);
+			delete hexes.selectedColumn;
+			delete hexes.selectedRow;
+			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			hexagonGrid.drawHexGrid(50, 50, 25, 25, true);
 		}else{
-			this.drawHex(drawx, drawy - 6, "", "", true, false);
+			//this.drawHex(drawx, drawy - 6, "", "", true, false);
 			hexes.selectedColumn=tile.column;
 			hexes.selectedRow=tile.row;
+			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			hexagonGrid.drawHexGrid(50, 50, 25, 25, true);
 		}
 		
     } 
