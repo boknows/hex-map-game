@@ -26,7 +26,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     var debugText = "";
 
     var offsetColumn = false;
-
+	var hexNum = 1;
     for (var col = 0; col < cols; col++) {
         for (var row = 0; row < rows; row++) {
 
@@ -39,13 +39,14 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
             }
 
             if (isDebug) {
-                //debugText = col + "," + row;
+                debugText = hexNum;
+				hexNum++;
             }
-			if((hexes.selectedColumn==col && hexes.selectedRow==row) && (typeof hexes.selectedColumn != 'undefined' && typeof hexes.selectedRow != 'undefined')){
-				this.drawHex(currentHexX, currentHexY, "#00F2FF", debugText, false);
-			}else{
+			//if((hexes.selectedColumn==col && hexes.selectedRow==row) && (typeof hexes.selectedColumn != 'undefined' && typeof hexes.selectedRow != 'undefined')){
+			//	this.drawHex(currentHexX, currentHexY, "#00F2FF", debugText, true);
+			//}else{
 				this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
-			}
+			//}
         }
         offsetColumn = !offsetColumn;
     }
@@ -58,15 +59,15 @@ HexagonGrid.prototype.drawHexAtColRow = function(column, row, color) {
     this.drawHex(drawx, drawy, color, "");
 };
 
-HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, revert) {
-    if (highlight == true && revert == false){
+HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight) {
+    if (highlight == true){
 		this.context.strokeStyle = "#00F2FF";
-	}else if(highlight == true && revert == true){
-		this.context.strokeStyle = "#000";
+		this.context.lineWidth = 3;
 	}else{
 		this.context.strokeStyle = "#000";
+		this.context.lineWidth = 2;
 	}
-	this.context.lineWidth = 2;
+	
     this.context.beginPath();
     this.context.moveTo(x0 + this.width - this.side, y0);
     this.context.lineTo(x0 + this.side, y0);
@@ -75,9 +76,6 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
     this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
     this.context.lineTo(x0, y0 + (this.height / 2));
 	
-	if (highlight == true){
-		
-	}
     if (fillColor && highlight == false) {
         this.context.fillStyle = fillColor;
         this.context.fill();
@@ -87,9 +85,15 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
     this.context.stroke();
 
     if (debugText) {
-        this.context.font = "5px";
+        this.context.font = "8px";
         this.context.fillStyle = "#000";
-        this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4), y0 + (this.height - 5));
+		if(debugText < 10){
+			this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/10), y0 + (this.height / 2) + (this.height / 7));
+		}else if(debugText < 100){
+			this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4.5), y0 + (this.height / 2) + (this.height / 7));
+		}else{
+			this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/3.25), y0 + (this.height / 2) + (this.height / 7));
+		}
     }
 
 };
@@ -175,7 +179,6 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
             }
         }
     }
-
     return  { row: row, column: column };
 };
 
@@ -187,11 +190,9 @@ HexagonGrid.prototype.sign = function(p1, p2, p3) {
 //TODO: Replace with optimized barycentric coordinate method
 HexagonGrid.prototype.isPointInTriangle = function isPointInTriangle(pt, v1, v2, v3) {
     var b1, b2, b3;
-
     b1 = this.sign(pt, v1, v2) < 0.0;
     b2 = this.sign(pt, v2, v3) < 0.0;
     b3 = this.sign(pt, v3, v1) < 0.0;
-
     return ((b1 == b2) && (b2 == b3));
 };
 
@@ -207,19 +208,19 @@ HexagonGrid.prototype.clickEvent = function (e) {
     if (tile.column >= 0 && tile.row >= 0) {
         var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
         var drawx = (tile.column * this.side) + this.canvasOriginX;
+		
 		if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
-			//this.drawHex(drawx, drawy - 6, "", "", true, true);
 			delete hexes.selectedColumn;
 			delete hexes.selectedRow;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			hexagonGrid.drawHexGrid(50, 50, 25, 25, true);
+			hexagonGrid.drawHexGrid(20, 20, 10, 10, true);
 		}else{
 			//this.drawHex(drawx, drawy - 6, "", "", true, false);
 			hexes.selectedColumn=tile.column;
 			hexes.selectedRow=tile.row;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			hexagonGrid.drawHexGrid(50, 50, 25, 25, true);
-		}
-		
+			hexagonGrid.drawHexGrid(20, 20, 10, 10, true);
+			this.drawHex(drawx, drawy - 6, "", "", true);
+		}	
     } 
 };
