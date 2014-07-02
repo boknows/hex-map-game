@@ -17,6 +17,23 @@ function HexagonGrid(canvasId, radius) {
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 };
 
+//Load map from database
+var loadedMap = [];
+function getMap(){
+	return $.ajax({
+	url: "getMap.php",
+	type: "POST",
+	data: "",
+	dataType: 'JSON',
+	success: dataHandler
+	});
+};
+function dataHandler(data){
+	loadedMap = JSON.parse(data);
+}
+getMap();
+console.log(loadedMap);
+
 //Create Random Map
 var map = new Array(5);
 var types = ["land", "grass", "mountains", "desert"];
@@ -35,9 +52,9 @@ for (var i=0; i<map.length; i++){
 	}
 }
 //convert properties to JSON for database storage
-console.log(map);
+//console.log(map);
 var data = JSON.stringify(map);
-console.log(data);
+
 HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
@@ -47,8 +64,6 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
     var currentHexY;
     var debugText = "";
 	
-	
-
     var offsetColumn = false;
 	var hexNum = 1;
     for (var col = 0; col < cols; col++) {
@@ -66,15 +81,15 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				hexNum++;
             }
 			
-			if(map[row][col].type=="land"){
+			if(loadedMap[row][col].type=="land"){
 				this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
-			}else if(map[row][col].type=="water"){
+			}else if(loadedMap[row][col].type=="water"){
 				this.drawHex(currentHexX, currentHexY, "#0000FF", "", false);
-			}else if(map[row][col].type=="grass"){
+			}else if(loadedMap[row][col].type=="grass"){
 				this.drawHex(currentHexX, currentHexY, "#28F75C", debugText, false);
-			}else if(map[row][col].type=="desert"){
+			}else if(loadedMap[row][col].type=="desert"){
 				this.drawHex(currentHexX, currentHexY, "#E0DD6E", debugText, false);
-			}else if(map[row][col].type=="mountains"){
+			}else if(loadedMap[row][col].type=="mountains"){
 				this.drawHex(currentHexX, currentHexY, "#000000", debugText, false);
 			}
 			
@@ -246,7 +261,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			delete hexes.selectedRow;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-		}else if(map[tile.row][tile.column].type !="water"){
+		}else if(loadedMap[tile.row][tile.column].type !="water"){
 			//this.drawHex(drawx, drawy - 6, "", "", true, false);
 			hexes.selectedColumn=tile.column;
 			hexes.selectedRow=tile.row;
