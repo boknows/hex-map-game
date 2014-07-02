@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <head>
     <title>Hex</title>
+	<script src='http://code.jquery.com/jquery-1.10.2.min.js' language='Javascript' type='text/javascript'></script>
     <script src="js/hexagon.js"></script>
+	
 </head>
 <body>
 	<canvas id="HexCanvas" width="1200" height="900"></canvas>
     <script>
         var hexagonGrid = new HexagonGrid("HexCanvas", 20);
-        hexagonGrid.drawHexGrid(20, 20, 10, 10, true);
+        hexagonGrid.drawHexGrid(5, 5, 10, 10, true);
     </script>
 
 </body>

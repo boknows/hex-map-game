@@ -17,19 +17,40 @@ function HexagonGrid(canvasId, radius) {
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 };
 
+//Create Random Map
+var map = new Array(5);
+for (var i=0; i<map.length; i++){
+	map[i] = new Array(5);
+}
+for (var i=0; i<map.length; i++){
+	for (var j=0; j<map[i].length; j++){
+		var land = Math.random()<.8;
+		if(land == true){
+			map[i][j] = { type: "land" };
+		}else if(land == false){
+			map[i][j] = { type: "water" };
+		}
+	}
+}
+//convert properties to JSON for database storage
+console.log(map);
+var data = JSON.stringify(map);
+console.log(data);
 HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
-    
+    this.rows = rows;
+	this.cols = cols;
     var currentHexX;
     var currentHexY;
     var debugText = "";
+	
+	
 
     var offsetColumn = false;
 	var hexNum = 1;
     for (var col = 0; col < cols; col++) {
         for (var row = 0; row < rows; row++) {
-
             if (!offsetColumn) {
                 currentHexX = (col * this.side) + originX;
                 currentHexY = (row * this.height) + originY;
@@ -42,11 +63,13 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 debugText = hexNum;
 				hexNum++;
             }
-			//if((hexes.selectedColumn==col && hexes.selectedRow==row) && (typeof hexes.selectedColumn != 'undefined' && typeof hexes.selectedRow != 'undefined')){
-			//	this.drawHex(currentHexX, currentHexY, "#00F2FF", debugText, true);
-			//}else{
+			
+			if(map[row][col].type=="land"){
 				this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
-			//}
+			}else if(map[row][col].type=="water"){
+				this.drawHex(currentHexX, currentHexY, "#0000FF", "", false);
+			}
+			
         }
         offsetColumn = !offsetColumn;
     }
@@ -203,8 +226,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	
     var localX = mouseX - this.canvasOriginX;
     var localY = mouseY - this.canvasOriginY;
-	console.log("Hexes: " + hexes.selectedColumn + " " + hexes.selectedRow);
     var tile = this.getSelectedTile(localX, localY);
+	
     if (tile.column >= 0 && tile.row >= 0) {
         var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
         var drawx = (tile.column * this.side) + this.canvasOriginX;
@@ -213,13 +236,13 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			delete hexes.selectedColumn;
 			delete hexes.selectedRow;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			hexagonGrid.drawHexGrid(20, 20, 10, 10, true);
-		}else{
+			hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+		}else if(map[tile.row][tile.column].type=="land"){
 			//this.drawHex(drawx, drawy - 6, "", "", true, false);
 			hexes.selectedColumn=tile.column;
 			hexes.selectedRow=tile.row;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			hexagonGrid.drawHexGrid(20, 20, 10, 10, true);
+			hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			this.drawHex(drawx, drawy - 6, "", "", true);
 		}	
     } 
