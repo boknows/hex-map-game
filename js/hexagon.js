@@ -19,6 +19,7 @@ function HexagonGrid(canvasId, radius) {
 
 //Create Random Map
 var map = new Array(5);
+var types = ["land", "grass", "mountains", "desert"];
 for (var i=0; i<map.length; i++){
 	map[i] = new Array(5);
 }
@@ -26,7 +27,8 @@ for (var i=0; i<map.length; i++){
 	for (var j=0; j<map[i].length; j++){
 		var land = Math.random()<.8;
 		if(land == true){
-			map[i][j] = { type: "land" };
+			var rand = Math.floor((Math.random() * 3)); 
+			map[i][j] = { type: types[rand] };
 		}else if(land == false){
 			map[i][j] = { type: "water" };
 		}
@@ -68,6 +70,12 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				this.drawHex(currentHexX, currentHexY, "#dddddd", debugText, false);
 			}else if(map[row][col].type=="water"){
 				this.drawHex(currentHexX, currentHexY, "#0000FF", "", false);
+			}else if(map[row][col].type=="grass"){
+				this.drawHex(currentHexX, currentHexY, "#28F75C", debugText, false);
+			}else if(map[row][col].type=="desert"){
+				this.drawHex(currentHexX, currentHexY, "#E0DD6E", debugText, false);
+			}else if(map[row][col].type=="mountains"){
+				this.drawHex(currentHexX, currentHexY, "#000000", debugText, false);
 			}
 			
         }
@@ -109,7 +117,8 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 
     if (debugText) {
         this.context.font = "8px";
-        this.context.fillStyle = "#000";
+		this.context.fillStyle = "#000";
+		
 		if(debugText < 10){
 			this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/10), y0 + (this.height / 2) + (this.height / 7));
 		}else if(debugText < 100){
@@ -237,7 +246,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			delete hexes.selectedRow;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-		}else if(map[tile.row][tile.column].type=="land"){
+		}else if(map[tile.row][tile.column].type !="water"){
 			//this.drawHex(drawx, drawy - 6, "", "", true, false);
 			hexes.selectedColumn=tile.column;
 			hexes.selectedRow=tile.row;
