@@ -40,8 +40,10 @@ function loadedMap(map){
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
+		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Red", "Blue") };
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
+
 		for (var i=0; i<map.length; i++){
 			map[i] = new Array(20);
 		}
@@ -49,8 +51,9 @@ function loadedMap(map){
 			for (var j=0; j<map[i].length; j++){
 				var land = Math.random()<.8;
 				if(land == true){
-					var rand = Math.floor((Math.random() * 3)); 
-					map[i][j] = { type: types[rand] };
+					var rand = Math.floor((Math.random() * 4)); 
+					var own = Math.floor((Math.random() * 2)); 
+					map[i][j] = { type: types[rand], owner: mapProperties.owners[own] };
 				}else if(land == false){
 					map[i][j] = { type: "water" };
 				}
@@ -85,15 +88,18 @@ function loadedMap(map){
 					debugText = hexNum;
 					hexNum++;
 				}
-				console.log("currentHexX: " + currentHexX + " currentHexY: " + currentHexY);
 				if(map[row][col].type=="land"){
-					this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false);
+					if(map[row][col].owner=="Bo"){
+						this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, "Bo");
+					}else if (map[row][col].owner=="Marlon"){
+						this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, "Marlon");
+					}
 				}else if(map[row][col].type=="water"){
 					this.drawHex(currentHexX, currentHexY, "#3333FF", "", false);
 				}else if(map[row][col].type=="grass"){
 					this.drawHex(currentHexX, currentHexY, "#009900", debugText, false);
 				}else if(map[row][col].type=="desert"){
-					this.drawHex(currentHexX, currentHexY, "#FFCC33", debugText, false);
+					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false);
 				}else if(map[row][col].type=="mountains"){
 					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false);
 				}
@@ -110,7 +116,12 @@ function loadedMap(map){
 		this.drawHex(drawx, drawy, color, "");
 	};
 
-	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight) {
+	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, owner) {
+		this.context.font="bold 12px Helvetica";
+		this.owner = owner;
+		
+		this.context.textAlign="center"; 
+		this.context.textBaseline = "middle";
 		if (highlight == true){
 			this.context.strokeStyle = "#00F2FF";
 			this.context.lineWidth = 3;
@@ -123,8 +134,7 @@ function loadedMap(map){
 			this.context.lineWidth = .1;
 		}
 		
-	
-		
+		//Draw Main Hex
 		this.context.beginPath();
 		this.context.moveTo(x0 + this.width - this.side, y0);
 		this.context.lineTo(x0 + this.side, y0);
@@ -140,26 +150,18 @@ function loadedMap(map){
 
 		this.context.closePath();
 		this.context.stroke();
+		
 
 		if (debugText) {
-			this.context.font = "8px";
-			this.context.fillStyle = "#000";
-			
-			if(debugText < 10){
-				//this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/10), y0 + (this.height / 2) + (this.height / 7));
-				//this.context.fillText(debugText, x0 + (this.width / 2), y0 + (this.height/2));
-				this.context.fillRect(x0 + (this.width / 2),y0 + (this.height/2),1,1); // fill in the pixel at (10,10)
-				this.context.beginPath();
-				this.context.arc(x0 + (this.width / 2), y0 + (this.height/2), 10, 0, 2 * Math.PI, false); //playing with circles
-				this.context.fillStyle = '#FFFFFF';
-				this.context.fill();
-				this.context.lineWidth = 1;
-				this.context.strokeStyle = '#003300';
-				this.context.stroke();
-			}else if(debugText < 100){
-				this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4.5), y0 + (this.height / 2) + (this.height / 7));
-			}else{
-				this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/3.25), y0 + (this.height / 2) + (this.height / 7));
+			if(this.owner == "Bo"){
+				this.context.fillStyle = "Red";
+			}else if (this.owner == "Marlon"){
+				this.context.fillStyle = "Blue";
+			}
+			//this.context.font = "8px";
+			//this.context.fillStyle = "#000";
+			if(debugText){
+				this.context.fillText(debugText, x0 + (this.width / 2) , y0 + (this.height / 2));
 			}
 		}
 
@@ -275,38 +277,91 @@ function loadedMap(map){
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
 			console.log("Row: " + tile.row + " Col:" + tile.column);
+			
+			if(!typeof map[tile.row][tile.column] == "undefined"){
+				console.log(map[tile.row][tile.column]);
+			}
 
 			if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
 				delete hexes.selectedColumn;
 				delete hexes.selectedRow;
+				delete this.rectX;
+				delete this.rectY;
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-			}else if(map[tile.row][tile.column].type !="water"){
-				//this.drawHex(drawx, drawy - 6, "", "", true, false);
-				hexes.selectedColumn=tile.column;
-				hexes.selectedRow=tile.row;
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-				this.drawHex(drawx, drawy - 6, "", "", true);
-			}	
-		} 
+			}else if(typeof map[tile.row][tile.column] != "undefined"){
+				if(map[tile.row][tile.column].type !="water"){
+					//this.drawHex(drawx, drawy - 6, "", "", true, false);
+					hexes.selectedColumn=tile.column;
+					hexes.selectedRow=tile.row;
+					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+					this.drawHex(drawx, drawy - 6, "", "", true);
+					
+					//Draw Attack Button
+					this.context.lineWidth = 4;
+					this.context.strokeStyle = "#000000";
+					this.context.fillStyle = "#FF0000";
+					this.context.textAlign="center"; 
+					this.context.textBaseline = "middle";
+					this.rectX = (this.radius*(3/2)*(this.cols+2));
+					this.rectY = 50;
+					roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
+					this.context.font="20px Helvetica";
+					this.context.fillStyle = "#000000";
+					this.rectHeight = 50;
+					this.rectWidth = 100;
+					this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
+					
+				}
+			}
+			
+		}
+		
+		if(localX > this.rectX && localX < (this.rectX + this.rectWidth) && localY > this.rectY && localY < (this.rectY + this.rectHeight)){
+			console.log("attack clicked!");
+		}
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
 	
 };
-function mouseMove(e)
-{
-    var mouseX, mouseY;
 
-    if(e.offsetX) {
-        mouseX = e.offsetX;
-        mouseY = e.offsetY;
-    }
-    else if(e.layerX) {
-        mouseX = e.layerX;
-        mouseY = e.layerY;
-    }
-
-    console.log("X:" + mouseX + " Y:" + mouseY);
+/**
+ * Draws a rounded rectangle using the current state of the canvas. 
+ * If you omit the last three params, it will draw a rectangle 
+ * outline with a 5 pixel border radius 
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Number} x The top left x coordinate
+ * @param {Number} y The top left y coordinate 
+ * @param {Number} width The width of the rectangle 
+ * @param {Number} height The height of the rectangle
+ * @param {Number} radius The corner radius. Defaults to 5;
+ * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
+ * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
+ */
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke == "undefined" ) {
+    stroke = true;
+  }
+  if (typeof radius === "undefined") {
+    radius = 5;
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (stroke) {
+    ctx.stroke();
+  }
+  if (fill) {
+    ctx.fill();
+  }        
 }
