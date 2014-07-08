@@ -158,8 +158,15 @@ function loadedMap(map){
 			}else if (this.owner == "Marlon"){
 				this.context.fillStyle = "Blue";
 			}
-			//this.context.font = "8px";
-			//this.context.fillStyle = "#000";
+			
+			this.context.beginPath();
+		    this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/5), 0, 2 * Math.PI, false);
+		    //this.context.fillStyle = "transparent";
+		    this.context.fill();
+		    this.context.lineWidth = 1;
+		    this.context.strokeStyle = '#003300';
+		    this.context.stroke();
+			
 			if(debugText){
 				this.context.fillText(debugText, x0 + (this.width / 2) , y0 + (this.height / 2));
 			}
@@ -276,7 +283,9 @@ function loadedMap(map){
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
-			console.log("Row: " + tile.row + " Col:" + tile.column);
+			console.log(tile.column + "," + tile.row);
+			var cube = toCubeCoord(tile.column, tile.row);
+			console.log(cube.x + "," + cube.y + "," + cube.z);
 			
 			if(!typeof map[tile.row][tile.column] == "undefined"){
 				console.log(map[tile.row][tile.column]);
@@ -294,9 +303,19 @@ function loadedMap(map){
 					//this.drawHex(drawx, drawy - 6, "", "", true, false);
 					hexes.selectedColumn=tile.column;
 					hexes.selectedRow=tile.row;
+					var cube = toCubeCoord(tile.column, tile.row);
+					var neighbors = getNeighbors(cube.x,cube.y,cube.z);
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+					for (i=0;i<neighbors.length;i++){
+						var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+						//this.drawHex(((offset.q * this.side) + this.canvasOriginX), offset.r - 6, "", "", true);
+						var r = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+						var q = (offset.q * this.side) + this.canvasOriginX;
+						this.drawHex(q, r - 6, "", "", true);
+					}
 					this.drawHex(drawx, drawy - 6, "", "", true);
+					console.log(drawx + " " + drawy);
 					
 					//Draw Attack Button
 					this.context.lineWidth = 4;
@@ -364,4 +383,48 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (fill) {
     ctx.fill();
   }        
+}
+function toCubeCoord (q, r) {
+	/**  Function to convert odd-q offset coordinates to cube coordinates. Reference: http://www.redblobgames.com/grids/hexagons/
+	* @param {Number} q - the column of the hex
+	* @param {Number} r - the row of the hex
+	*/
+	this.r = r;
+	this.q = q;
+	var x = this.q
+	var z = this.r - (this.q - (this.q&1)) / 2
+	var y = -x-z
+	var cube = {x: x, y: y, z: z};
+
+	return cube;
+}
+
+function toOffsetCoord (x, y, z) {
+	/**  Function to convert cube coordinates to odd-q offset coordinates. Reference: http://www.redblobgames.com/grids/hexagons/
+	* @param {Number} x - the x cube coord of the hex
+	* @param {Number} y - the y cube coord of the hex
+	* @param {Number} z - the z cube coord of the hex
+	*/
+	this.x = x;
+	this.y = y;
+	this.z = z;
+	var q = this.x;
+	var r = this.z + (this.x - (this.x&1)) / 2
+	var offset = {q: q, r: r};
+
+	return offset;
+}
+
+function getNeighbors (x, y, z){
+/**  Function to find all neighboring hexes via cube coordinates. Reference: http://www.redblobgames.com/grids/hexagons/
+	* @param {Number} x - the x cube coord of the hex
+	* @param {Number} y - the y cube coord of the hex
+	* @param {Number} z - the z cube coord of the hex
+	*/
+	this.x = x;
+	this.y = y;
+	this.z = z;
+	var neighbors = [ {x: this.x+1 ,y: this.y-1 ,z: z}, {x: this.x+1 ,y: y,z: this.z-1 }, {x: x ,y: this.y+1 ,z: this.z-1 }, 
+					  {x: this.x-1 ,y: this.y+1 ,z: z}, {x: this.x-1 ,y: y,z: this.z+1 }, {x: x ,y: this.y-1 ,z: this.z+1 } ];
+	return neighbors;
 }
