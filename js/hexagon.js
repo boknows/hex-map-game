@@ -63,14 +63,13 @@ function loadedMap(map){
 	//convert properties to JSON for database storage
 	//var data = JSON.stringify(map);
 
-	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
+	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY) {
 		this.canvasOriginX = originX;
 		this.canvasOriginY = originY;
 		this.rows = rows;
 		this.cols = cols;
 		var currentHexX;
 		var currentHexY;
-		var debugText = "";
 		this.context.fillRect(10,10,1,1); // fill in the pixel at (10,10)
 		var offsetColumn = false;
 		var hexNum = 1;
@@ -84,20 +83,16 @@ function loadedMap(map){
 					currentHexY = (row * this.height) + originY + (this.height * 0.5);
 				}
 
-				if (isDebug) {
-					debugText = hexNum;
-					hexNum++;
-				}
 				if(map[row][col].type=="land"){
-					this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#99CC66", false, false, map[row][col].owner);
 				}else if(map[row][col].type=="water"){
-					this.drawHex(currentHexX, currentHexY, "#3333FF", "", false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#3333FF", false, false, map[row][col].owner);
 				}else if(map[row][col].type=="grass"){
-					this.drawHex(currentHexX, currentHexY, "#009900", debugText, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#009900", false, false, map[row][col].owner);
 				}else if(map[row][col].type=="desert"){
-					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#F5E8C1", false, false, map[row][col].owner);
 				}else if(map[row][col].type=="mountains"){
-					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#996600", false, false, map[row][col].owner);
 				}
 				
 			}
@@ -109,10 +104,10 @@ function loadedMap(map){
 		var drawy = column % 2 == 0 ? (row * this.height) + this.canvasOriginY : (row * this.height) + this.canvasOriginY + (this.height / 2);
 		var drawx = (column * this.side) + this.canvasOriginX;
 
-		this.drawHex(drawx, drawy, color, "");
+		//this.drawHex(drawx, drawy, color, "");
 	};
 
-	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {
+	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, highlight, highlightColor, owner) {
 		this.context.font="bold 12px Helvetica";
 		this.owner = owner;
 		
@@ -146,6 +141,7 @@ function loadedMap(map){
 		if(map[tile.row][tile.column].type != "water"){	
 			if(map[tile.row][tile.column].owner == "Bo"){
 				this.context.fillStyle = "Green";
+	
 			}else if (map[tile.row][tile.column].owner == "Marlon"){
 				this.context.fillStyle = "Blue";
 			}
@@ -299,7 +295,7 @@ function loadedMap(map){
 					
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-					this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
+					this.drawHex(drawx, drawy - 6, "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
 					var owner = map[tile.row][tile.column].owner;
 					//Get neighbors of clicked hex and highlight them
 					var tile = this.getSelectedTile(drawx, drawy - 6);
@@ -309,7 +305,7 @@ function loadedMap(map){
 						var drawx = (offset.q * this.side) + this.canvasOriginX;
 						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
 						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
-							this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+							this.drawHex(drawx, drawy - 6, "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
 						}
 					}
 					
