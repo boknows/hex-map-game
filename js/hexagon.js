@@ -130,8 +130,11 @@ function loadedMap(map){
 			this.context.lineWidth = 2;
 		}
 		var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-		if(map[tile.row][tile.column].type=="water"){
-			this.context.lineWidth = .1;
+
+		if(!typeof map[tile.row][tile.column].type =="undefined"){
+			if(map[tile.row][tile.column].type=="water"){
+				this.context.lineWidth = .1;
+			}
 		}
 		
 		//Draw Main Hex
@@ -142,16 +145,13 @@ function loadedMap(map){
 		this.context.lineTo(x0 + this.side, y0 + this.height);
 		this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
 		this.context.lineTo(x0, y0 + (this.height / 2));
-		
 		if (fillColor && highlight == false) {
 			this.context.fillStyle = fillColor;
 			this.context.fill();
 		}
-
 		this.context.closePath();
 		this.context.stroke();
 		
-
 		if (debugText) {
 			if(this.owner == "Bo"){
 				this.context.fillStyle = "Red";
@@ -253,7 +253,9 @@ function loadedMap(map){
 				}
 			}
 		}
+
 		return  { row: row, column: column };
+
 	};
 
 
@@ -278,17 +280,19 @@ function loadedMap(map){
 		var localX = mouseX - this.canvasOriginX;
 		var localY = mouseY - this.canvasOriginY;
 		var tile = this.getSelectedTile(localX, localY);
-		    console.log("X:" + mouseX + " Y:" + mouseY);
+		//console.log("X:" + mouseX + " Y:" + mouseY);
 
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
-			console.log(tile.column + "," + tile.row);
+			//console.log(tile.column + "," + tile.row);
 			var cube = toCubeCoord(tile.column, tile.row);
-			console.log(cube.x + "," + cube.y + "," + cube.z);
+			//console.log(cube.x + "," + cube.y + "," + cube.z);
+			var offset = toOffsetCoord(cube.x,cube.y,cube.z);
+			//console.log(offset.q +","+ offset.r);
 			
 			if(!typeof map[tile.row][tile.column] == "undefined"){
-				console.log(map[tile.row][tile.column]);
+				//console.log(map[tile.row][tile.column]);
 			}
 
 			if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
@@ -305,17 +309,37 @@ function loadedMap(map){
 					hexes.selectedRow=tile.row;
 					var cube = toCubeCoord(tile.column, tile.row);
 					var neighbors = getNeighbors(cube.x,cube.y,cube.z);
+					//console.log("Neighbors:");
+					for(i=0;i<neighbors.length;i++){
+						var offset = toOffsetCoord(neighbors[i].x, neighbors[i].y, neighbors[i].z);
+						//console.log(offset.q + "," + offset.r);
+						//console.log(neighbors[i].x +","+neighbors[i].y +","+neighbors[i].z);
+					}
+					
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+					this.drawHex(drawx, drawy - 6, "", "", true);
+					var tile = this.getSelectedTile(drawx, drawy - 6);
+					//console.log("Drawing " + tile.column + "," + tile.row);
 					for (i=0;i<neighbors.length;i++){
 						var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+						console.log("Cube: " + neighbors[i].x + "," + neighbors[i].y +","+neighbors[i].z);
+						console.log(offset);
+						//console.log("offset: " + offset.q + "," + offset.r);
 						//this.drawHex(((offset.q * this.side) + this.canvasOriginX), offset.r - 6, "", "", true);
-						var r = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-						var q = (offset.q * this.side) + this.canvasOriginX;
-						this.drawHex(q, r - 6, "", "", true);
+						var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+						var drawx = (offset.q * this.side) + this.canvasOriginX;
+						console.log(drawx + " " + drawy);
+						var tile = this.getSelectedTile(drawx, drawy-6);
+						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0){
+							//console.log("Drawing " + tile.column + "," + tile.row);
+							//console.log("Columns: " + this.cols + " Rows: " + this.rows + "Column: " + tile.column + " Row: " + tile.row);
+							this.drawHex(drawx, drawy - 6, "", "", true);
+						}else{
+							console.log("Can't draw " + tile.column + "," + tile.row);
+						}
 					}
-					this.drawHex(drawx, drawy - 6, "", "", true);
-					console.log(drawx + " " + drawy);
+					
 					
 					//Draw Attack Button
 					this.context.lineWidth = 4;
