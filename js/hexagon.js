@@ -301,7 +301,7 @@ function loadedMap(map){
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 					this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight clicked hex
-					
+					var owner = map[tile.row][tile.column].owner;
 					//Get neighbors of clicked hex and highlight them
 					var tile = this.getSelectedTile(drawx, drawy - 6);
 					for (i=0;i<neighbors.length;i++){
@@ -309,7 +309,7 @@ function loadedMap(map){
 						var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 						var drawx = (offset.q * this.side) + this.canvasOriginX;
 						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
-						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water"){
+						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
 							this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight neighboring hexes
 						}
 					}
