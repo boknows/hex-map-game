@@ -278,56 +278,73 @@ function loadedMap(map){
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
-
-			if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
-				delete hexes.selectedColumn;
-				delete hexes.selectedRow;
-				delete this.rectX;
-				delete this.rectY;
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-			}else if(typeof map[tile.row][tile.column] != "undefined"){
-				if(map[tile.row][tile.column].type !="water"){
-					hexes.selectedColumn=tile.column;
-					hexes.selectedRow=tile.row;
-					var cube = toCubeCoord(tile.column, tile.row);
-					var neighbors = getNeighbors(cube.x,cube.y,cube.z);
-					
+			//Check if clicked hex is a neighbor of the already selected hex.
+			if(typeof hexes.selectedColumn != "undefined"){
+				var cube = toCubeCoord(hexes.selectedColumn, hexes.selectedRow);
+				var neighbors = getNeighbors(cube.x,cube.y,cube.z);
+				for(i=0;i<neighbors.length;i++){
+					var offsetAt = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+					var drawyAt = offsetAt.q % 2 == 0 ? (offsetAt.r * this.height) + this.canvasOriginY + 6 : (offsetAt.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawxAt = (offsetAt.q * this.side) + this.canvasOriginX;
+					var tileAt = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
+					if(tileAt.row < this.rows && tileAt.column < this.cols && tileAt.row >=0 && tileAt.column >=0 && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tileAt.row][tileAt.column].owner){
+						console.log("You can attack!");
+					}else{
+						console.log("You can't attack!");
+					}
+				}
+				
+			}else{
+				var cube = toCubeCoord(tile.column, tile.row);
+				var neighbors = getNeighbors(cube.x,cube.y,cube.z);
+				if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
+					delete hexes.selectedColumn;
+					delete hexes.selectedRow;
+					delete this.rectX;
+					delete this.rectY;
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-					this.drawHex(drawx, drawy - 6, "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
-					var owner = map[tile.row][tile.column].owner;
-					//Get neighbors of clicked hex and highlight them
-					var tile = this.getSelectedTile(drawx, drawy - 6);
-					for (i=0;i<neighbors.length;i++){
-						var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
-						var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-						var drawx = (offset.q * this.side) + this.canvasOriginX;
-						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
-						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
-							this.drawHex(drawx, drawy - 6, "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+				}else if(typeof map[tile.row][tile.column] != "undefined"){
+					if(map[tile.row][tile.column].type !="water"){
+						hexes.selectedColumn=tile.column;
+						hexes.selectedRow=tile.row;
+						
+						
+						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+						hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+						this.drawHex(drawx, drawy - 6, "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
+						var owner = map[tile.row][tile.column].owner;
+						//Get neighbors of clicked hex and highlight them
+						var tile = this.getSelectedTile(drawx, drawy - 6);
+						for (i=0;i<neighbors.length;i++){
+							var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+							var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+							var drawx = (offset.q * this.side) + this.canvasOriginX;
+							var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
+							if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
+								this.drawHex(drawx, drawy - 6, "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+							}
 						}
+						
+						
+						//Draw Attack Button
+						this.context.lineWidth = 4;
+						this.context.strokeStyle = "#000000";
+						this.context.fillStyle = "#FF0000";
+						this.context.textAlign="center"; 
+						this.context.textBaseline = "middle";
+						this.rectX = (this.radius*(3/2)*(this.cols+2));
+						this.rectY = 50;
+						roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
+						this.context.font="20px Helvetica";
+						this.context.fillStyle = "#000000";
+						this.rectHeight = 50;
+						this.rectWidth = 100;
+						this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
+						
 					}
-					
-					
-					//Draw Attack Button
-					this.context.lineWidth = 4;
-					this.context.strokeStyle = "#000000";
-					this.context.fillStyle = "#FF0000";
-					this.context.textAlign="center"; 
-					this.context.textBaseline = "middle";
-					this.rectX = (this.radius*(3/2)*(this.cols+2));
-					this.rectY = 50;
-					roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
-					this.context.font="20px Helvetica";
-					this.context.fillStyle = "#000000";
-					this.rectHeight = 50;
-					this.rectWidth = 100;
-					this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
-					
 				}
 			}
-			
 		}
 		
 		if(localX > this.rectX && localX < (this.rectX + this.rectWidth) && localY > this.rectY && localY < (this.rectY + this.rectHeight)){
