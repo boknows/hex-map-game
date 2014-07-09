@@ -39,7 +39,7 @@ function loadedMap(map){
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
-		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Red", "Blue") };
+		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue") };
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
@@ -112,7 +112,7 @@ function loadedMap(map){
 		this.drawHex(drawx, drawy, color, "");
 	};
 
-	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, owner) {
+	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {
 		this.context.font="bold 12px Helvetica";
 		this.owner = owner;
 		
@@ -144,16 +144,15 @@ function loadedMap(map){
 		
 
 		if(map[tile.row][tile.column].type != "water"){	
-			if(this.owner == "Bo"){
-				this.context.fillStyle = "Red";
-			}else if (this.owner == "Marlon"){
+			if(map[tile.row][tile.column].owner == "Bo"){
+				this.context.fillStyle = "Green";
+			}else if (map[tile.row][tile.column].owner == "Marlon"){
 				this.context.fillStyle = "Blue";
 			}
 			
 			//Draw Circle inside Hex
 			if (highlight == true){
-				console.log("true!");
-				this.context.strokeStyle = "#00F2FF";
+				this.context.strokeStyle = highlightColor;
 				this.context.lineWidth = 3;
 			}
 			this.context.beginPath();
@@ -300,7 +299,7 @@ function loadedMap(map){
 					
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-					this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight clicked hex
+					this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
 					var owner = map[tile.row][tile.column].owner;
 					//Get neighbors of clicked hex and highlight them
 					var tile = this.getSelectedTile(drawx, drawy - 6);
@@ -310,7 +309,7 @@ function loadedMap(map){
 						var drawx = (offset.q * this.side) + this.canvasOriginX;
 						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
 						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
-							this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight neighboring hexes
+							this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
 						}
 					}
 					
