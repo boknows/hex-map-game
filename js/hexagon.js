@@ -9,16 +9,17 @@ function getMap(){
     dataType: 'JSON',
     });
 };
-getMap().done(function(r) {
-    if (r) {
-       loadedMap(); //call loadedMap(r) if loading a map from DB
-    } else {
-       console.log("No data");
-    }
-}).fail(function(x) {
-    console.log("error");
-});
+//getMap().done(function(r) {
+ //   if (r) {
+//       loadedMap(); //call loadedMap(r) if loading a map from DB
+//    } else {
+//       console.log("No data");
+//    }
+//}).fail(function(x) {
+//    console.log("error");
+//});
 
+loadedMap();
 function loadedMap(map){
     
 	var hexes = [];
@@ -53,7 +54,7 @@ function loadedMap(map){
 				if(land == true){
 					var rand = Math.floor((Math.random() * 4)); 
 					var own = Math.floor((Math.random() * 2)); 
-					map[i][j] = { type: types[rand], owner: mapProperties.owners[own] };
+					map[i][j] = { type: types[rand], owner: mapProperties.owners[own], units: 3 };
 				}else if(land == false){
 					map[i][j] = { type: "water" };
 				}
@@ -89,19 +90,15 @@ function loadedMap(map){
 					hexNum++;
 				}
 				if(map[row][col].type=="land"){
-					if(map[row][col].owner=="Bo"){
-						this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, "Bo");
-					}else if (map[row][col].owner=="Marlon"){
-						this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, "Marlon");
-					}
+					this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="water"){
-					this.drawHex(currentHexX, currentHexY, "#3333FF", "", false);
+					this.drawHex(currentHexX, currentHexY, "#3333FF", "", false, map[row][col].owner);
 				}else if(map[row][col].type=="grass"){
-					this.drawHex(currentHexX, currentHexY, "#009900", debugText, false);
+					this.drawHex(currentHexX, currentHexY, "#009900", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="desert"){
-					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false);
+					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="mountains"){
-					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false);
+					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map[row][col].owner);
 				}
 				
 			}
@@ -127,7 +124,7 @@ function loadedMap(map){
 			this.context.lineWidth = 3;
 		}else{
 			this.context.strokeStyle = "#000";
-			this.context.lineWidth = 2;
+			this.context.lineWidth = 1;
 		}
 		var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
@@ -159,18 +156,20 @@ function loadedMap(map){
 				this.context.fillStyle = "Blue";
 			}
 			
+			//Draw Circle inside Hex
 			this.context.beginPath();
-		    this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/5), 0, 2 * Math.PI, false);
-		    //this.context.fillStyle = "transparent";
+		    this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
 		    this.context.fill();
 		    this.context.lineWidth = 1;
 		    this.context.strokeStyle = '#003300';
 		    this.context.stroke();
 			
 			if(debugText){
-				this.context.fillText(debugText, x0 + (this.width / 2) , y0 + (this.height / 2));
+				this.context.fillStyle = '#FFFFFF';
+				this.context.fillText(map[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 			}
 		}
+		
 
 	};
 
@@ -280,20 +279,10 @@ function loadedMap(map){
 		var localX = mouseX - this.canvasOriginX;
 		var localY = mouseY - this.canvasOriginY;
 		var tile = this.getSelectedTile(localX, localY);
-		//console.log("X:" + mouseX + " Y:" + mouseY);
 
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
-			//console.log(tile.column + "," + tile.row);
-			var cube = toCubeCoord(tile.column, tile.row);
-			//console.log(cube.x + "," + cube.y + "," + cube.z);
-			var offset = toOffsetCoord(cube.x,cube.y,cube.z);
-			//console.log(offset.q +","+ offset.r);
-			
-			if(!typeof map[tile.row][tile.column] == "undefined"){
-				//console.log(map[tile.row][tile.column]);
-			}
 
 			if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
 				delete hexes.selectedColumn;
@@ -304,39 +293,24 @@ function loadedMap(map){
 				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			}else if(typeof map[tile.row][tile.column] != "undefined"){
 				if(map[tile.row][tile.column].type !="water"){
-					//this.drawHex(drawx, drawy - 6, "", "", true, false);
 					hexes.selectedColumn=tile.column;
 					hexes.selectedRow=tile.row;
 					var cube = toCubeCoord(tile.column, tile.row);
 					var neighbors = getNeighbors(cube.x,cube.y,cube.z);
-					//console.log("Neighbors:");
-					for(i=0;i<neighbors.length;i++){
-						var offset = toOffsetCoord(neighbors[i].x, neighbors[i].y, neighbors[i].z);
-						//console.log(offset.q + "," + offset.r);
-						//console.log(neighbors[i].x +","+neighbors[i].y +","+neighbors[i].z);
-					}
 					
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 					this.drawHex(drawx, drawy - 6, "", "", true);
+					
+					//Get neighbors of clicked hex and highlight them
 					var tile = this.getSelectedTile(drawx, drawy - 6);
-					//console.log("Drawing " + tile.column + "," + tile.row);
 					for (i=0;i<neighbors.length;i++){
 						var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
-						console.log("Cube: " + neighbors[i].x + "," + neighbors[i].y +","+neighbors[i].z);
-						console.log(offset);
-						//console.log("offset: " + offset.q + "," + offset.r);
-						//this.drawHex(((offset.q * this.side) + this.canvasOriginX), offset.r - 6, "", "", true);
 						var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 						var drawx = (offset.q * this.side) + this.canvasOriginX;
-						console.log(drawx + " " + drawy);
-						var tile = this.getSelectedTile(drawx, drawy-6);
-						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0){
-							//console.log("Drawing " + tile.column + "," + tile.row);
-							//console.log("Columns: " + this.cols + " Rows: " + this.rows + "Column: " + tile.column + " Row: " + tile.row);
+						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
+						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water"){
 							this.drawHex(drawx, drawy - 6, "", "", true);
-						}else{
-							console.log("Can't draw " + tile.column + "," + tile.row);
 						}
 					}
 					
