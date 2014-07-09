@@ -9,19 +9,17 @@ function getMap(){
     dataType: 'JSON',
     });
 };
-//getMap().done(function(r) {
- //   if (r) {
-//       loadedMap(); //call loadedMap(r) if loading a map from DB
-//    } else {
-//       console.log("No data");
-//    }
-//}).fail(function(x) {
-//    console.log("error");
-//});
+getMap().done(function(r) {
+    if (r) {
+       loadedMap(r); //call loadedMap(r) if loading a map from DB
+    } else {
+       console.log("No data");
+    }
+}).fail(function(x) {
+    console.log("error");
+});
 
-loadedMap();
 function loadedMap(map){
-    
 	var hexes = [];
 
 	function HexagonGrid(canvasId, radius) {
@@ -61,8 +59,9 @@ function loadedMap(map){
 			}
 		}
 	}
+
 	//convert properties to JSON for database storage
-	var data = JSON.stringify(map);
+	//var data = JSON.stringify(map);
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
 		this.canvasOriginX = originX;
@@ -117,15 +116,9 @@ function loadedMap(map){
 		this.context.font="bold 12px Helvetica";
 		this.owner = owner;
 		
-		this.context.textAlign="center"; 
-		this.context.textBaseline = "middle";
-		if (highlight == true){
-			this.context.strokeStyle = "#00F2FF";
-			this.context.lineWidth = 3;
-		}else{
-			this.context.strokeStyle = "#000";
-			this.context.lineWidth = 1;
-		}
+		this.context.strokeStyle = "#000";
+		this.context.lineWidth = 1;
+
 		var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
 		if(!typeof map[tile.row][tile.column].type =="undefined"){
@@ -149,7 +142,8 @@ function loadedMap(map){
 		this.context.closePath();
 		this.context.stroke();
 		
-		if (debugText) {
+
+		if(map[tile.row][tile.column].type != "water"){	
 			if(this.owner == "Bo"){
 				this.context.fillStyle = "Red";
 			}else if (this.owner == "Marlon"){
@@ -157,18 +151,24 @@ function loadedMap(map){
 			}
 			
 			//Draw Circle inside Hex
+			if (highlight == true){
+				console.log("true!");
+				this.context.strokeStyle = "#00F2FF";
+				this.context.lineWidth = 3;
+			}
 			this.context.beginPath();
 		    this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
 		    this.context.fill();
-		    this.context.lineWidth = 1;
-		    this.context.strokeStyle = '#003300';
+		    //this.context.lineWidth = 1;
+		    //this.context.strokeStyle = '#000000';
 		    this.context.stroke();
 			
-			if(debugText){
-				this.context.fillStyle = '#FFFFFF';
-				this.context.fillText(map[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
-			}
+			this.context.textAlign="center"; 
+			this.context.textBaseline = "middle";
+			this.context.fillStyle = '#FFFFFF';
+			this.context.fillText(map[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 		}
+		
 		
 
 	};
@@ -300,7 +300,7 @@ function loadedMap(map){
 					
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-					this.drawHex(drawx, drawy - 6, "", "", true);
+					this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight clicked hex
 					
 					//Get neighbors of clicked hex and highlight them
 					var tile = this.getSelectedTile(drawx, drawy - 6);
@@ -310,7 +310,7 @@ function loadedMap(map){
 						var drawx = (offset.q * this.side) + this.canvasOriginX;
 						var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
 						if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water"){
-							this.drawHex(drawx, drawy - 6, "", "", true);
+							this.drawHex(drawx, drawy - 6, "", "", true, map[tile.row][tile.column].owner); //highlight neighboring hexes
 						}
 					}
 					
