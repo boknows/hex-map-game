@@ -82,7 +82,6 @@ function loadedMap(map){
 					currentHexX = col * this.side + originX;
 					currentHexY = (row * this.height) + originY + (this.height * 0.5);
 				}
-
 				if(map[row][col].type=="land"){
 					this.drawHex(currentHexX, currentHexY, "#99CC66", false, false, map[row][col].owner);
 				}else if(map[row][col].type=="water"){
@@ -137,7 +136,6 @@ function loadedMap(map){
 		this.context.closePath();
 		this.context.stroke();
 		
-
 		if(map[tile.row][tile.column].type != "water"){	
 			if(map[tile.row][tile.column].owner == "Bo"){
 				this.context.fillStyle = "Green";
@@ -293,7 +291,6 @@ function loadedMap(map){
 						console.log("You can't attack!");
 					}
 				}
-				
 			}else{
 				var cube = toCubeCoord(tile.column, tile.row);
 				var neighbors = getNeighbors(cube.x,cube.y,cube.z);
@@ -325,7 +322,6 @@ function loadedMap(map){
 								this.drawHex(drawx, drawy - 6, "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
 							}
 						}
-						
 						
 						//Draw Attack Button
 						this.context.lineWidth = 4;
