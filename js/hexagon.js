@@ -9,16 +9,16 @@ function getMap(){
     dataType: 'JSON',
     });
 };
-getMap().done(function(r) {
-    if (r) {
-       loadedMap(r); //call loadedMap(r) if loading a map from DB
-    } else {
-       console.log("No data");
-    }
-}).fail(function(x) {
-    console.log("error");
-});
-
+//getMap().done(function(r) {
+//    if (r) {
+ //      loadedMap(); //call loadedMap(r) if loading a map from DB
+//    } else {
+//       console.log("No data");
+//    }
+//}).fail(function(x) {
+//    console.log("error");
+//});
+loadedMap();
 function loadedMap(map){
 	var hexes = [];
 
@@ -437,4 +437,43 @@ function getNeighbors (x, y, z){
 	var neighbors = [ {x: this.x+1 ,y: this.y-1 ,z: z}, {x: this.x+1 ,y: y,z: this.z-1 }, {x: x ,y: this.y+1 ,z: this.z-1 }, 
 					  {x: this.x-1 ,y: this.y+1 ,z: z}, {x: this.x-1 ,y: y,z: this.z+1 }, {x: x ,y: this.y-1 ,z: this.z+1 } ];
 	return neighbors;
+}
+
+function rollDice () {
+	//  Function to simulate rolling a dice. Number 1-6 returned.
+	var rand = Math.floor((Math.random() * 6))+1; 
+	return rand;
+}
+
+function battle(att, def, attTer, defTer){
+	/**  Function to simulate battle between two armies. 
+	* @param {Number} att - number of attacking armies
+	* @param {Number} def - number of defending armies
+	* @param {Text} attTer - terrain type of attacker, for purposes of modifiers
+	* @param {Text} defTer - terrain type of defender, for purposes of modifiers
+	*/
+	var attArr = []; //Array of attackers rolls
+	var defArr = []; //Array of defenders 
+	var attLoses = 0;
+	var defLoses = 0;
+	
+	for(i=0;i<att;i++){
+		attArr.push(rollDice());
+	}
+	attArr.sort(function(a, b){return b-a});
+	for(i=0;i<def;i++){
+		defArr.push(rollDice());
+	}
+	defArr.sort(function(a, b){return b-a});
+	for(i=0;i<defArr.length;i++){
+		if(defArr[i] >= attArr[i]){
+			attLoses++;
+		}else{
+			defLoses++;
+		}
+	}
+	
+	var losses = { att: attLoses, def: defLoses };
+	return losses;
+	
 }
