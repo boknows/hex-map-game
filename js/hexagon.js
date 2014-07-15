@@ -9,16 +9,16 @@ function getMap(){
     dataType: 'JSON',
     });
 };
-//getMap().done(function(r) {
-//    if (r) {
- //      loadedMap(); //call loadedMap(r) if loading a map from DB
-//    } else {
-//       console.log("No data");
-//    }
-//}).fail(function(x) {
-//    console.log("error");
-//});
-loadedMap();
+getMap().done(function(r) {
+    if (r) {
+       loadedMap(r); //call loadedMap(r) if loading a map from DB
+    } else {
+       console.log("No data");
+    }
+}).fail(function(x) {
+    console.log("error");
+});
+
 function loadedMap(map){
 	var hexes = [];
 
@@ -63,13 +63,14 @@ function loadedMap(map){
 	//convert properties to JSON for database storage
 	//var data = JSON.stringify(map);
 
-	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY) {
+	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
 		this.canvasOriginX = originX;
 		this.canvasOriginY = originY;
 		this.rows = rows;
 		this.cols = cols;
 		var currentHexX;
 		var currentHexY;
+		var debugText = "";
 		this.context.fillRect(10,10,1,1); // fill in the pixel at (10,10)
 		var offsetColumn = false;
 		var hexNum = 1;
@@ -82,16 +83,21 @@ function loadedMap(map){
 					currentHexX = col * this.side + originX;
 					currentHexY = (row * this.height) + originY + (this.height * 0.5);
 				}
+
+				if (isDebug) {
+					debugText = hexNum;
+					hexNum++;
+				}
 				if(map[row][col].type=="land"){
-					this.drawHex(currentHexX, currentHexY, "#99CC66", false, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="water"){
-					this.drawHex(currentHexX, currentHexY, "#3333FF", false, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#3333FF", "", false, map[row][col].owner);
 				}else if(map[row][col].type=="grass"){
-					this.drawHex(currentHexX, currentHexY, "#009900", false, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#009900", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="desert"){
-					this.drawHex(currentHexX, currentHexY, "#F5E8C1", false, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="mountains"){
-					this.drawHex(currentHexX, currentHexY, "#996600", false, false, map[row][col].owner);
+					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map[row][col].owner);
 				}
 				
 			}
@@ -103,10 +109,10 @@ function loadedMap(map){
 		var drawy = column % 2 == 0 ? (row * this.height) + this.canvasOriginY : (row * this.height) + this.canvasOriginY + (this.height / 2);
 		var drawx = (column * this.side) + this.canvasOriginX;
 
-		//this.drawHex(drawx, drawy, color, "");
+		this.drawHex(drawx, drawy, color, "");
 	};
 
-	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, highlight, highlightColor, owner) {
+	HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {
 		this.context.font="bold 12px Helvetica";
 		this.owner = owner;
 		
@@ -136,10 +142,10 @@ function loadedMap(map){
 		this.context.closePath();
 		this.context.stroke();
 		
+
 		if(map[tile.row][tile.column].type != "water"){	
 			if(map[tile.row][tile.column].owner == "Bo"){
 				this.context.fillStyle = "Green";
-	
 			}else if (map[tile.row][tile.column].owner == "Marlon"){
 				this.context.fillStyle = "Blue";
 			}
@@ -265,51 +271,70 @@ function loadedMap(map){
 	};
 
 	var hexes = {};
+	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
-		
 		var mouseX = e.pageX;
 		var mouseY = e.pageY;
 		var localX = mouseX - this.canvasOriginX;
 		var localY = mouseY - this.canvasOriginY;
 		var tile = this.getSelectedTile(localX, localY);
-
+		console.log(neighbors);
+		
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
-			//Check if clicked hex is a neighbor of the already selected hex.
-			if(typeof hexes.selectedColumn != "undefined"){
-				var cube = toCubeCoord(hexes.selectedColumn, hexes.selectedRow);
-				var neighbors = getNeighbors(cube.x,cube.y,cube.z);
-				for(i=0;i<neighbors.length;i++){
-					var offsetAt = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
-					var drawyAt = offsetAt.q % 2 == 0 ? (offsetAt.r * this.height) + this.canvasOriginY + 6 : (offsetAt.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-					var drawxAt = (offsetAt.q * this.side) + this.canvasOriginX;
-					var tileAt = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
-					if(tileAt.row < this.rows && tileAt.column < this.cols && tileAt.row >=0 && tileAt.column >=0 && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tileAt.row][tileAt.column].owner){
-						console.log("You can attack!");
-					}else{
-						console.log("You can't attack!");
+			if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
+				delete hexes.selectedColumn;
+				delete hexes.selectedRow;
+				delete this.rectX;
+				delete this.rectY;
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+			}else if(typeof map[tile.row][tile.column] != "undefined"){
+				if(map[tile.row][tile.column].type !="water"){
+					var cube = toCubeCoord(tile.column, tile.row);
+					var trigger = false;
+					for(i=0;i<neighbors.length;i++){
+						if(typeof hexes.selectedRow != "undefined"){
+							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){
+								trigger = true;
+								console.log("clicked a valid attacking neighbor");
+								var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+								var drawy3 = hexes.selectedColumn % 2 == 0 ? (hexes.selectedRow * this.height) + this.canvasOriginY + 6 : (hexes.selectedRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+								var drawx3 = (hexes.selectedColumn * this.side) + this.canvasOriginX;
+								this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
+								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
+									
+								//Draw Attack Button
+								this.context.lineWidth = 4;
+								this.context.strokeStyle = "#000000";
+								this.context.fillStyle = "#FF0000";
+								this.context.textAlign="center"; 
+								this.context.textBaseline = "middle";
+								this.rectX = (this.radius*(3/2)*(this.cols+2));
+								this.rectY = 50;
+								roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
+								this.context.font="20px Helvetica";
+								this.context.fillStyle = "#000000";
+								this.rectHeight = 50;
+								this.rectWidth = 100;
+								this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
+							}
+						}						
 					}
-				}
-			}else{
-				var cube = toCubeCoord(tile.column, tile.row);
-				var neighbors = getNeighbors(cube.x,cube.y,cube.z);
-				if(hexes.selectedColumn == tile.column && hexes.selectedRow == tile.row){
-					delete hexes.selectedColumn;
-					delete hexes.selectedRow;
-					delete this.rectX;
-					delete this.rectY;
-					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-					hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-				}else if(typeof map[tile.row][tile.column] != "undefined"){
-					if(map[tile.row][tile.column].type !="water"){
+					if(trigger == false){
 						hexes.selectedColumn=tile.column;
 						hexes.selectedRow=tile.row;
-						
-						
+						neighbors = getNeighbors(cube.x,cube.y,cube.z);
+						hexes.neighbors = neighbors;
 						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 						hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-						this.drawHex(drawx, drawy - 6, "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
+						this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight clicked hex
+						
 						var owner = map[tile.row][tile.column].owner;
 						//Get neighbors of clicked hex and highlight them
 						var tile = this.getSelectedTile(drawx, drawy - 6);
@@ -319,28 +344,13 @@ function loadedMap(map){
 							var drawx = (offset.q * this.side) + this.canvasOriginX;
 							var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
 							if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
-								this.drawHex(drawx, drawy - 6, "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+								this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
 							}
 						}
-						
-						//Draw Attack Button
-						this.context.lineWidth = 4;
-						this.context.strokeStyle = "#000000";
-						this.context.fillStyle = "#FF0000";
-						this.context.textAlign="center"; 
-						this.context.textBaseline = "middle";
-						this.rectX = (this.radius*(3/2)*(this.cols+2));
-						this.rectY = 50;
-						roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
-						this.context.font="20px Helvetica";
-						this.context.fillStyle = "#000000";
-						this.rectHeight = 50;
-						this.rectWidth = 100;
-						this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
-						
 					}
 				}
 			}
+			
 		}
 		
 		if(localX > this.rectX && localX < (this.rectX + this.rectWidth) && localY > this.rectY && localY < (this.rectY + this.rectHeight)){
@@ -472,4 +482,8 @@ function battle(att, def, attTer, defTer){
 	var losses = { att: attLoses, def: defLoses };
 	return losses;
 	
+}
+
+function highlightNeighbors(){
+
 }
