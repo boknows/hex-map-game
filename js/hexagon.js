@@ -19,6 +19,15 @@ getMap().done(function(r) {
     console.log("error");
 });
 
+function updateMap(data){
+    $.ajax({
+    url: "updateMap.php",
+	data: data,
+    type: "POST",
+    dataType: 'JSON'
+    });
+};
+
 function loadedMap(map){
 	var hexes = [];
 
@@ -62,6 +71,7 @@ function loadedMap(map){
 
 	//convert properties to JSON for database storage
 	//var data = JSON.stringify(map);
+
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
 		this.canvasOriginX = originX;
@@ -271,6 +281,7 @@ function loadedMap(map){
 	};
 
 	var hexes = {};
+	var attack = {};
 	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
 		var mouseX = e.pageX;
@@ -278,7 +289,7 @@ function loadedMap(map){
 		var localX = mouseX - this.canvasOriginX;
 		var localY = mouseY - this.canvasOriginY;
 		var tile = this.getSelectedTile(localX, localY);
-		console.log(neighbors);
+		//console.log(neighbors);
 		
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -298,7 +309,7 @@ function loadedMap(map){
 						if(typeof hexes.selectedRow != "undefined"){
 							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){
 								trigger = true;
-								console.log("clicked a valid attacking neighbor");
+								//console.log("clicked a valid attacking neighbor");
 								var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
@@ -308,21 +319,42 @@ function loadedMap(map){
 								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
 								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
-									
+								attack.attY = hexes.selectedColumn;
+								attack.attX = hexes.selectedRow;
+								attack.defY = offset.q;
+								attack.defX = offset.r;
+								
+								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
+								//console.log(map[hexes.selectedRow][hexes.selectedColumn]);
 								//Draw Attack Button
 								this.context.lineWidth = 4;
 								this.context.strokeStyle = "#000000";
 								this.context.fillStyle = "#FF0000";
 								this.context.textAlign="center"; 
 								this.context.textBaseline = "middle";
-								this.rectX = (this.radius*(3/2)*(this.cols+2));
-								this.rectY = 50;
-								roundRect(this.context, this.rectX, this.rectY, 100, 50, 10, true);
+								this.attRectX = (this.radius*(3/2)*(this.cols+2));
+								this.attRectY = 50;
+								roundRect(this.context, this.attRectX, this.attRectY, 175, 50, 10, true);
 								this.context.font="20px Helvetica";
 								this.context.fillStyle = "#000000";
-								this.rectHeight = 50;
-								this.rectWidth = 100;
-								this.context.fillText("Attack!",this.rectX+(this.rectWidth/2),this.rectY+(this.rectHeight/2));
+								this.attRectHeight = 50;
+								this.attRectWidth = 175;
+								this.context.fillText("Single Attack",this.attRectX+(this.attRectWidth/2),this.attRectY+(this.attRectHeight/2));
+								
+								//Draw Continuous Attack Button
+								this.context.lineWidth = 4;
+								this.context.strokeStyle = "#000000";
+								this.context.fillStyle = "#FFAE00";
+								this.context.textAlign="center"; 
+								this.context.textBaseline = "middle";
+								this.contRectX = (this.radius*(3/2)*(this.cols+2));
+								this.contRectY = 105;
+								roundRect(this.context, this.contRectX, this.contRectY, 175, 50, 10, true);
+								this.context.font="20px Helvetica";
+								this.context.fillStyle = "#000000";
+								this.contRectHeight = 50;
+								this.contRectWidth = 175;
+								this.context.fillText("Continuous Attack",this.contRectX+(this.contRectWidth/2),this.contRectY+(this.contRectHeight/2));
 							}
 						}						
 					}
@@ -353,8 +385,26 @@ function loadedMap(map){
 			
 		}
 		
-		if(localX > this.rectX && localX < (this.rectX + this.rectWidth) && localY > this.rectY && localY < (this.rectY + this.rectHeight)){
-			console.log("attack clicked!");
+		if(localX > this.attRectX && localX < (this.attRectX + this.attRectWidth) && localY > this.attRectY && localY < (this.attRectY + this.attRectHeight)){
+			//console.log("attack clicked!");
+			if(map[attack.attX][attack.attY].units > 1){
+				var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "")
+				map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
+				map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
+				
+				if(map[attack.defX][attack.defY].units == 0){
+					map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
+					map[attack.attX][attack.attY].units = 1;
+					map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
+				}
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+				var data = { data: JSON.stringify(map) };
+				updateMap(data);
+			}else{
+				console.log("Can't attack. Not enough units.");
+			}
+			
 		}
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
@@ -465,6 +515,12 @@ function battle(att, def, attTer, defTer){
 	
 	for(i=0;i<att;i++){
 		attArr.push(rollDice());
+	}
+	if(def>2){ //Defender can roll max 2 dice
+		def = 2;
+	}
+	if(att>3){ //Attacker can roll max 3 dice
+		att = 3;
 	}
 	attArr.sort(function(a, b){return b-a});
 	for(i=0;i<def;i++){
