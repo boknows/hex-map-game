@@ -71,6 +71,7 @@ function loadedMap(map){
 
 	//convert properties to JSON for database storage
 	//var data = JSON.stringify(map);
+	//console.log(data);
 
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
@@ -307,7 +308,7 @@ function loadedMap(map){
 					var trigger = false;
 					for(i=0;i<neighbors.length;i++){
 						if(typeof hexes.selectedRow != "undefined"){
-							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){
+							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
 								//console.log("clicked a valid attacking neighbor");
 								var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
@@ -323,42 +324,13 @@ function loadedMap(map){
 								attack.attX = hexes.selectedRow;
 								attack.defY = offset.q;
 								attack.defX = offset.r;
-								
 								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
-								//console.log(map[hexes.selectedRow][hexes.selectedColumn]);
-								//Draw Attack Button
-								this.context.lineWidth = 4;
-								this.context.strokeStyle = "#000000";
-								this.context.fillStyle = "#FF0000";
-								this.context.textAlign="center"; 
-								this.context.textBaseline = "middle";
-								this.attRectX = (this.radius*(3/2)*(this.cols+2));
-								this.attRectY = 50;
-								roundRect(this.context, this.attRectX, this.attRectY, 175, 50, 10, true);
-								this.context.font="20px Helvetica";
-								this.context.fillStyle = "#000000";
-								this.attRectHeight = 50;
-								this.attRectWidth = 175;
-								this.context.fillText("Single Attack",this.attRectX+(this.attRectWidth/2),this.attRectY+(this.attRectHeight/2));
 								
-								//Draw Continuous Attack Button
-								this.context.lineWidth = 4;
-								this.context.strokeStyle = "#000000";
-								this.context.fillStyle = "#FFAE00";
-								this.context.textAlign="center"; 
-								this.context.textBaseline = "middle";
-								this.contRectX = (this.radius*(3/2)*(this.cols+2));
-								this.contRectY = 105;
-								roundRect(this.context, this.contRectX, this.contRectY, 175, 50, 10, true);
-								this.context.font="20px Helvetica";
-								this.context.fillStyle = "#000000";
-								this.contRectHeight = 50;
-								this.contRectWidth = 175;
-								this.context.fillText("Continuous Attack",this.contRectX+(this.contRectWidth/2),this.contRectY+(this.contRectHeight/2));
+								this.drawButtons();
 							}
 						}						
 					}
-					if(trigger == false){
+					if(trigger == false){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
 						hexes.selectedColumn=tile.column;
 						hexes.selectedRow=tile.row;
 						neighbors = getNeighbors(cube.x,cube.y,cube.z);
@@ -406,6 +378,38 @@ function loadedMap(map){
 			}
 			
 		}
+	};
+	
+	HexagonGrid.prototype.drawButtons = function() {
+		//Draw Attack Button
+		this.context.lineWidth = 4;
+		this.context.strokeStyle = "#000000";
+		this.context.fillStyle = "#FF0000";
+		this.context.textAlign="center"; 
+		this.context.textBaseline = "middle";
+		this.attRectX = (this.radius*(3/2)*(this.cols+2));
+		this.attRectY = 50;
+		roundRect(this.context, this.attRectX, this.attRectY, 175, 50, 10, true);
+		this.context.font="20px Helvetica";
+		this.context.fillStyle = "#000000";
+		this.attRectHeight = 50;
+		this.attRectWidth = 175;
+		this.context.fillText("Single Attack",this.attRectX+(this.attRectWidth/2),this.attRectY+(this.attRectHeight/2));
+		
+		//Draw Continuous Attack Button
+		this.context.lineWidth = 4;
+		this.context.strokeStyle = "#000000";
+		this.context.fillStyle = "#FFAE00";
+		this.context.textAlign="center"; 
+		this.context.textBaseline = "middle";
+		this.contRectX = (this.radius*(3/2)*(this.cols+2));
+		this.contRectY = 105;
+		roundRect(this.context, this.contRectX, this.contRectY, 175, 50, 10, true);
+		this.context.font="20px Helvetica";
+		this.context.fillStyle = "#000000";
+		this.contRectHeight = 50;
+		this.contRectWidth = 175;
+		this.context.fillText("Continuous Attack",this.contRectX+(this.contRectWidth/2),this.contRectY+(this.contRectHeight/2));
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
@@ -540,6 +544,4 @@ function battle(att, def, attTer, defTer){
 	
 }
 
-function highlightNeighbors(){
 
-}
