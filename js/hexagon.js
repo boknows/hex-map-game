@@ -45,6 +45,18 @@ function loadedMap(map){
 		this.canvasOriginY = 0;
 		
 		this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
+		var singleAttackButton = document.getElementById('singleAttack');
+		singleAttackButton.addEventListener('click', function (e) {
+			singleAttack(map, attack);
+			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+			$('#controls').hide();
+		}, false);
+		var contAttackButton = document.getElementById('continuousAttack');
+		contAttackButton.addEventListener('click', function (e) {
+			alert("Continous Attack!");
+			$('#controls').hide();
+		}, false);
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
@@ -61,7 +73,7 @@ function loadedMap(map){
 				if(land == true){
 					var rand = Math.floor((Math.random() * 4)); 
 					var own = Math.floor((Math.random() * 2)); 
-					map[i][j] = { type: types[rand], owner: mapProperties.owners[own], units: 3 };
+					map[i][j] = { type: types[rand], owner: mapProperties.owners[own], units: 10 };
 				}else if(land == false){
 					map[i][j] = { type: "water" };
 				}
@@ -286,7 +298,6 @@ function loadedMap(map){
 	var attack = {};
 	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
-		
 		var mouseX = e.pageX;
 		var mouseY = e.pageY;
 		var localX = mouseX - this.canvasOriginX;
@@ -330,17 +341,14 @@ function loadedMap(map){
 								attack.defX = offset.r;
 								
 								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
-								$('#controls').show();
-								var controls = document.getElementById('controls');
-								controls.addEventListener('click', function (e) {
-									singleAttack(map, attack);
-									hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-									hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-									$('#controls').hide();
-								}, false);
+								
 								
 							}
 						}						
+					}
+					if(trigger == true){
+						$('#controls').show();
+						
 					}
 					if(trigger == false){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
 						hexes.selectedColumn=tile.column;
@@ -371,14 +379,9 @@ function loadedMap(map){
 		
 		if(localX > this.attRectX && localX < (this.attRectX + this.attRectWidth) && localY > this.attRectY && localY < (this.attRectY + this.attRectHeight)){
 			//console.log("attack clicked!");
-			
-			
+					
 		}
-		
-		
 			
-		
-		
 	};
 	
 	HexagonGrid.prototype.drawButtons = function() {
@@ -412,9 +415,10 @@ function loadedMap(map){
 		this.contRectWidth = 175;
 		this.context.fillText("Continuous Attack",this.contRectX+(this.contRectWidth/2),this.contRectY+(this.contRectHeight/2));
 	};
-	function singleAttack(map, attack, canvas, context) {
+	function singleAttack(map, attack) {
 		if(map[attack.attX][attack.attY].units > 1){
-			var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "")
+			var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "");
+			console.log(losses);
 			map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
 			map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
 			
@@ -535,14 +539,16 @@ function battle(att, def, attTer, defTer){
 	var attLoses = 0;
 	var defLoses = 0;
 	
-	for(i=0;i<att;i++){
-		attArr.push(rollDice());
-	}
+	
 	if(def>2){ //Defender can roll max 2 dice
 		def = 2;
 	}
 	if(att>3){ //Attacker can roll max 3 dice
 		att = 3;
+	}
+	console.log("Att:" + att);
+	for(i=0;i<att;i++){
+		attArr.push(rollDice());
 	}
 	attArr.sort(function(a, b){return b-a});
 	for(i=0;i<def;i++){
