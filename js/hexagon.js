@@ -346,14 +346,10 @@ function loadedMap(map){
 								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
 								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
-								console.log(drawx3 + " " + drawy3);
 								attack.attY = hexes.selectedColumn;
 								attack.attX = hexes.selectedRow;
 								attack.defY = offset.q;
 								attack.defX = offset.r;
-								
-								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
-								
 								
 							}
 						}						
@@ -556,6 +552,10 @@ function battle(att, def, attTer, defTer){
 	}
 	if(att>3){ //Attacker can roll max 3 dice
 		att = 3;
+	}else if(att== 3){
+		att = 2;
+	}else if (att < 3){
+		att = 1;
 	}
 	for(i=0;i<att;i++){
 		attArr.push(rollDice());
@@ -573,7 +573,21 @@ function battle(att, def, attTer, defTer){
 		}
 	}
 	
+	var attString = "";
+	for(i=0;i<attArr.length;i++){
+		attString = attString + attArr[i] + ",";
+	}
+	var defString = "";
+	for(i=0;i<defArr.length;i++){
+		defString = defString + defArr[i] + ",";
+	}
+	attString = attString.slice(0,attString.length-1);
+	defString = defString.slice(0,defString.length-1);
+	
 	var losses = { att: attLoses, def: defLoses };
+	console.log("Attacker rolls: [" + attString + "]");
+	console.log("Defender rolls: [" + defString + "]");
+	console.log("Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.");
 	return losses;
 	
 }
