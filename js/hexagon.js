@@ -50,7 +50,18 @@ function loadedMap(map){
 			singleAttack(map, attack);
 			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-			$('#controls').hide();
+			
+			var drawy2 = attack.attY % 2 == 0 ? (attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+			var drawx2 = (attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+			var drawy3 = attack.defY % 2 == 0 ? (attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+			var drawx3 = (attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+			if(map[attack.attX][attack.attY].units == 1){
+			
+			}else{
+				hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map[attack.attX][attack.attY].owner); //highlight attacker hex
+				hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map[attack.defX][attack.defY].owner); //highlight defender hex
+			}
+			  
 		}, false);
 		var contAttackButton = document.getElementById('continuousAttack');
 		contAttackButton.addEventListener('click', function (e) {
@@ -335,6 +346,7 @@ function loadedMap(map){
 								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
 								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
+								console.log(drawx3 + " " + drawy3);
 								attack.attY = hexes.selectedColumn;
 								attack.attX = hexes.selectedRow;
 								attack.defY = offset.q;
@@ -418,7 +430,6 @@ function loadedMap(map){
 	function singleAttack(map, attack) {
 		if(map[attack.attX][attack.attY].units > 1){
 			var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "");
-			console.log(losses);
 			map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
 			map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
 			
@@ -546,7 +557,6 @@ function battle(att, def, attTer, defTer){
 	if(att>3){ //Attacker can roll max 3 dice
 		att = 3;
 	}
-	console.log("Att:" + att);
 	for(i=0;i<att;i++){
 		attArr.push(rollDice());
 	}
