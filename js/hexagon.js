@@ -114,6 +114,7 @@ function loadedMap(map){
 			}
 			offsetColumn = !offsetColumn;
 		}
+		
 	};
 
 	HexagonGrid.prototype.drawHexAtColRow = function(column, row, color) {
@@ -285,6 +286,7 @@ function loadedMap(map){
 	var attack = {};
 	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
+		
 		var mouseX = e.pageX;
 		var mouseY = e.pageY;
 		var localX = mouseX - this.canvasOriginX;
@@ -300,12 +302,14 @@ function loadedMap(map){
 				delete hexes.selectedRow;
 				delete this.rectX;
 				delete this.rectY;
+				$('#controls').hide();
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			}else if(typeof map[tile.row][tile.column] != "undefined"){
 				if(map[tile.row][tile.column].type !="water"){
 					var cube = toCubeCoord(tile.column, tile.row);
 					var trigger = false;
+					$('#controls').hide();
 					for(i=0;i<neighbors.length;i++){
 						if(typeof hexes.selectedRow != "undefined"){
 							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
@@ -324,9 +328,17 @@ function loadedMap(map){
 								attack.attX = hexes.selectedRow;
 								attack.defY = offset.q;
 								attack.defX = offset.r;
-								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
 								
-								this.drawButtons();
+								//console.log(hexes.selectedColumn + "," + hexes.selectedRow + " is attacking " + offset.q + "," + offset.r);
+								$('#controls').show();
+								var controls = document.getElementById('controls');
+								controls.addEventListener('click', function (e) {
+									singleAttack(map, attack);
+									hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+									hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+									$('#controls').hide();
+								}, false);
+								
 							}
 						}						
 					}
@@ -359,25 +371,14 @@ function loadedMap(map){
 		
 		if(localX > this.attRectX && localX < (this.attRectX + this.attRectWidth) && localY > this.attRectY && localY < (this.attRectY + this.attRectHeight)){
 			//console.log("attack clicked!");
-			if(map[attack.attX][attack.attY].units > 1){
-				var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "")
-				map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
-				map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
-				
-				if(map[attack.defX][attack.defY].units == 0){
-					map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
-					map[attack.attX][attack.attY].units = 1;
-					map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
-				}
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-				var data = { data: JSON.stringify(map) };
-				updateMap(data);
-			}else{
-				console.log("Can't attack. Not enough units.");
-			}
+			
 			
 		}
+		
+		
+			
+		
+		
 	};
 	
 	HexagonGrid.prototype.drawButtons = function() {
@@ -410,6 +411,23 @@ function loadedMap(map){
 		this.contRectHeight = 50;
 		this.contRectWidth = 175;
 		this.context.fillText("Continuous Attack",this.contRectX+(this.contRectWidth/2),this.contRectY+(this.contRectHeight/2));
+	};
+	function singleAttack(map, attack, canvas, context) {
+		if(map[attack.attX][attack.attY].units > 1){
+			var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "")
+			map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
+			map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
+			
+			if(map[attack.defX][attack.defY].units == 0){
+				map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
+				map[attack.attX][attack.attY].units = 1;
+				map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
+			}
+			var data = { data: JSON.stringify(map) };
+			updateMap(data);
+		}else{
+			console.log("Can't attack. Not enough units.");
+		}
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
@@ -543,5 +561,7 @@ function battle(att, def, attTer, defTer){
 	return losses;
 	
 }
+
+
 
 
