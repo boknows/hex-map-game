@@ -8,6 +8,6 @@ foreach ($stmt as $row) {
 	$data['mapProperties'] = $row['mapProperties'];
 }
 
-echo $data;
+echo JSON_encode($data);
 
 ?>

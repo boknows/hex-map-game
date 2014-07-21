@@ -11,8 +11,7 @@ function getMap(){
 };
 getMap().done(function(r) {
    if (r) {
-       loadedMap(r); //call loadedMap(r) if loading a map from DB
-	   
+       loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
     } else {
        console.log("No data");
     }
@@ -29,7 +28,8 @@ function updateMap(data){
     });
 };
 
-function loadedMap(map){
+function loadedMap(map, mapProperties){
+	console.log(mapProperties);
 	var hexes = [];
 	function HexagonGrid(canvasId, radius) {
 		this.radius = radius;
@@ -72,7 +72,7 @@ function loadedMap(map){
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
 		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue") };
-		console.log(mapProperties);
+		console.log(mapProperties.owners);
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
@@ -85,14 +85,14 @@ function loadedMap(map){
 				if(land == true){
 					var rand = Math.floor((Math.random() * 4)); 
 					var own = Math.floor((Math.random() * 2)); 
-					map[i][j] = { type: types[rand], owner: mapProperties.owners[own], units: 10 };
+					map[i][j] = { type: types[rand], owner: mapProperties.owners[own], units: 10, color: mapProperties.colors[own] };
 				}else if(land == false){
 					map[i][j] = { type: "water" };
 				}
 			}
 		}
 		//convert properties to JSON for database storage
-		var data = JSON.stringify(mapProperties);
+		var data = JSON.stringify(map);
 		console.log(data);
 	}
 
@@ -179,12 +179,13 @@ function loadedMap(map){
 		this.context.stroke();
 		
 
-		if(map[tile.row][tile.column].type != "water"){	
-			if(map[tile.row][tile.column].owner == "Bo"){
-				this.context.fillStyle = "Green";
-			}else if (map[tile.row][tile.column].owner == "Marlon"){
-				this.context.fillStyle = "Blue";
-			}
+		if(map[tile.row][tile.column].type != "water"){
+			this.context.fillStyle = map[tile.row][tile.column].color;
+			//if(map[tile.row][tile.column].owner == "Bo"){
+			//	this.context.fillStyle = "Green";
+			//}else if (map[tile.row][tile.column].owner == "Marlon"){
+			//	this.context.fillStyle = "Blue";
+			//}
 			
 			//Draw Circle inside Hex
 			if (highlight == true){
@@ -434,6 +435,7 @@ function loadedMap(map){
 				map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
 				map[attack.attX][attack.attY].units = 1;
 				map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
+				map[attack.defX][attack.defY].color = map[attack.attX][attack.attY].color;
 				$('#controls').hide();
 			}
 			var data = { data: JSON.stringify(map) };
