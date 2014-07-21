@@ -12,6 +12,7 @@ function getMap(){
 getMap().done(function(r) {
     if (r) {
        loadedMap(r); //call loadedMap(r) if loading a map from DB
+	   
     } else {
        console.log("No data");
     }
@@ -30,7 +31,6 @@ function updateMap(data){
 
 function loadedMap(map){
 	var hexes = [];
-
 	function HexagonGrid(canvasId, radius) {
 		this.radius = radius;
 
@@ -155,7 +155,6 @@ function loadedMap(map){
 		this.context.lineWidth = 1;
 
 		var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-
 		if(!typeof map[tile.row][tile.column].type =="undefined"){
 			if(map[tile.row][tile.column].type=="water"){
 				this.context.lineWidth = .1;
