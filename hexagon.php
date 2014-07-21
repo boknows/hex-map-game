@@ -21,12 +21,13 @@
 	}
 	.Game > canvas {
 		position: absolute;
+		
 		width: 100%;
 		height: 100%;
 	}
 	.Game > .controls {
 		position: absolute;
-		bottom: 850px;
+		bottom: 800px;
 		left: 1000px;
 		height: 40px;
 	}
@@ -46,9 +47,10 @@
 			<button type="button" id="singleAttack">Single Attack</button>
 			<button type="button" id ="continuousAttack">Continuous Attack</button>
 		</div>
+		<p style="position: absolute; bottom: 850px; left: 1000px;">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 	</div>
 	<script src="js/hexagon.js"></script>
-	 <h2>Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</h2>
+	 
 </body>
 
 

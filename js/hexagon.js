@@ -10,7 +10,7 @@ function getMap(){
     });
 };
 getMap().done(function(r) {
-    if (r) {
+   if (r) {
        loadedMap(r); //call loadedMap(r) if loading a map from DB
 	   
     } else {
@@ -72,6 +72,7 @@ function loadedMap(map){
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
 		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue") };
+		console.log(mapProperties);
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
@@ -90,11 +91,12 @@ function loadedMap(map){
 				}
 			}
 		}
+		//convert properties to JSON for database storage
+		var data = JSON.stringify(mapProperties);
+		console.log(data);
 	}
 
-	//convert properties to JSON for database storage
-	//var data = JSON.stringify(map);
-	//console.log(data);
+	
 
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
@@ -105,7 +107,7 @@ function loadedMap(map){
 		var currentHexX;
 		var currentHexY;
 		var debugText = "";
-		this.context.fillRect(10,10,1,1); // fill in the pixel at (10,10)
+		//this.context.fillRect(10,10,1,1); // fill in the pixel at (10,10)
 		var offsetColumn = false;
 		var hexNum = 1;
 		for (var col = 0; col < cols; col++) {
@@ -432,11 +434,13 @@ function loadedMap(map){
 				map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
 				map[attack.attX][attack.attY].units = 1;
 				map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
+				$('#controls').hide();
 			}
 			var data = { data: JSON.stringify(map) };
 			updateMap(data);
 		}else{
 			console.log("Can't attack. Not enough units.");
+			$('#controls').hide();
 		}
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
