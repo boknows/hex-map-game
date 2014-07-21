@@ -65,7 +65,10 @@ function loadedMap(map, mapProperties){
 		}, false);
 		var contAttackButton = document.getElementById('continuousAttack');
 		contAttackButton.addEventListener('click', function (e) {
-			alert("Continous Attack!");
+			contAttack(map, attack);
+			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+
 			$('#controls').hide();
 		}, false);
 	};
@@ -443,6 +446,28 @@ function loadedMap(map, mapProperties){
 		}else{
 			console.log("Can't attack. Not enough units.");
 			$('#controls').hide();
+		}
+	};
+	function contAttack(map, attack) {
+		while (map[attack.attX][attack.attY].units > 5){
+			if(map[attack.attX][attack.attY].units > 1){
+				var losses = battle(map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "");
+				map[attack.attX][attack.attY].units = map[attack.attX][attack.attY].units - losses.att;
+				map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units - losses.def;
+				
+				if(map[attack.defX][attack.defY].units == 0){
+					map[attack.defX][attack.defY].units = map[attack.attX][attack.attY].units - 1;
+					map[attack.attX][attack.attY].units = 1;
+					map[attack.defX][attack.defY].owner = map[attack.attX][attack.attY].owner;
+					map[attack.defX][attack.defY].color = map[attack.attX][attack.attY].color;
+					$('#controls').hide();
+				}
+				var data = { data: JSON.stringify(map) };
+				updateMap(data);
+			}else{
+				console.log("Can't attack. Not enough units.");
+				$('#controls').hide();
+			}
 		}
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
