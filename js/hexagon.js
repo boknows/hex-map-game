@@ -100,6 +100,8 @@ function loadedMap(map, mapProperties){
 			console.log("Now it is " + mapProperties.owners[mapProperties.turn] + "'s turn");
 			var data = { data: JSON.stringify(mapProperties) };
 			updateMap(data, "mapProperties");
+			var data = { data: JSON.stringify(map) };
+			updateMap(data, "map");
 			$('#endTurn').hide();
 		}, false);
 		
@@ -111,9 +113,15 @@ function loadedMap(map, mapProperties){
 			$('#controls').hide();	
 		}, false);	
 		
-		var transferButton = document.getElementById('transferButton');
-		transferButton.addEventListener('click', function (e) {
-			
+		var transferMaxButton = document.getElementById('transferMaxButton');
+		transferMaxButton.addEventListener('click', function (e) {
+			map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units + map[attack.attX][attack.attY].units - 1;
+			map[attack.attX][attack.attY].units = 1;
+			delete hexes.selectedColumn;
+			delete hexes.selectedRow;
+			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+			$('#fortify').hide();
 		}, false);
 	};
 	//Create Random Map if not loading from DB

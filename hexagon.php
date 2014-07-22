@@ -64,6 +64,7 @@
 				<span class='input-group-addon'>Units</span>
 			</div>
 			<button type="button" class="btn btn-success" id="transferButton">Move</button>
+			<button type="button" class="btn btn-danger" id="transferMaxButton">Move(max)</button>
 		</div>
 		<div class="controls" id="controls" style="display:none">
 			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
