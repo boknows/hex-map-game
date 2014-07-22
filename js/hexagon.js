@@ -92,7 +92,7 @@ function loadedMap(map, mapProperties){
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
-		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue") };
+		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue"), turn: 0 };
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
