@@ -1,6 +1,5 @@
 // Hex math defined here: http://blog.ruslans.com/2011/02/hexagonal-grid-math.html
 
-
 //Load map from database
 function getMap(){
     return $.ajax({
@@ -11,8 +10,8 @@ function getMap(){
 };
 getMap().done(function(r) {
    if (r) {
-		console.log(JSON.parse(r.mapProperties));
 		loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
+		//loadedMap();
     } else {
        console.log("No data");
     }
@@ -29,13 +28,28 @@ function updateMap(data, param){
 		dataType: 'JSON'
 		});
 	}else if(param == "mapProperties"){
-	
+		$.ajax({
+		url: "updateMapProps.php",
+		data: data,
+		type: "POST",
+		dataType: 'JSON'
+		});
 	}
 };
 
 function loadedMap(map, mapProperties){
 	var hexes = [];
+	var username = $('#username').val();
+	if(mapProperties.owners[mapProperties.turn] != username){
+		$('#endTurn').hide();
+	}
 	
+	if(typeof mapProperties != "undefined" && username == mapProperties.owners[mapProperties.turn]){
+		var msg = document.getElementById('msg').innerHTML;
+		msg = msg + " It's your turn! " + mapProperties.turnPhase + " stage. ";
+		document.getElementById('msg').innerHTML = msg;	
+	}
+
 	function HexagonGrid(canvasId, radius) {
 		this.radius = radius;
 		
@@ -65,34 +79,46 @@ function loadedMap(map, mapProperties){
 			}else{
 				hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map[attack.attX][attack.attY].owner); //highlight attacker hex
 				hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map[attack.defX][attack.defY].owner); //highlight defender hex
-			}
-			  
+			} 
 		}, false);
+		
 		var contAttackButton = document.getElementById('continuousAttack');
 		contAttackButton.addEventListener('click', function (e) {
 			contAttack(map, attack);
 			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-
 			$('#controls').hide();
 		}, false);
+		
 		var endTurnButton = document.getElementById('endTurnButton');
 		endTurnButton.addEventListener('click', function (e) {
-			console.log("It is " + mapProperties.owners[mapProperties.turn] + "'s turn");
 			if(mapProperties.turn == mapProperties.owners.length-1){
 				mapProperties.turn = 0;
 			}else{
 				mapProperties.turn = parseInt(mapProperties.turn) + 1;
 			}
 			console.log("Now it is " + mapProperties.owners[mapProperties.turn] + "'s turn");
-			var data = { data: JSON.stringify(map) };
+			var data = { data: JSON.stringify(mapProperties) };
 			updateMap(data, "mapProperties");
+			$('#endTurn').hide();
 		}, false);
 		
+		var fortifyButton = document.getElementById('fortifyButton');
+		fortifyButton.addEventListener('click', function (e) {
+			mapProperties.turnPhase = "fortify";
+			var data = { data: JSON.stringify(mapProperties) };
+			updateMap(data, "mapProperties");
+			$('#controls').hide();	
+		}, false);	
+		
+		var transferButton = document.getElementById('transferButton');
+		transferButton.addEventListener('click', function (e) {
+			
+		}, false);
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
-		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue"), turn: 0 };
+		var mapProperties = { owners: new Array("bo_knows", "Marlon"), colors: new Array("Orange", "Purple"), turn: 0 };
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
@@ -114,10 +140,9 @@ function loadedMap(map, mapProperties){
 		//convert properties to JSON for database storage
 		var data = JSON.stringify(map);
 		console.log(data);
+		var data = JSON.stringify(mapProperties);
+		console.log(data);
 	}
-
-	
-
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
 		this.canvasOriginX = originX;
@@ -154,8 +179,7 @@ function loadedMap(map, mapProperties){
 					this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map[row][col].owner);
 				}else if(map[row][col].type=="mountains"){
 					this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map[row][col].owner);
-				}
-				
+				}	
 			}
 			offsetColumn = !offsetColumn;
 		}
@@ -198,14 +222,8 @@ function loadedMap(map, mapProperties){
 		this.context.closePath();
 		this.context.stroke();
 		
-
 		if(map[tile.row][tile.column].type != "water"){
 			this.context.fillStyle = map[tile.row][tile.column].color;
-			//if(map[tile.row][tile.column].owner == "Bo"){
-			//	this.context.fillStyle = "Green";
-			//}else if (map[tile.row][tile.column].owner == "Marlon"){
-			//	this.context.fillStyle = "Blue";
-			//}
 			
 			//Draw Circle inside Hex
 			if (highlight == true){
@@ -224,9 +242,6 @@ function loadedMap(map, mapProperties){
 			this.context.fillStyle = '#FFFFFF';
 			this.context.fillText(map[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 		}
-		
-		
-
 	};
 
 	//Recusivly step up to the body to calculate canvas offset.
@@ -246,7 +261,6 @@ function loadedMap(map, mapProperties){
 	//Uses a grid overlay algorithm to determine hexagon location
 	//Left edge of grid has a test to acuratly determin correct hex
 	HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
-
 		var offSet = this.getRelativeCanvasOffset();
 
 		mouseX -= offSet.x;
@@ -346,6 +360,7 @@ function loadedMap(map, mapProperties){
 				delete this.rectX;
 				delete this.rectY;
 				$('#controls').hide();
+				$('#fortify').hide();
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 				hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			}else if(typeof map[tile.row][tile.column] != "undefined"){
@@ -355,30 +370,51 @@ function loadedMap(map, mapProperties){
 					$('#controls').hide();
 					for(i=0;i<neighbors.length;i++){
 						if(typeof hexes.selectedRow != "undefined"){
-							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
-								trigger = true;
-								var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
-								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
-								var drawy3 = hexes.selectedColumn % 2 == 0 ? (hexes.selectedRow * this.height) + this.canvasOriginY + 6 : (hexes.selectedRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-								var drawx3 = (hexes.selectedColumn * this.side) + this.canvasOriginX;
-								this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
-								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
-								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
-								attack.attY = hexes.selectedColumn;
-								attack.attX = hexes.selectedRow;
-								attack.defY = offset.q;
-								attack.defX = offset.r;
-								
+							if(mapProperties.turnPhase != "fortify"){
+								if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
+									trigger = true;
+									var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+									var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+									var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+									var drawy3 = hexes.selectedColumn % 2 == 0 ? (hexes.selectedRow * this.height) + this.canvasOriginY + 6 : (hexes.selectedRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+									var drawx3 = (hexes.selectedColumn * this.side) + this.canvasOriginX;
+									this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+									hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+									this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
+									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
+									attack.attY = hexes.selectedColumn;
+									attack.attX = hexes.selectedRow;
+									attack.defY = offset.q;
+									attack.defX = offset.r;
+								}
+							}else if(mapProperties.turnPhase == "fortify"){
+								if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner == map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
+									trigger = true;
+									var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
+									var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+									var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+									var drawy3 = hexes.selectedColumn % 2 == 0 ? (hexes.selectedRow * this.height) + this.canvasOriginY + 6 : (hexes.selectedRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+									var drawx3 = (hexes.selectedColumn * this.side) + this.canvasOriginX;
+									this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+									hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+									this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map[tile.row][tile.column].owner); //highlight attacker hex
+									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight defender hex
+									attack.attY = hexes.selectedColumn;
+									attack.attX = hexes.selectedRow;
+									attack.defY = offset.q;
+									attack.defX = offset.r;
+								}
 							}
 						}						
 					}
 					if(trigger == true){
-						$('#controls').show();
-						
+						if(mapProperties.turnPhase == "fortify"){
+							$('#fortify').show();
+						}else{
+							$('#controls').show();
+						}
 					}
-					if(trigger == false){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
+					if(trigger == false && map[tile.row][tile.column].owner == username && mapProperties.owners[mapProperties.turn] == username){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
 						hexes.selectedColumn=tile.column;
 						hexes.selectedRow=tile.row;
 						neighbors = getNeighbors(cube.x,cube.y,cube.z);
@@ -395,8 +431,14 @@ function loadedMap(map, mapProperties){
 							var drawy = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 							var drawx = (offset.q * this.side) + this.canvasOriginX;
 							var tile = this.getSelectedTile(drawx + (this.width/2), drawy-6+(this.height/2));
-							if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
-								this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+							if(mapProperties.turnPhase == "fortify"){
+								if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner == map[tile.row][tile.column].owner){
+									this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+								}
+							}else{
+								if(tile.row < this.rows && tile.column < this.cols && tile.row >=0 && tile.column >=0 && map[tile.row][tile.column].type != "water" && owner != map[tile.row][tile.column].owner){
+									this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map[tile.row][tile.column].owner); //highlight neighboring hexes
+								}
 							}
 						}
 					}
