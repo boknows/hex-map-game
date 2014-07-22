@@ -11,29 +11,34 @@ function getMap(){
 };
 getMap().done(function(r) {
    if (r) {
-       loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
+		console.log(JSON.parse(r.mapProperties));
+		loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
     } else {
        console.log("No data");
     }
 }).fail(function(x) {
-    console.log("error");
+   console.log("error");
 });
 
-function updateMap(data){
-    $.ajax({
-    url: "updateMap.php",
-	data: data,
-    type: "POST",
-    dataType: 'JSON'
-    });
+function updateMap(data, param){
+	if(param == "map"){
+		$.ajax({
+		url: "updateMap.php",
+		data: data,
+		type: "POST",
+		dataType: 'JSON'
+		});
+	}else if(param == "mapProperties"){
+	
+	}
 };
 
 function loadedMap(map, mapProperties){
-	console.log(mapProperties);
 	var hexes = [];
+	
 	function HexagonGrid(canvasId, radius) {
 		this.radius = radius;
-
+		
 		this.height = Math.sqrt(3) * radius;
 		this.width = 2 * radius;
 		this.side = (3 / 2) * radius;
@@ -71,11 +76,23 @@ function loadedMap(map, mapProperties){
 
 			$('#controls').hide();
 		}, false);
+		var endTurnButton = document.getElementById('endTurnButton');
+		endTurnButton.addEventListener('click', function (e) {
+			console.log("It is " + mapProperties.owners[mapProperties.turn] + "'s turn");
+			if(mapProperties.turn == mapProperties.owners.length-1){
+				mapProperties.turn = 0;
+			}else{
+				mapProperties.turn = parseInt(mapProperties.turn) + 1;
+			}
+			console.log("Now it is " + mapProperties.owners[mapProperties.turn] + "'s turn");
+			var data = { data: JSON.stringify(map) };
+			updateMap(data, "mapProperties");
+		}, false);
+		
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
 		var mapProperties = { owners: new Array("Bo", "Marlon"), colors: new Array("Green", "Blue") };
-		console.log(mapProperties.owners);
 		var map = new Array(10);
 		var types = ["land", "grass", "mountains", "desert"];
 
@@ -319,7 +336,6 @@ function loadedMap(map, mapProperties){
 		var localX = mouseX - this.canvasOriginX;
 		var localY = mouseY - this.canvasOriginY;
 		var tile = this.getSelectedTile(localX, localY);
-		//console.log(neighbors);
 		
 		if (tile.column >= 0 && tile.row >= 0) {
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -341,7 +357,6 @@ function loadedMap(map, mapProperties){
 						if(typeof hexes.selectedRow != "undefined"){
 							if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && map[hexes.selectedRow][hexes.selectedColumn].owner != map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
-								//console.log("clicked a valid attacking neighbor");
 								var offset = toOffsetCoord(neighbors[i].x,neighbors[i].y,neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
@@ -442,7 +457,7 @@ function loadedMap(map, mapProperties){
 				$('#controls').hide();
 			}
 			var data = { data: JSON.stringify(map) };
-			updateMap(data);
+			updateMap(data, "map");
 		}else{
 			console.log("Can't attack. Not enough units.");
 			$('#controls').hide();
@@ -463,7 +478,7 @@ function loadedMap(map, mapProperties){
 					$('#controls').hide();
 				}
 				var data = { data: JSON.stringify(map) };
-				updateMap(data);
+				updateMap(data, "map");
 			}else{
 				console.log("Can't attack. Not enough units.");
 				$('#controls').hide();

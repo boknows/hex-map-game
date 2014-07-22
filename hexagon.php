@@ -21,13 +21,18 @@
 	}
 	.Game > canvas {
 		position: absolute;
-		
 		width: 100%;
 		height: 100%;
 	}
-	.Game > .controls {
+	.Game > #controls {
 		position: absolute;
-		bottom: 800px;
+		bottom: 750px;
+		left: 1000px;
+		height: 40px;
+	}
+	.Game > #endTurn {
+		position: absolute;
+		bottom: 785px;
 		left: 1000px;
 		height: 40px;
 	}
@@ -43,6 +48,9 @@
 <body>
 	<div class=Game>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
+		<div class="controls" id="endTurn">
+			<button type="button" id="endTurnButton">End Turn</button>
+		</div>
 		<div class="controls" id="controls" style="display:none">
 			<button type="button" id="singleAttack">Single Attack</button>
 			<button type="button" id ="continuousAttack">Continuous Attack</button>
