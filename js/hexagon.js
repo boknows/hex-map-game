@@ -123,6 +123,21 @@ function loadedMap(map, mapProperties){
 			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
 			$('#fortify').hide();
 		}, false);
+		
+		var moveButton = document.getElementById('transferButton');
+		moveButton.addEventListener('click', function (e) {
+			var num = $("#transfer").val();
+			num = parseInt(num);
+			console.log(num);
+			var tmpAtt = map[attack.attX][attack.attY].units;
+			map[attack.defX][attack.defY].units = map[attack.defX][attack.defY].units + num;
+			map[attack.attX][attack.attY].units = tmpAtt - num;
+			delete hexes.selectedColumn;
+			delete hexes.selectedRow;
+			hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+			$('#fortify').hide();
+		}, false);
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
@@ -418,6 +433,14 @@ function loadedMap(map, mapProperties){
 					if(trigger == true){
 						if(mapProperties.turnPhase == "fortify"){
 							$('#fortify').show();
+							var tran = "";
+							
+							for(i=1;i<map[hexes.selectedRow][hexes.selectedColumn].units;i++){
+								var tran2 = "<option value='" + i + "'>" + i + "</option>";
+								tran = tran + tran2;
+							}
+							console.log(tran);
+							document.getElementById('transfer').innerHTML = tran;	
 						}else{
 							$('#controls').show();
 						}

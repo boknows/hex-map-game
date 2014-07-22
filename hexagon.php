@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+
 	<style>
 	.Game {
 		position: relative;
@@ -58,11 +59,13 @@
 			<button type="button" id="fortifyButton" class="btn btn-primary">Fortify</button>
 		</div>
 		<div class="controls" id="fortify" style="display:none">
-			<div class="input-group">
-				<span class='input-group-addon'>Transfer</span>
-				<select name='transfer' id='transfer' class='selectpicker'><option value="1">1</option><option value="2">2</option></select>
-				<span class='input-group-addon'>Units</span>
+			
+			<div class="btn-group" data-resize="auto">
+				Transfer: 
+				<select id="transfer"></select> Units.
 			</div>
+			
+			<br>
 			<button type="button" class="btn btn-success" id="transferButton">Move</button>
 			<button type="button" class="btn btn-danger" id="transferMaxButton">Move(max)</button>
 		</div>
@@ -76,9 +79,9 @@
 	
 </body>
 <script>
-window.onload=function(){
-	$('.selectpicker').selectpicker();
-};
+$('#transfer').on('changed', function (evt, data) {
+			console.log(data);
+		});
 </script>
 </html>
 
