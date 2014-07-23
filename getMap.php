@@ -6,6 +6,7 @@ $stmt->execute(array(':id' => "3"));
 foreach ($stmt as $row) {
 	$data['mapArray'] = $row['mapArray'];	
 	$data['mapProperties'] = $row['mapProperties'];
+	//$data = $row['mapArray'];	
 }
 
 echo JSON_encode($data);

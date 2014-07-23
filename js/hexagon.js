@@ -10,8 +10,8 @@ function getMap(){
 };
 getMap().done(function(r) {
    if (r) {
-		loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
-		//loadedMap();
+		//loadedMap(JSON.parse(r.mapArray), JSON.parse(r.mapProperties)); //call loadedMap(r) if loading a map from DB
+		loadedMap();
     } else {
        console.log("No data");
     }
@@ -40,9 +40,7 @@ function updateMap(data, param){
 function loadedMap(map, mapProperties){
 	var hexes = [];
 	var username = $('#username').val();
-	if(mapProperties.owners[mapProperties.turn] != username){
-		$('#endTurn').hide();
-	}
+	
 	
 	if(typeof mapProperties != "undefined" && username == mapProperties.owners[mapProperties.turn]){
 		var msg = document.getElementById('msg').innerHTML;
@@ -64,6 +62,8 @@ function loadedMap(map, mapProperties){
 		this.canvasOriginY = 0;
 		
 		this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
+		
+		//UI Buttons
 		var singleAttackButton = document.getElementById('singleAttack');
 		singleAttackButton.addEventListener('click', function (e) {
 			singleAttack(map, attack);
@@ -139,7 +139,7 @@ function loadedMap(map, mapProperties){
 			$('#fortify').hide();
 		}, false);
         
-        //setup unit placement select
+        //setup unit placement select box
         if(mapProperties.turnPhase == "unitPlacement"){
             $("#unitPlacement").show();
             $("#endTurn").hide();
@@ -178,6 +178,13 @@ function loadedMap(map, mapProperties){
 		var data = JSON.stringify(mapProperties);
 		console.log(data);
 	}
+	
+	if(mapProperties.owners[mapProperties.turn] != username){ 
+		//if it's not a players turn, hide UI elements
+		$('#endTurn').hide();
+		$('#controls').hide();
+		$('#fortify').hide();
+	}
 
 	HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
 		this.canvasOriginX = originX;
@@ -187,7 +194,7 @@ function loadedMap(map, mapProperties){
 		var currentHexX;
 		var currentHexY;
 		var debugText = "";
-		//this.context.fillRect(10,10,1,1); // fill in the pixel at (10,10)
+
 		var offsetColumn = false;
 		var hexNum = 1;
 		for (var col = 0; col < cols; col++) {
@@ -367,7 +374,6 @@ function loadedMap(map, mapProperties){
 		return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
 	};
 
-	//TODO: Replace with optimized barycentric coordinate method
 	HexagonGrid.prototype.isPointInTriangle = function isPointInTriangle(pt, v1, v2, v3) {
 		var b1, b2, b3;
 		b1 = this.sign(pt, v1, v2) < 0.0;
@@ -376,8 +382,8 @@ function loadedMap(map, mapProperties){
 		return ((b1 == b2) && (b2 == b3));
 	};
 
-	var hexes = {};
-	var attack = {};
+	var hexes = {}; //object stores clicked hexagon
+	var attack = {}; //object stores another clicked hexagon only after one is already selected. This is the hexagon the player is attacking.
 	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
 		var mouseX = e.pageX;
