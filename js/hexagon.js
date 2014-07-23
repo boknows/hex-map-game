@@ -138,6 +138,18 @@ function loadedMap(map, mapProperties){
 			hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
 			$('#fortify').hide();
 		}, false);
+        
+        //setup unit placement select
+        if(mapProperties.turnPhase == "unitPlacement"){
+            $("#unitPlacement").show();
+            $("#endTurn").hide();
+            var units = calcUnits(map, username);
+            var unitMenu = document.getElementById('place').innerHTML;
+            for(i=1;i<units+1;i++){
+                unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   
+            }
+            document.getElementById('place').innerHTML = unitMenu;	
+        }
 	};
 	//Create Random Map if not loading from DB
 	if(typeof map == "undefined"){
@@ -557,6 +569,19 @@ function loadedMap(map, mapProperties){
 				$('#controls').hide();
 			}
 		}
+	};
+	function calcUnits(map, username) {
+		//calc raw units for initial units
+        var units = 0;
+		for(i=0;i<map.length;i++){
+            for(j=0;j<map[i].length;j++){
+                if(map[i][j].owner == username){
+                    units++;   
+                }
+            }        
+		}
+		units = Math.floor(units/3); 
+		return units;
 	};
 	var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);

@@ -47,6 +47,12 @@
 		left: 1000px;
 		height: 40px;
 	}
+    .Game > #unitPlacement {
+		position: absolute;
+		bottom: 785px;
+		left: 1000px;
+		height: 40px;
+	}
 
 	</style>
 </head>
@@ -58,13 +64,17 @@
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
 			<button type="button" id="fortifyButton" class="btn btn-primary">Fortify</button>
 		</div>
+        <div class="controls" id="unitPlacement" style="display:none">
+            <p>Select number of units, then click a hexagon.</p> 
+            <div class="btn-group" data-resize="auto">
+				<select id="place"></select> Units.
+			</div>
+        </div>
 		<div class="controls" id="fortify" style="display:none">
-			
 			<div class="btn-group" data-resize="auto">
 				Transfer: 
 				<select id="transfer"></select> Units.
 			</div>
-			
 			<br>
 			<button type="button" class="btn btn-success" id="transferButton">Move</button>
 			<button type="button" class="btn btn-danger" id="transferMaxButton">Move(max)</button>
