@@ -1,7 +1,7 @@
 (function() {
-  // let's get our map
-  var gameMap = mapGen.getMap().done();
-  console.log(gameMap);
-  console.log(gameMap.responseText);
-  console.log(JSON.parse(gameMap));
+    // let's get our map
+    var gameMap = mapGen.getMap();
+    gameMap.done(function(r){  }).
+    fail(function(x){  });
+    console.log(gameMap);
 })();
