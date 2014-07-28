@@ -1,0 +1,122 @@
+
+<script type="text/javascript">
+function run()
+    {
+	run.execute();
+    }
+</script>
+<script type="text/javascript">
+    run.execute = function()
+    {
+        alert("Running away!");
+    }
+</script>
+<script type="text/javascript">
+run();
+</script>
+
+
+http://pastebin.com/QBn6GBCK
+https://gist.github.com/jarofghosts/84ed820127774573febc
+15:23] <chippah> Hexagon.js/hexagon.js at master · rrreese/Hexagon.js · GitHub
+[15:23] <bo_knows> if has a HexagonGrid function and a bunch of prototypes
+[15:23] <bo_knows> ideally, I'd like to separate the prototypes into different files
+[15:24] <bo_knows> would I be able to do that this way?
+[15:24] <jarofghosts> you could
+[15:24] <jarofghosts> each file would just have Map.prototype.functionName = function(blah) { ... }
+
+[15:25] <bo_knows> I want it to not be confusing  haha
+[15:25] <bo_knows> right now it's all in 1 file and getting unruly
+[15:25] <jarofghosts> Map's constructor and methods should all be in one file
+[15:25] <bo_knows> because I'm encapsulating the entire thing in 1 function so that my data can be passed to it from .success
+[15:26] <jarofghosts> and whatever consumes it should live elsewhere
+[15:26] <jarofghosts> what you want to do is more like what i showed in my example
+[15:26] <jarofghosts> when the ajax request completes, store the mapdata as a property of the map instance
+[15:26] <jarofghosts> so that other methods can refer to it
+[15:26] <jarofghosts> so you dont have to do that
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
+
+<bo_knows> yeah
+[15:27] <bo_knows> also, TIL you could do console.log("Map:", mapData)    text then an object using a comma
+[15:28] <bo_knows> ha!
+[15:28] <jarofghosts> haha
+[15:29] <bo_knows> so, if I have this HexagonGrid
+[15:29] == Elvano [~Elvano@180.11-67-87.adsl-dyn.isp.belgacom.be] has quit [Ping timeout: 255 seconds]
+[15:29] <bo_knows> and it has prototypes
+[15:29] <bo_knows> like HexagonGrid.prototype.drawHex
+[15:29] <jarofghosts> those are methods
+[15:29] <bo_knows> I'd have to call it like map.prototype.HexagonGrid.prototype.drawHex ??
+[15:30] <bo_knows> Bear with me.  I'm probably starting this project that is way too complicated for my knowledge level.
+[15:30] <jarofghosts> so it would be useful to learn how prototypes work in javascript
+[15:30] <jarofghosts> suffice to say
+[15:30] <jarofghosts> when you call new Map
+[15:31] <jarofghosts> what happens is the Map function (the constructor) is ran
+[15:31] <bo_knows> right
+[15:31] <bo_knows> with the method getData in there
+[15:31] <jarofghosts> and the object returned will have access to whatever is set up in that constructor, plus any methods defined on its prototype
+[15:32] <jarofghosts> so thats why i recommended moving getData out of the constructor
+[15:42] == Jammaloo [~Jammaloo3@d192-186-118-189.home4.cgocable.net] has joined #learnjavascript
+[15:43] <jarofghosts> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
+[15:43] <chippah> Introduction to Object-Oriented JavaScript - JavaScript | MDN
+[15:46] <bo_knows> thanks
+[15:46] <bo_knows> some light weekend reading
+[15:46] <jarofghosts> mdn is your friend
+[15:54] == msd2 [49357d88@gateway/web/freenode/ip.73.53.125.136] has quit [Ping timeout: 246 seconds]
+[15:54] <bo_knows> so I read through to methods
+[15:54] <jarofghosts> ᕕ( ᐛ )ᕗ
+[15:54] <bo_knows> is it not possible to assign the data from map.getData(displayData) to a variable?
+[15:55] <bo_knows> var data = map.getData(displayData);
+[15:55] <bo_knows> in the global namespace
+[15:55] <jarofghosts> you would assign within the callback, but it would be much more useful to have it be a property of the map instance
+[15:55] <jarofghosts> mostly because global variables are bad++
+
+    
+    http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/
+    
+    [21:52] <danecando> got it let me take a look
+[21:53] <bo_knows> ok
+[21:53] <bo_knows> its a bit messy, so feel free to ask questions
+[21:53] <bo_knows> I appreciate any help
+[22:01] <danecando> is the methods in hexagon grid  taking any data from the enclosing scope or is it all being passed in through the arguments it looks like
+[22:01] <bo_knows> well, it does use the "map" object, which is inside the scope of loadedMap()
+[22:02] <bo_knows> everything else is arguments
+[22:02] <bo_knows> before I even used AJAX for DB data, it was all global
+[22:03] <danecando> because ideally you would probably want to separate the hexagon object into another file and it's just operating on the data that you get from your ajax call
+[22:03] <danecando> and in the 2nd paste bin
+[22:04] <bo_knows> I do want it separate
+[22:04] <bo_knows> thats the point
+[22:05] <danecando> you could structure it like that and operate on the data in the get data callback
+[22:05] <bo_knows> even every HexagonGrid.prototype could be a separate file
+[22:06] <bo_knows> so, using that 2nd pastebin as an example, how/where would i start the HexagonGrid object?
+[22:08] <danecando> you would start it in the get data callback
+[22:09] <danecando> and it would essentially be the same concept as your original
+[22:09] <bo_knows> inside map.getData(function(map_data) {}   ?
+[22:09] <danecando> where the function inside of get data  =
+[22:09] <danecando> function loadedMap(map, mapProperties){
+[22:10] <danecando> just structured a little bit fancier
+[22:10] <danecando> you might wanna get help from somebody more advanced then me tho :p
+[22:10] <bo_knows> heh   I've been trying
+[22:10] <bo_knows> jarofghosts was helping me earlier, but I had to bail because my 2yr old woke up from his nap
+[22:11] <danecando> i just like looking at problems to make my brain do something
+[22:11] <danecando> is he the one that made the 2nd paste?
+[22:11] <bo_knows> he did, but he didn't fully understand what I needed
+[22:11] <bo_knows> I sent him my code after that
+[22:13] <danecando> yea but it seems to me like you could easily call  var hexagonGrid = new HexagonGrid("HexCanvas", 30); right inside of map.getdata function as it essentially the same as the loaded map function
+[22:13] <danecando> there should be no reason why hexagon grid object needs to be declared inside of that function
+[22:13] <bo_knows> hmm... ddin't even think of that
+    
+    
+    Can I create a HexagonGrid method/property with mapData in there?
+    
+    http://jsfiddle.net/fk74m/    - closures for eventlisterner
+    
+    4:59] <Jammaloo1> Depends on the data
+[14:59] <bo_knows> the data in question is where I clicked, and where I clicked previously.  Those 2 things determine a lot of things in my "game"
+[15:03] == night-owl [~night-owl@cpe-74-131-145-231.swo.res.rr.com] has quit [Ping timeout: 240 seconds]
+[15:06] == {alw} [~prokesye@adsl-108-68-75-133.dsl.sgnwmi.sbcglobal.net] has joined #learnjavascript
+[15:11] <olivierrr> functions invoked by even handler have the element as context
+[15:11] <olivierrr> this = elem
+[15:15] == night-owl [~night-owl@cpe-74-131-145-231.swo.res.rr.com] has joined #learnjavascript
+[15:27] <Jammaloo1> You could always have, as part of your game, some variables that keep track of the current and previous click, and those are updated in that click event
+[15:27] == beardofb_ [~beardofbe@184-99-104-190.boid.qwest.net] has quit [Remote host closed the connection]
