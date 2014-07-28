@@ -1,0 +1,36 @@
+so, you essentially have a main run() function
+[08:02] <bo_knows> and all other functionality can be a separate rile with a new run.otherFunction() with it
+[08:02] <Jammaloo2> Correctamundo
+[08:02] <bo_knows> that the run() calls
+[08:02] <Jammaloo2> Yep, that's how it's normally organised
+[08:02] <Jammaloo2> So you could do something like
+[08:03] <Jammaloo2> in the main file, making loadMap.modules = {}
+[08:03] <Jammaloo2> s/load/loaded/g
+[08:03] <ziggy-js> Jammaloo2 meant "in the main file, making loadedMap.modules = {}"
+[08:04] <Jammaloo2> Then in each separate file
+[08:04] <Jammaloo2> do loadedMap.modules.doSomethingWithMap = function(){}
+[08:04] <Jammaloo2> And split off every file into it's own module
+[08:04] <bo_knows> so, for example
+[08:05] <bo_knows> my primary function is called HexagonGrid, which has many prototypes
+[08:05] <bo_knows> so, I'd be doing like      loadedMap.modules.HexagonGrid.prototype.drawHex = function(){}
+[08:05] <Jammaloo2> Yep
+[08:05] <Jammaloo2> That will work
+[08:06] <bo_knows> hell of a function call
+[08:06] <Jammaloo2> the .modules is just to keep things organised, that could always be removed to shorten it
+[08:06] <Jammaloo2> but yeah, the namespaces get quite long
+[08:07] <Jammaloo2> But in drawHex, you can always do something like
+[08:07] <thatslifeson> and I've gotta say
+[08:07] <Jammaloo2> self = loadedMap.modules.HexagonGrid
+[08:07] <thatslifeson> you have some of the nicest teeth I've ever seen
+[08:07] <Jammaloo2> and just do self.whateverfunction()
+[08:07] <Jammaloo2> You wouldn't believe I'm British!
+[08:07] <Jammaloo2> !ty thatslifeson
+[08:07] <ziggy-js> Thank you, thatslifeson, you are a fine human being!
+[08:07] <Jammaloo2> I had braces
+[08:08] <thatslifeson> lol, definitely not
+[08:08] <Jammaloo2> But they turned out pretty well
+[08:08] <bo_knows> backup...  I don't quite get that self reference
+[08:08] <Jammaloo2> So
+[08:09] <bo_knows> self.drawHex()   after that declaration?
+[08:09] <Jammaloo2> if in drawHex, you call a bunch of other functions from Hexagongrid
+[08:09] <bo_knows> indeed

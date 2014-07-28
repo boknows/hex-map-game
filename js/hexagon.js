@@ -3,7 +3,7 @@ var Map = function(){
     var mapData;
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
-    this.hexes = {selectedX: null, selectedY: null };
+    this.hexes = {selectedX: null, selectedY: null, neighbors: null};
     this.getData = function(callback){
         $.ajax({
             url: "getMap.php",
@@ -59,6 +59,7 @@ function updateMap(data, param){
 		this.width = 2 * radius;
 		this.side = (3 / 2) * radius;
         this.map = map.data;
+		console.log(this.map);
         this.mapProperties = map.dataProp;
 		this.canvas = document.getElementById(canvasId);
 		this.context = this.canvas.getContext('2d');
@@ -119,10 +120,12 @@ function updateMap(data, param){
 		
 		var transferMaxButton = document.getElementById('transferMaxButton');
 		transferMaxButton.addEventListener('click', function (e) {
-			this.map[this.attack.defX][this.attack.defY].units = this.map[this.attack.defX][this.attack.defY].units + this.map[this.attack.attX][this.attack.attY].units - 1;
-			this.map[this.attack.attX][this.attack.attY].units = 1;
-			delete this.hexes.selectedColumn;
-			delete this.hexes.selectedRow;
+			console.log(map.attack);
+			console.log(map.data[0][1].units);
+			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + map.data[map.attack.attX][map.attack.attY].units - 1;
+			map.data[map.attack.attX][map.attack.attY].units = 1;
+			delete map.data.hexes.selectedColumn;
+			delete map.data.hexes.selectedRow;
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			$('#fortify').hide();
@@ -377,7 +380,7 @@ function updateMap(data, param){
 	//var attack = {}; //object stores another clicked hexagon only after one is already selected. This is the hexagon the player is attacking.
 	var neighbors = [];
 	HexagonGrid.prototype.clickEvent = function (e) {
-        console.log(this.attack);
+        console.log(map.attack);
 		var mouseX = e.pageX;
 		var mouseY = e.pageY;
 		var localX = mouseX - this.canvasOriginX;
@@ -388,8 +391,8 @@ function updateMap(data, param){
 			var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (tile.column * this.side) + this.canvasOriginX;
 			if(this.hexes.selectedColumn == tile.column && this.hexes.selectedRow == tile.row){
-				delete this.hexes.selectedColumn;
-				delete this.hexes.selectedRow;
+				delete map.data.hexes.selectedColumn;
+				delete map.data.hexes.selectedRow;
 				delete this.rectX;
 				delete this.rectY;
 				$('#controls').hide();
@@ -417,8 +420,9 @@ function updateMap(data, param){
 									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", this.map[tile.row][tile.column].owner); //highlight defender hex
 									this.attack.attY = this.hexes.selectedColumn;
 									this.attack.attX = this.hexes.selectedRow;
-									this.attack.defY = offset.q;
-									this.attack.defX = offset.r;
+									map.attack.defY = offset.q;
+									map.attack.defX = offset.r;
+									
 								}
 							}else if(this.mapProperties.turnPhase == "fortify"){
 								if(neighbors[i].x == cube.x && neighbors[i].y == cube.y && neighbors[i].z == cube.z && this.map[this.hexes.selectedRow][this.hexes.selectedColumn].owner == this.map[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
@@ -436,6 +440,11 @@ function updateMap(data, param){
 									this.attack.attX = this.hexes.selectedRow;
 									this.attack.defY = offset.q;
 									this.attack.defX = offset.r;
+									map.attack.defY = offset.q;
+									map.attack.defX = offset.r;
+									map.attack.attY = this.hexes.selectedColumn;
+									map.attack.attX = this.hexes.selectedRow;
+									console.log(map.attack);
 								}
 							}
 						}						
