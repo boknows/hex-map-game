@@ -40,12 +40,12 @@ function contAttack(map, attack) {
 		}
 	}
 };
-function calcUnits(map, username) {
+function calcUnits(username) {
 	//calc raw units for initial units
 	var units = 0;
-	for(i=0;i<map.length;i++){
-		for(j=0;j<map[i].length;j++){
-			if(this.map[i][j].owner == username){
+	for(i=0;i<map.data.length;i++){
+		for(j=0;j<map.data[i].length;j++){
+			if(map.data[i][j].owner == username){
 				units++;   
 			}
 		}        

@@ -44,6 +44,12 @@
 		left: 1000px;
 		height: 40px;
 	}
+	.Game > #unitButtons {
+		position: absolute;
+		bottom: 785px;
+		left: 1000px;
+		height: 40px;
+	}
 
 	</style>
 </head>
@@ -74,7 +80,12 @@
 			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
 			<button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
 		</div>
+		<div class="controls" id="unitButtons" style="display:none">
+			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button>
+			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
+		</div>
 		<p style="position: absolute; bottom: 850px; left: 1000px;" id="msg">Welcome!</p>
+		<p style="position: absolute; bottom: 820px; left: 1000px;" id="units">Hello!</p>
 	</div>
 	<script src="js/hexagon-rewrite.js"></script>
 	<script src="js/HexagonGrid.js"></script>

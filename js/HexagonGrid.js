@@ -12,7 +12,8 @@ function HexagonGrid(canvasId, radius) {
 	this.canvasOriginX = 0;
 	this.canvasOriginY = 0;
 	
-	map.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
+	this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
+
 	
 	//setup unit placement select box
 	/*

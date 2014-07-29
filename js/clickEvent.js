@@ -4,13 +4,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var localX = mouseX - this.canvasOriginX;
 	var localY = mouseY - this.canvasOriginY;
 	var tile = this.getSelectedTile(localX, localY);
-	
 	if (tile.column >= 0 && tile.row >= 0) {
 		var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 		var drawx = (tile.column * this.side) + this.canvasOriginX;
 		if(map.hexes.selectedColumn == tile.column && map.hexes.selectedRow == tile.row){
-			delete map.data.hexes.selectedColumn;
-			delete map.data.hexes.selectedRow;
+			delete map.hexes.selectedColumn;
+			delete map.hexes.selectedRow;
 			delete this.rectX;
 			delete this.rectY;
 			$('#controls').hide();
@@ -24,9 +23,10 @@ HexagonGrid.prototype.clickEvent = function (e) {
 				$('#controls').hide();
 				for(i=0;i<map.neighbors.length;i++){
 					if(typeof map.hexes.selectedRow != "undefined"){
-						if(map.dataProp.turnPhase != "fortify"){
+						if(map.dataProp.turnPhase == "attack"){
 							if(map.neighbors[i].x == cube.x && map.neighbors[i].y == cube.y && map.neighbors[i].z == cube.z && map.data[map.hexes.selectedRow][map.hexes.selectedColumn].owner != map.data[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
+								console.log("hey!3");
 								var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
@@ -45,6 +45,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						}else if(map.dataProp.turnPhase == "fortify"){
 							if(map.neighbors[i].x == cube.x && map.neighbors[i].y == cube.y && map.neighbors[i].z == cube.z && map.data[map.hexes.selectedRow][map.hexes.selectedColumn].owner == map.data[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
+								console.log("hey!2");
 								var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
@@ -70,7 +71,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 					if(map.dataProp.turnPhase == "fortify"){
 						$('#fortify').show();
 						var tran = "";
-						
 						for(i=1;i<map.data[map.hexes.selectedRow][map.hexes.selectedColumn].units;i++){
 							var tran2 = "<option value='" + i + "'>" + i + "</option>";
 							tran = tran + tran2;
@@ -81,8 +81,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						$('#controls').show();
 					}
 				}
-				if(trigger == false && map.data[tile.row][tile.column].owner == map.username && map.dataProp.owners[map.dataProp.turn] == map.username){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
+				if(trigger == false && map.data[tile.row][tile.column].owner == map.username && map.dataProp.owners[map.dataProp.turn] == map.username && map.dataProp.turnPhase != "unitPlacement"){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
 					map.hexes.selectedColumn=tile.column;
+					console.log("hey!4");
 					map.hexes.selectedRow=tile.row;
 					map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
 					map.hexes.neighbors = map.neighbors;
@@ -108,6 +109,24 @@ HexagonGrid.prototype.clickEvent = function (e) {
 							}
 						}
 					}
+				}
+				if(map.dataProp.turnPhase == "unitPlacement"){
+					
+					var tmp = {row: tile.row, col: tile.column};
+					map.unitPlacement.push(tmp);
+					console.log(map.unitPlacement);
+					map.data[tile.row][tile.column].units++;
+					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+					for(var i=0, len=map.unitPlacement.length; i<len; i++){
+						var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+						var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
+						this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); //highlight attacker hex
+					}
+					map.attack.attY = map.hexes.selectedColumn;
+					map.attack.attX = map.hexes.selectedRow;
+					map.attack.attY = map.hexes.selectedColumn;
+					map.attack.attX = map.hexes.selectedRow;
 				}
 			}
 		}

@@ -4,6 +4,7 @@ var Map = function(){
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
     this.hexes = {selectedX: null, selectedY: null, neighbors: null};
+	this.unitPlacement = [];
 	this.neighbors = {};
 	this.username = "bo_knows";
 	this.ctx = null;
@@ -43,6 +44,23 @@ map.getData(function(map_data){
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
 	
+	var msg = document.getElementById('msg').innerHTML;
+	msg = "It's the " + map.dataProp.turnPhase + " stage. ";
+	document.getElementById('msg').innerHTML = msg;	
+	
+	if(map.dataProp.turnPhase == "unitPlacement"){
+		$('#controls').hide();
+		$('#endTurn').hide();
+		$('#fortify').hide();
+		$('#unitButtons').show();
+		var units = calcUnits("bo_knows");
+		var msg = document.getElementById('units').innerHTML;
+		console.log(msg);
+		msg = "0 / " + units + " units placed.";
+		document.getElementById('units').innerHTML = msg;	
+		console.log(units);
+	}
+	
 	//UI Buttons
 	var singleAttackButton = document.getElementById('singleAttack');
 	singleAttackButton.addEventListener('click', function (e) {
@@ -72,15 +90,16 @@ map.getData(function(map_data){
 	
 	var endTurnButton = document.getElementById('endTurnButton');
 	endTurnButton.addEventListener('click', function (e) {
-		if(mapProperties.turn == mapProperties.owners.length-1){
-			mapProperties.turn = 0;
+		//turned off for testing
+		/*if(map.dataProp.turn == map.dataProp.owners.length-1){
+			map.dataProp.turn = 0;
 		}else{
-			mapProperties.turn = parseInt(mapProperties.turn) + 1;
-		}
-		console.log("Now it is " + mapProperties.owners[mapProperties.turn] + "'s turn");
-		var data = { data: JSON.stringify(mapProperties) };
+			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
+		} */ 
+		map.dataProp.turnPhase = "unitPlacement";
+		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "mapProperties");
-		var data = { data: JSON.stringify(map) };
+		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
 		$('#endTurn').hide();
 	}, false);
@@ -97,6 +116,22 @@ map.getData(function(map_data){
 	transferMaxButton.addEventListener('click', function (e) {
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + map.data[map.attack.attX][map.attack.attY].units - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
+		delete map.hexes.selectedColumn;
+		delete map.hexes.selectedRow;
+		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "map");
+		$('#fortify').hide();
+	}, false);
+	
+	var transferButton = document.getElementById('transferButton');
+	transferButton.addEventListener('click', function (e) {
+		var num = $('#transfer').val();
+		num = parseInt(num);
+		var tmp = map.data[map.attack.attX][map.attack.attY].units;
+		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + num;
+		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
 		delete map.hexes.selectedColumn;
 		delete map.hexes.selectedRow;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);

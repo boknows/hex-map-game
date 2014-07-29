@@ -1,11 +1,13 @@
 HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {  
+
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
 	this.context.strokeStyle = "#000";
 	this.context.lineWidth = 1;
 
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-	if(!typeof map.data[tile.row][tile.column].type =="undefined"){
+
+	if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
 		if(map.data[tile.row][tile.column].type=="water"){
 			this.context.lineWidth = .1;
 		}
@@ -34,12 +36,29 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 			this.context.strokeStyle = highlightColor;
 			this.context.lineWidth = 3;
 		}
+		
 		this.context.beginPath();
 		this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
 		this.context.fill();
 		//this.context.lineWidth = 1;
 		//this.context.strokeStyle = '#000000';
 		this.context.stroke();
+	
+		/*
+		//Draw smaller hex inside bigger hex - v2
+		var numberOfSides = 6,
+		size = 16,
+		Xcenter = x0 + (this.width / 2),
+		Ycenter = y0 + (this.height / 2);
+		this.context.beginPath();
+		this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+		for (var i = 1; i <= numberOfSides;i += 1) {
+			this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+		}
+		this.context.fill();
+		this.context.closePath();
+		this.context.stroke();
+		*/
 		
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
