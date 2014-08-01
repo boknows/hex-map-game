@@ -1,38 +1,38 @@
-function singleAttack(map, attack) {
-	if(this.map[attack.attX][attack.attY].units > 1){
-		var losses = battle(this.map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "");
-		map[attack.attX][attack.attY].units = this.map[attack.attX][attack.attY].units - losses.att;
-		map[attack.defX][attack.defY].units = this.map[attack.defX][attack.defY].units - losses.def;
+function singleAttack() {
+	if(map.data[map.attack.attX][map.attack.attY].units > 1){
+		var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
+		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
+		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 		
-		if(this.map[attack.defX][attack.defY].units == 0){
-			map[attack.defX][attack.defY].units = this.map[attack.attX][attack.attY].units - 1;
-			map[attack.attX][attack.attY].units = 1;
-			map[attack.defX][attack.defY].owner = this.map[attack.attX][attack.attY].owner;
-			map[attack.defX][attack.defY].color = this.map[attack.attX][attack.attY].color;
+		if(map.data[map.attack.defX][map.attack.defY].units == 0){
+			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
+			map.data[map.attack.attX][map.attack.attY].units = 1;
+			map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
+			map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 			$('#controls').hide();
 		}
-		var data = { data: JSON.stringify(this.map) };
+		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
 	}else{
 		console.log("Can't attack. Not enough units.");
 		$('#controls').hide();
 	}
 };
-function contAttack(map, attack) {
-	while (this.map[attack.attX][attack.attY].units > 5){
-		if(this.map[attack.attX][attack.attY].units > 1){
-			var losses = battle(this.map[attack.attX][attack.attY].units, map[attack.defX][attack.defY].units, "", "");
-			map[attack.attX][attack.attY].units = this.map[attack.attX][attack.attY].units - losses.att;
-			map[attack.defX][attack.defY].units = this.map[attack.defX][attack.defY].units - losses.def;
+function contAttack() {
+	while (map.data[map.attack.attX][map.attack.attY].units > 5){
+		if(map.data[map.attack.attX][map.attack.attY].units > 1){
+			var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
+			map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
+			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 			
-			if(this.map[attack.defX][attack.defY].units == 0){
-				map[attack.defX][attack.defY].units = this.map[attack.attX][attack.attY].units - 1;
-				map[attack.attX][attack.attY].units = 1;
-				map[attack.defX][attack.defY].owner = this.map[attack.attX][attack.attY].owner;
-				map[attack.defX][attack.defY].color = this.map[attack.attX][attack.attY].color;
+			if(map.data[map.attack.defX][map.attack.defY].units == 0){
+				map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
+				map.data[map.attack.attX][map.attack.attY].units = 1;
+				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
+				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 				$('#controls').hide();
 			}
-			var data = { data: JSON.stringify(this.map) };
+			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "map");
 		}else{
 			console.log("Can't attack. Not enough units.");

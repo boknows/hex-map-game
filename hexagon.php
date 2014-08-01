@@ -53,6 +53,12 @@
 		left: 1000px;
 		height: 40px;
 	}
+	.Game > #unitButtons {
+		position: absolute;
+		bottom: 785px;
+		left: 1000px;
+		height: 40px;
+	}
 
 	</style>
 </head>
@@ -83,9 +89,20 @@
 			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
 			<button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
 		</div>
-		<p style="position: absolute; bottom: 850px; left: 1000px;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
+		<div class="controls" id="unitButtons" style="display:none">
+			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button>
+			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
+            <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
+		</div>
+        <p style="position: absolute; bottom: 850px; left: 1000px;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 	</div>
-	<script src="js/hexagon.js"></script>
+	<script src="js/hexagon-rewrite.js"></script>
+	<script src="js/HexagonGrid.js"></script>
+	<script src="js/drawHexGrid.js"></script>
+	<script src="js/drawHex.js"></script>
+	<script src="js/getSelectedTile.js"></script>
+	<script src="js/clickEvent.js"></script>
+	<script src="js/util.js"></script>
 	
 </body>
 <script>
@@ -94,6 +111,5 @@ $('#transfer').on('changed', function (evt, data) {
 		});
 </script>
 </html>
-
    
 

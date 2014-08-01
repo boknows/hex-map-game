@@ -26,14 +26,13 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						if(map.dataProp.turnPhase == "attack"){
 							if(map.neighbors[i].x == cube.x && map.neighbors[i].y == cube.y && map.neighbors[i].z == cube.z && map.data[map.hexes.selectedRow][map.hexes.selectedColumn].owner != map.data[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
-								console.log("hey!3");
 								var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
 								var drawy3 = map.hexes.selectedColumn % 2 == 0 ? (map.hexes.selectedRow * this.height) + this.canvasOriginY + 6 : (map.hexes.selectedRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx3 = (map.hexes.selectedColumn * this.side) + this.canvasOriginX;
 								this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-								hexagonGrid.drawHexGrid(this.rows, this.cols, 10, 10, true);
+								this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 								this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map.data[tile.row][tile.column].owner); //highlight attacker hex
 								this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
 								map.attack.attY = map.hexes.selectedColumn;
@@ -45,7 +44,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						}else if(map.dataProp.turnPhase == "fortify"){
 							if(map.neighbors[i].x == cube.x && map.neighbors[i].y == cube.y && map.neighbors[i].z == cube.z && map.data[map.hexes.selectedRow][map.hexes.selectedColumn].owner == map.data[tile.row][tile.column].owner){ // If you already have a hex selected, and the next click is a neighbor that is attackable, do this.
 								trigger = true;
-								console.log("hey!2");
 								var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
 								var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 								var drawx2 = (offset.q * this.side) + this.canvasOriginX;
@@ -83,7 +81,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 				}
 				if(trigger == false && map.data[tile.row][tile.column].owner == map.username && map.dataProp.owners[map.dataProp.turn] == map.username && map.dataProp.turnPhase != "unitPlacement"){ // If you already have a hex selected, and the next click is a isn't neighbor that is attackable, do this.
 					map.hexes.selectedColumn=tile.column;
-					console.log("hey!4");
 					map.hexes.selectedRow=tile.row;
 					map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
 					map.hexes.neighbors = map.neighbors;
@@ -137,13 +134,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }
 				}
 			}
-		}
-		
-	}
-	
-	if(localX > this.attRectX && localX < (this.attRectX + this.attRectWidth) && localY > this.attRectY && localY < (this.attRectY + this.attRectHeight)){
-		//console.log("attack clicked!");
-				
-	}
-		
+		}	
+	}		
 };

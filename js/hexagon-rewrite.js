@@ -57,28 +57,30 @@ map.getData(function(map_data){
 	//UI Buttons
 	var singleAttackButton = document.getElementById('singleAttack');
 	singleAttackButton.addEventListener('click', function (e) {
-		singleAttack(this.map, attack);
+		singleAttack();
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
 		
-		var drawy2 = attack.attY % 2 == 0 ? (attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
-		var drawx2 = (attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-		var drawy3 = attack.defY % 2 == 0 ? (attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
-		var drawx3 = (attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-		if(this.map[attack.attX][attack.attY].units == 1){
+		var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+		var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+		var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+		var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+		if(map.data[map.attack.attX][map.attack.attY].units == 1){
 		
 		}else{
-			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", this.map[attack.attX][attack.attY].owner); //highlight attacker hex
-			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", this.map[attack.defX][attack.defY].owner); //highlight defender hex
+			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
+			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 		} 
 	}, false);
 	
 	var contAttackButton = document.getElementById('continuousAttack');
 	contAttackButton.addEventListener('click', function (e) {
-		contAttack(map, attack);
+		contAttack();
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-		$('#controls').hide();
+		
+        $('#controls').hide();
+        $('#controls').hide();
 	}, false);
 	
 	var endTurnButton = document.getElementById('endTurnButton');
@@ -95,14 +97,21 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
 		$('#endTurn').hide();
+        $('#controls').hide();
+        $('#fortify').hide();
+        updateMsg();
 	}, false);
 	
 	var fortifyButton = document.getElementById('fortifyButton');
 	fortifyButton.addEventListener('click', function (e) {
-		mapProperties.turnPhase = "fortify";
-		var data = { data: JSON.stringify(mapProperties) };
+		map.dataProp.turnPhase = "fortify";
+		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "mapProperties");
-		$('#controls').hide();	
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		$('#controls').hide();
+        $('#fortify').hide();
+        updateMsg();
 	}, false);	
 	
 	var transferMaxButton = document.getElementById('transferMaxButton');
@@ -157,6 +166,8 @@ map.getData(function(map_data){
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
         $('#unitButtons').hide();
+        $('#endTurn').show();
+        updateMsg();
 	}, false);
     
     function updateMsg(){
@@ -168,9 +179,8 @@ map.getData(function(map_data){
         if(map.dataProp.turnPhase == "unitPlacement"){
             var msg = document.getElementById('msg').innerHTML;
             var units = calcUnits("bo_knows");
-            var msgA = document.getElementById('units').innerHTML;
-            msgA = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
-            document.getElementById('units').innerHTML = msg;
+            msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
+            document.getElementById('msg').innerHTML = msg;
         }
     }
     updateMsg();
