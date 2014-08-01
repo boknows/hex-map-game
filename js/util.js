@@ -198,6 +198,18 @@ function battle(att, def, attTer, defTer){
 	console.log("Defender rolls: [" + defString + "]");
 	console.log("Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.");
 	return losses;
-	
+}
+
+function cloneArr(arr){
+    var clone = new Array(10);
+    for (var i=0; i<clone.length; i++){
+		clone[i] = new Array(20);
+	}
+    for(i=0, leni=arr.length; i<leni; i++){
+        for(j=0, lenj=arr[i].length; j<lenj; j++){
+            clone[i][j] = {color: arr[i][j].color, owner: arr[i][j].owner, type: arr[i][j].type, units: arr[i][j].units};
+        }
+    }
+    return clone;
 }
 

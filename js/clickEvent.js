@@ -111,22 +111,30 @@ HexagonGrid.prototype.clickEvent = function (e) {
 					}
 				}
 				if(map.dataProp.turnPhase == "unitPlacement"){
-					
-					var tmp = {row: tile.row, col: tile.column};
-					map.unitPlacement.push(tmp);
-					console.log(map.unitPlacement);
-					map.data[tile.row][tile.column].units++;
-					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-					this.drawHexGrid(this.rows, this.cols, 10, 10, true);
-					for(var i=0, len=map.unitPlacement.length; i<len; i++){
-						var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-						var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
-						this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); //highlight attacker hex
-					}
-					map.attack.attY = map.hexes.selectedColumn;
-					map.attack.attX = map.hexes.selectedRow;
-					map.attack.attY = map.hexes.selectedColumn;
-					map.attack.attX = map.hexes.selectedRow;
+					var units = calcUnits("bo_knows");
+                    if(map.unitCnt < units){
+                        var tmp = {row: tile.row, col: tile.column};
+                        map.unitPlacement.push(tmp);
+                        map.data[tile.row][tile.column].units++;
+                        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+                        for(var i=0, len=map.unitPlacement.length; i<len; i++){
+                            var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+                            var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
+                            this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); //highlight attacker hex
+                        }
+                        map.attack.attY = map.hexes.selectedColumn;
+                        map.attack.attX = map.hexes.selectedRow;
+                        map.attack.attY = map.hexes.selectedColumn;
+                        map.attack.attX = map.hexes.selectedRow;
+
+                        //Update Text on Unit Placement HTML
+
+                        map.unitCnt++;
+                        var msg = document.getElementById('units').innerHTML;
+                        msg = map.unitCnt + " / " + units + " units placed.";
+                        document.getElementById('units').innerHTML = msg;
+                    }
 				}
 			}
 		}

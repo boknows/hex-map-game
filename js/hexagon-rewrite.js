@@ -6,7 +6,9 @@ var Map = function(){
     this.hexes = {selectedX: null, selectedY: null, neighbors: null};
 	this.unitPlacement = [];
 	this.neighbors = {};
+    this.dataPrev = null;
 	this.username = "bo_knows";
+    this.unitCnt = 0;
 	this.ctx = null;
 	this.canvas = null;
     this.getData = function(callback){
@@ -35,30 +37,21 @@ function updateMap(data, param){
 		});
 	}
 };
- 
+
 var map = new Map();
 map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
+    map.dataPrev = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
 
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
 	
-	var msg = document.getElementById('msg').innerHTML;
-	msg = "It's the " + map.dataProp.turnPhase + " stage. ";
-	document.getElementById('msg').innerHTML = msg;	
-	
 	if(map.dataProp.turnPhase == "unitPlacement"){
 		$('#controls').hide();
 		$('#endTurn').hide();
 		$('#fortify').hide();
-		$('#unitButtons').show();
-		var units = calcUnits("bo_knows");
-		var msg = document.getElementById('units').innerHTML;
-		console.log(msg);
-		msg = "0 / " + units + " units placed.";
-		document.getElementById('units').innerHTML = msg;	
-		console.log(units);
+		$('#unitButtons').show();	
 	}
 	
 	//UI Buttons
@@ -140,6 +133,48 @@ map.getData(function(map_data){
 		updateMap(data, "map");
 		$('#fortify').hide();
 	}, false);
+    
+    var undoAll = document.getElementById('undoAll');
+	undoAll.addEventListener('click', function (e) {
+        map.unitCnt = 0;
+        updateMsg();
+        var cln = cloneArr(map.dataPrev);
+        map.data = null;
+        map.data = cln;
+        map.unitPlacement = null;
+        map.unitPlacement = [];
+		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+	}, false);
+    
+    var compPlc = document.getElementById('compPlc');
+	compPlc.addEventListener('click', function (e) {
+        map.dataProp.turnPhase = "attack";
+		var data = { data: JSON.stringify(map.dataProp) };
+		updateMap(data, "mapProperties");
+        var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "map");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+        $('#unitButtons').hide();
+	}, false);
+    
+    function updateMsg(){
+        var msg = document.getElementById('msg').innerHTML;
+        msg = "It's the " + map.dataProp.turnPhase + " stage. ";
+        document.getElementById('msg').innerHTML = msg;	
+
+        var msgA = null;
+        if(map.dataProp.turnPhase == "unitPlacement"){
+            var msg = document.getElementById('msg').innerHTML;
+            var units = calcUnits("bo_knows");
+            var msgA = document.getElementById('units').innerHTML;
+            msgA = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
+            document.getElementById('units').innerHTML = msg;
+        }
+    }
+    updateMsg();
+    
 });
 
 /*
