@@ -30,6 +30,10 @@
 		
 	</form>
 </div>
-
+<pre>
+<?php
+print_r($_SESSION['user']);
+?>
+</pre>
 </body>
 </html>

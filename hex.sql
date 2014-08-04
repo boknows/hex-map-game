@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 04, 2014 at 08:22 PM
+-- Generation Time: Aug 04, 2014 at 08:51 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `game_name` varchar(40) NOT NULL,
   `created` int(16) NOT NULL,
   `ended` int(16) DEFAULT NULL,
-  `player_name` varchar(25) NOT NULL,
+  `email` varchar(75) NOT NULL,
   `status` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS `games` (
 -- Dumping data for table `games`
 --
 
-INSERT INTO `games` (`mapID`, `gameID`, `game_name`, `created`, `ended`, `player_name`, `status`) VALUES
-(3, 3, 'test game 1', 1407158474, NULL, 'bo_knows', 'yourTurn'),
-(4, 4, 'test game 2', 1407158475, NULL, 'bo_knows', 'invite');
+INSERT INTO `games` (`mapID`, `gameID`, `game_name`, `created`, `ended`, `email`, `status`) VALUES
+(3, 3, 'test game 1', 1407158474, NULL, 'lawrence.boland@gmail.com', 'yourTurn'),
+(4, 4, 'test game 2', 1407158475, NULL, 'lawrence.boland@gmail.com', 'invite');
 
 -- --------------------------------------------------------
 

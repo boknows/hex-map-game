@@ -6,14 +6,14 @@ if(empty($_SESSION['user']))
     die("Redirecting to index.php"); 
 }
 
-$username = htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8');
+$username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 $db = new PDO('mysql:host=localhost;dbname=hex;charset=utf8', 'root', '');
-$stmt = $db->prepare('SELECT * FROM games WHERE player_name = :username');
+$stmt = $db->prepare('SELECT * FROM games WHERE email = :username');
 $stmt->execute(array(':username' => $username));
 foreach ($stmt as $row) {
 	$data['gameID'][] = $row['gameID'];	
 	$data['mapID'][] = $row['mapID'];
-    $data['player_name'][] = $row['player_name'];
+    $data['email'][] = $row['email'];
 	$data['game_name'][] = $row['game_name'];
     $data['created'][] = $row['created'];
     $data['ended'][] = $row['ended'];
