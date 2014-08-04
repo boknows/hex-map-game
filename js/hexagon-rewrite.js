@@ -15,7 +15,8 @@ var Map = function(){
         $.ajax({
             url: "getMap.php",
             type: "POST",
-            dataType: 'JSON'
+            dataType: 'JSON', 
+			data: { id: $('#game_id').val() },
         }).success(callback);
     };
 };

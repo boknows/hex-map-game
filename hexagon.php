@@ -96,6 +96,7 @@
 		</div>
         <p style="position: absolute; bottom: 850px; left: 1000px;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 	</div>
+	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
 	<script src="js/hexagon-rewrite.js"></script>
 	<script src="js/HexagonGrid.js"></script>
 	<script src="js/drawHexGrid.js"></script>

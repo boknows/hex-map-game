@@ -20,23 +20,15 @@
 </head>
 <body>
 
-<ul class="list-group">
-  <li class="list-group-item">
-    <span class="badge">14</span>
-    Cras justo odio
-  </li>
-</ul>
-    
-<div class="list-group">
-  <a href="#" class="list-group-item active">
-    Cras justo odio
-  </a>
-  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-  <a href="#" class="list-group-item">Morbi leo risus</a>
-  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-  <a href="#" class="list-group-item">Vestibulum at eros</a>
-</div>
 <p>Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
+<h3>Active Games</h3>    
+<table class="table table-striped" id="game_table" style="width: auto;">
+</table>
+<div class="container-fluid">
+	<form method='POST' action='hexagon.php' id='form'>
+	
+	</form>
+</div>
 
 </body>
 </html>
