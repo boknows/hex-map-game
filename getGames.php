@@ -17,6 +17,7 @@ foreach ($stmt as $row) {
 	$data['game_name'][] = $row['game_name'];
     $data['created'][] = $row['created'];
     $data['ended'][] = $row['ended'];
+	$data['status'][] = $row['status'];
 }
 for ($i=0; $i<count($data['created']); $i++){
 	$epoch = $data['created'][$i]; 

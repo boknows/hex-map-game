@@ -128,9 +128,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         //Update Text on Unit Placement HTML
 
                         map.unitCnt++;
-                        var msg = document.getElementById('units').innerHTML;
+                        var msg = document.getElementById('msg').innerHTML;
                         msg = map.unitCnt + " / " + units + " units placed.";
-                        document.getElementById('units').innerHTML = msg;
+                        document.getElementById('msg').innerHTML = msg;
                     }
 				}
 			}
