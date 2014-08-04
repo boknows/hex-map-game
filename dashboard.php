@@ -25,8 +25,9 @@
 <table class="table table-striped" id="game_table" style="width: auto;">
 </table>
 <div class="container-fluid">
+	<h3>Start New Game</h3> 
 	<form method='POST' action='hexagon.php' id='form'>
-	
+		
 	</form>
 </div>
 
