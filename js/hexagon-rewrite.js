@@ -46,7 +46,7 @@ map.getData(function(map_data){
     map.dataProp = JSON.parse(map_data.mapProperties);
 
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
-    hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+    hexagonGrid.drawHexGrid(8, 14, 10, 10, true);
 	
 	if(map.dataProp.turnPhase == "unitPlacement"){
 		$('#controls').hide();

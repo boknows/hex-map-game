@@ -4,6 +4,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var localX = mouseX - this.canvasOriginX;
 	var localY = mouseY - this.canvasOriginY;
 	var tile = this.getSelectedTile(localX, localY);
+    console.log(map.data[tile.row][tile.column]);
 	if (tile.column >= 0 && tile.row >= 0) {
 		var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 		var drawx = (tile.column * this.side) + this.canvasOriginX;
