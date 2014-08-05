@@ -6,8 +6,21 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var tile = this.getSelectedTile(localX, localY);
     console.log(map.data[tile.row][tile.column]);
 	if (tile.column >= 0 && tile.row >= 0) {
+        //print out coordinate for creating borders
+         
 		var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 		var drawx = (tile.column * this.side) + this.canvasOriginX;
+        console.log("N:",(drawx + this.side),drawy-6,"to",(drawx+this.width-this.side),drawy-6);
+console.log("NE:",(drawx+this.side),drawy-6,"to",drawx+this.width,((drawy-6)+(this.height/2)));
+         console.log("SE:",(drawx+this.width),((drawy-6)+(this.height/2)),"to",(drawx+this.side),(drawy-6+this.height));       
+        
+        
+                   
+                            
+                            
+                            
+       
+       
 		if(map.hexes.selectedColumn == tile.column && map.hexes.selectedRow == tile.row){
 			delete map.hexes.selectedColumn;
 			delete map.hexes.selectedRow;

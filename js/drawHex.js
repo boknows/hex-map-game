@@ -4,6 +4,7 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 	this.owner = owner;
 	this.context.strokeStyle = "#000";
 	this.context.lineWidth = 1;
+    this.context.lineCap='round';
 
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
@@ -27,18 +28,53 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 	}
 	this.context.closePath();
 	this.context.stroke();
+    
 	if(map.data[tile.row][tile.column].s == true){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
 		this.context.moveTo(x0 + this.side, y0 + this.height);
 		this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
-		this.context.closePath();
+		this.context.stroke();
+	}
+    if(map.data[tile.row][tile.column].n == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0 + this.side, y0);
+		this.context.lineTo(x0 + this.width - this.side, y0);
+		this.context.stroke();
+	}
+    if(map.data[tile.row][tile.column].ne == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0 + this.side, y0);
+		this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
+		this.context.stroke();
+	}
+    if(map.data[tile.row][tile.column].se == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0 + this.width, y0 + (this.height / 2));
+		this.context.lineTo(x0 + this.side, y0 + this.height);
+		this.context.stroke();
+	}
+    if(map.data[tile.row][tile.column].sw == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0 + this.width - this.side, y0 + this.height);
+		this.context.lineTo(x0, y0 + (this.height/2));
+		this.context.stroke();
+	}
+    if(map.data[tile.row][tile.column].nw == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0, y0 + (this.height/2));
+		this.context.lineTo(x0 + this.width - this.side, y0);
 		this.context.stroke();
 	}
 	
 	if(map.data[tile.row][tile.column].type != "water"){
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
-		
+		this.context.lineWidth = 1;
 		//Draw Circle inside Hex
 		if (highlight == true){
 			this.context.strokeStyle = highlightColor;
