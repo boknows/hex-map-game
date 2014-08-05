@@ -27,6 +27,14 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 	}
 	this.context.closePath();
 	this.context.stroke();
+	if(map.data[tile.row][tile.column].s == true){
+		this.context.beginPath();
+		this.context.lineWidth = 5;
+		this.context.moveTo(x0 + this.side, y0 + this.height);
+		this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
+		this.context.closePath();
+		this.context.stroke();
+	}
 	
 	if(map.data[tile.row][tile.column].type != "water"){
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
