@@ -59,6 +59,11 @@
 		left: 1000px;
 		height: 40px;
 	}
+    .Game > #editMap {
+		position: absolute;
+		bottom: 350px;
+		height: 40px;
+	}
 
 	</style>
 </head>
@@ -94,6 +99,39 @@
 			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
+        <div class="controls" id="editMap">
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Units:</b></span><input type='text' name='units' class='form-control' id='units' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Owner:</b></span><input type='text' name='owner' class='form-control' id='owner' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Color:</b></span><input type='text' name='color' class='form-control' id='color' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>N:</b></span><input type='text' name='n' class='form-control' id='n' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>NE:</b></span><input type='text' name='ne' class='form-control' id='ne' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>SE:</b></span><input type='text' name='se' class='form-control' id='se' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>S:</b></span><input type='text' name='s' class='form-control' id='s' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>SW:</b></span><input type='text' name='sw' class='form-control' id='sw' value=''>
+            </div>
+            <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>NW:</b></span><input type='text' name='nw' class='form-control' id='nw' value=''>
+            </div>
+            <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
+        </div>
         <p style="position: absolute; bottom: 850px; left: 1000px;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>

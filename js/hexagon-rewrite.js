@@ -3,9 +3,10 @@ var Map = function(){
     var mapData;
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
-    this.hexes = {selectedX: null, selectedY: null, neighbors: null};
+    this.selected = {selCol: null, selRow: null, selColPrev: null, selRowPrev: null};
 	this.unitPlacement = [];
 	this.neighbors = {};
+    this.neighborsPrev = {};
     this.dataPrev = null;
 	this.username = "bo_knows";
     this.unitCnt = 0;
@@ -44,7 +45,13 @@ map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataPrev = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
-
+    /*for(i=0;i<map.data.length;i++){ //clear map 
+        for(j=0;j<map.data[i].length;j++){
+            map.data[i][j].units = 0;
+            delete map.data[i][j].owner;
+            delete map.data[i][j].color;
+        }
+    }*/
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(8, 14, 10, 10, true);
 	
@@ -169,6 +176,24 @@ map.getData(function(map_data){
         $('#unitButtons').hide();
         $('#endTurn').show();
         updateMsg();
+	}, false);
+    
+    var updateMapBtn = document.getElementById('updateMap');
+	updateMapBtn.addEventListener('click', function (e) {
+		map.data[map.selected.selRow][map.selected.selCol].type = $('#type').val();
+        map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
+        map.data[map.selected.selRow][map.selected.selCol].units = $('#units').val();
+        map.data[map.selected.selRow][map.selected.selCol].color = $('#color').val();
+        map.data[map.selected.selRow][map.selected.selCol].n = Boolean($('#n').val());
+        map.data[map.selected.selRow][map.selected.selCol].ne = Boolean($('#ne').val());
+        map.data[map.selected.selRow][map.selected.selCol].se = Boolean($('#se').val());
+        map.data[map.selected.selRow][map.selected.selCol].s = Boolean($('#s').val());
+        map.data[map.selected.selRow][map.selected.selCol].sw = Boolean($('#sw').val());
+        map.data[map.selected.selRow][map.selected.selCol].nw = Boolean($('#nw').val());
+        var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "map");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
 	}, false);
     
     function updateMsg(){

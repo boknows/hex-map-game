@@ -72,7 +72,7 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 		this.context.stroke();
 	}
 	
-	if(map.data[tile.row][tile.column].type != "water"){
+	if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
 		this.context.lineWidth = 1;
 		//Draw Circle inside Hex
