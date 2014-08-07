@@ -53,7 +53,7 @@ map.getData(function(map_data){
         }
     }*/
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
-    hexagonGrid.drawHexGrid(8, 14, 10, 10, true);
+    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	
 	if(map.dataProp.turnPhase == "unitPlacement"){
 		$('#controls').hide();
@@ -86,9 +86,6 @@ map.getData(function(map_data){
 		contAttack();
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-		
-        $('#controls').hide();
-        $('#controls').hide();
 	}, false);
 	
 	var endTurnButton = document.getElementById('endTurnButton');
@@ -116,7 +113,7 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "mapProperties");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		$('#controls').hide();
         $('#fortify').hide();
         updateMsg();
@@ -126,10 +123,10 @@ map.getData(function(map_data){
 	transferMaxButton.addEventListener('click', function (e) {
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + map.data[map.attack.attX][map.attack.attY].units - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
-		delete map.hexes.selectedColumn;
-		delete map.hexes.selectedRow;
+		delete map.selected.selCol;
+		delete map.selected.selRow;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
 		$('#fortify').hide();
@@ -142,12 +139,13 @@ map.getData(function(map_data){
 		var tmp = map.data[map.attack.attX][map.attack.attY].units;
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + num;
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
-		delete map.hexes.selectedColumn;
-		delete map.hexes.selectedRow;
+		delete map.selected.selCol;
+        delete map.selected.selRow; 
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
+        
 		$('#fortify').hide();
 	}, false);
     
@@ -161,7 +159,7 @@ map.getData(function(map_data){
         map.unitPlacement = null;
         map.unitPlacement = [];
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	}, false);
     
     var compPlc = document.getElementById('compPlc');
@@ -172,7 +170,7 @@ map.getData(function(map_data){
         var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
         $('#unitButtons').hide();
         $('#endTurn').show();
         updateMsg();
@@ -193,12 +191,17 @@ map.getData(function(map_data){
         var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
-	}, false);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+	}, false); 
     
     function updateMsg(){
         var msg = document.getElementById('msg').innerHTML;
-        msg = "It's the " + map.dataProp.turnPhase + " stage. ";
+        //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
+        if(map.dataProp.turnPhase == "attack"){
+            msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to attack with.";
+        }else if(map.dataProp.turnPhase == "fortify"){
+            msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to move units from.";
+        }
         document.getElementById('msg').innerHTML = msg;	
 
         var msgA = null;

@@ -1,4 +1,4 @@
-HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {  
+HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highlight, highlightColor, owner) {  
 
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
@@ -106,7 +106,8 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
 		
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
-		this.context.fillStyle = '#FFFFFF';
+        var clr = getContrastYIQ(map.data[tile.row][tile.column].color);
+        this.context.fillStyle = clr;
 		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 	}
 };
@@ -123,4 +124,12 @@ HexagonGrid.prototype.getRelativeCanvasOffset = function() {
 		
 		return { x: x, y: y };
 	}
+}
+
+function getContrastYIQ(hexcolor){
+	var r = parseInt(hexcolor.substr(1,3),16);
+	var g = parseInt(hexcolor.substr(3,3),16);
+	var b = parseInt(hexcolor.substr(5,3),16);
+	var yiq = ((r*299)+(g*587)+(b*114))/1000;
+	return (yiq >= 128) ? '#000000' : '#FFFFFF';
 }

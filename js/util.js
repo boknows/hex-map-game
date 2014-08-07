@@ -20,6 +20,8 @@ function singleAttack() {
 };
 function contAttack() {
 	while (map.data[map.attack.attX][map.attack.attY].units > 5){
+        console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
+            console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
 		if(map.data[map.attack.attX][map.attack.attY].units > 1){
 			var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
 			map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
