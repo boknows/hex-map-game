@@ -3,7 +3,7 @@ var Map = function(){
     var mapData;
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
-    this.selected = {selCol: null, selRow: null, selColPrev: null, selRowPrev: null};
+    this.selected = {selCol: null, selRow: null, selColPrev: null, selRowPrev: null, trigger1: false, trigger2: false};
 	this.unitPlacement = [];
 	this.neighbors = {};
     this.neighborsPrev = {};
@@ -123,8 +123,7 @@ map.getData(function(map_data){
 	transferMaxButton.addEventListener('click', function (e) {
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + map.data[map.attack.attX][map.attack.attY].units - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
-		delete map.selected.selCol;
-		delete map.selected.selRow;
+        map.selected.trigger = false;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
@@ -139,13 +138,12 @@ map.getData(function(map_data){
 		var tmp = map.data[map.attack.attX][map.attack.attY].units;
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + num;
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
-		delete map.selected.selCol;
-        delete map.selected.selRow; 
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+        map.selected.trigger1 = false;
+        map.selected.trigger2 = false;
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
-        
 		$('#fortify').hide();
 	}, false);
     
