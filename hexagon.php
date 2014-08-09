@@ -61,7 +61,8 @@
 	}
     .Game > #editMap {
 		position: absolute;
-		bottom: 350px;
+		bottom: 650px;
+        left: 800px;
 		height: 40px;
 	}
 

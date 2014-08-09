@@ -47,9 +47,12 @@ map.getData(function(map_data){
     map.dataProp = JSON.parse(map_data.mapProperties);
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
-            map.data[i][j].units = 0;
-            delete map.data[i][j].owner;
-            delete map.data[i][j].color;
+                map.data[i][j].n = "";
+                map.data[i][j].ne = "";
+                map.data[i][j].se = "";
+                map.data[i][j].s = "";
+                map.data[i][j].sw = "";
+                map.data[i][j].nw = "";
         }
     }*/
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
@@ -182,35 +185,35 @@ map.getData(function(map_data){
         map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
         map.data[map.selected.selRow][map.selected.selCol].units = $('#units').val();
         map.data[map.selected.selRow][map.selected.selCol].color = $('#color').val();
-        if($('#n').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].n = Boolean($('#n').val());
+        if($('#n').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].n = $('#n').val();
             var offset = toOffsetCoord(cube.x, cube.y+1, cube.z-1);
-            map.data[offset.r][offset.q].s = Boolean($('#n').val()); 
+            map.data[offset.r][offset.q].s = $('#n').val(); 
         }
-        if($('#ne').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].ne = Boolean($('#ne').val());
+        if($('#ne').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].ne = $('#ne').val();
             var offset = toOffsetCoord(cube.x+1, cube.y, cube.z-1);
-            map.data[offset.r][offset.q].sw = Boolean($('#ne').val());
+            map.data[offset.r][offset.q].sw = $('#ne').val();
         }
-        if($('#se').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].se = Boolean($('#se').val());
+        if($('#se').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].se = $('#se').val();
             var offset = toOffsetCoord(cube.x+1, cube.y-1, cube.z);
-            map.data[offset.r][offset.q].nw = Boolean($('#se').val());
+            map.data[offset.r][offset.q].nw = $('#se').val();
         }
-        if($('#s').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].s = Boolean($('#s').val());
+        if($('#s').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].s = $('#s').val();
             var offset = toOffsetCoord(cube.x, cube.y-1, cube.z+1);
-            map.data[offset.r][offset.q].n = Boolean($('#s').val());
+            map.data[offset.r][offset.q].n = $('#s').val();
         }
-        if($('#sw').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].sw = Boolean($('#sw').val());
+        if($('#sw').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].sw = $('#sw').val();
             var offset = toOffsetCoord(cube.x-1, cube.y, cube.z+1);
-            map.data[offset.r][offset.q].ne = Boolean($('#sw').val());
+            map.data[offset.r][offset.q].ne = $('#sw').val();
         }
-        if($('#nw').val() != "null"){
-            map.data[map.selected.selRow][map.selected.selCol].nw = Boolean($('#nw').val());
+        if($('#nw').val() != ""){
+            map.data[map.selected.selRow][map.selected.selCol].nw = $('#nw').val();
             var offset = toOffsetCoord(cube.x-1, cube.y+1, cube.z);
-            map.data[offset.r][offset.q].se = Boolean($('#nw').val());
+            map.data[offset.r][offset.q].se = $('#nw').val();
         }
         var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");

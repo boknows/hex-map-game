@@ -2,7 +2,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
-	this.context.strokeStyle = "#000";
+	this.context.strokeStyle = "#000000";
 	this.context.lineWidth = 1;
     this.context.lineCap='round';
 
@@ -28,50 +28,56 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	}
 	this.context.closePath();
 	this.context.stroke();
-    
-	if(map.data[tile.row][tile.column].s == true){
+	if(map.data[tile.row][tile.column].s != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].s;
 		this.context.moveTo(x0 + this.side, y0 + this.height);
 		this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
 		this.context.stroke();
 	}
-    if(map.data[tile.row][tile.column].n == true){
+    if(map.data[tile.row][tile.column].n != ""){
+        
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].n;
 		this.context.moveTo(x0 + this.side, y0);
 		this.context.lineTo(x0 + this.width - this.side, y0);
 		this.context.stroke();
 	}
-    if(map.data[tile.row][tile.column].ne == true){
+    if(map.data[tile.row][tile.column].ne != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].ne;
 		this.context.moveTo(x0 + this.side, y0);
 		this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
 		this.context.stroke();
 	}
-    if(map.data[tile.row][tile.column].se == true){
+    if(map.data[tile.row][tile.column].se != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].se;
 		this.context.moveTo(x0 + this.width, y0 + (this.height / 2));
 		this.context.lineTo(x0 + this.side, y0 + this.height);
 		this.context.stroke();
 	}
-    if(map.data[tile.row][tile.column].sw == true){
+    if(map.data[tile.row][tile.column].sw != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].sw;
 		this.context.moveTo(x0 + this.width - this.side, y0 + this.height);
 		this.context.lineTo(x0, y0 + (this.height/2));
 		this.context.stroke();
 	}
-    if(map.data[tile.row][tile.column].nw == true){
+    if(map.data[tile.row][tile.column].nw != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
+        this.context.strokeStyle=map.data[tile.row][tile.column].nw;
 		this.context.moveTo(x0, y0 + (this.height/2));
 		this.context.lineTo(x0 + this.width - this.side, y0);
 		this.context.stroke();
 	}
-	
+
 	if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
 		this.context.lineWidth = 1;
@@ -82,6 +88,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		}
 		
 		this.context.beginPath();
+        this.context.strokeStyle = "#000000";
 		this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
 		this.context.fill();
 		//this.context.lineWidth = 1;

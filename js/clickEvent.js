@@ -19,36 +19,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
     $('#owner').val(map.data[tile.row][tile.column].owner);
     $('#units').val(map.data[tile.row][tile.column].units);
     $('#color').val(map.data[tile.row][tile.column].color);
-    if(Boolean(map.data[tile.row][tile.column].n)==false){
-        $('#n').val("");
-    }else{
-        $('#n').val(Boolean(map.data[tile.row][tile.column].n));
-    }
-    if(Boolean(map.data[tile.row][tile.column].ne)==false){
-        $('#ne').val("");
-    }else{
-        $('#ne').val(Boolean(map.data[tile.row][tile.column].ne));
-    }
-    if(Boolean(map.data[tile.row][tile.column].se)==false){
-        $('#se').val("");
-    }else{
-        $('#se').val(Boolean(map.data[tile.row][tile.column].se));
-    }
-    if(Boolean(map.data[tile.row][tile.column].s)==false){
-        $('#s').val("");
-    }else{
-        $('#s').val(Boolean(map.data[tile.row][tile.column].s));
-    }
-    if(Boolean(map.data[tile.row][tile.column].sw)==false){
-        $('#sw').val("");
-    }else{
-        $('#sw').val(Boolean(map.data[tile.row][tile.column].sw));
-    }
-    if(Boolean(map.data[tile.row][tile.column].nw)==false){
-        $('#nw').val("");
-    }else{
-        $('#nw').val(Boolean(map.data[tile.row][tile.column].nw));
-    }
+    $('#n').val(map.data[tile.row][tile.column].n);
+    $('#ne').val(map.data[tile.row][tile.column].ne);
+    $('#se').val(map.data[tile.row][tile.column].se);
+    $('#s').val(map.data[tile.row][tile.column].s);
+    $('#sw').val(map.data[tile.row][tile.column].sw);
+    $('#nw').val(map.data[tile.row][tile.column].nw);
     //END map editor
     
     if (tile.column >= 0 && tile.row >= 0) {
