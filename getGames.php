@@ -12,7 +12,6 @@ $stmt = $db->prepare('SELECT * FROM games WHERE email = :username');
 $stmt->execute(array(':username' => $username));
 foreach ($stmt as $row) {
 	$data['gameID'][] = $row['gameID'];	
-	$data['mapID'][] = $row['mapID'];
     $data['email'][] = $row['email'];
 	$data['game_name'][] = $row['game_name'];
     $data['created'][] = $row['created'];

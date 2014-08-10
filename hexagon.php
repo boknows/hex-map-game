@@ -70,7 +70,18 @@
 </head>
 <body>
 	<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
-	<div class=Game>
+	<?php
+        $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
+        $stmt->execute(array(':gameID' => $_GET['id']));
+        foreach ($stmt as $row) {
+	       $data['status'] = $row['status'];
+        }
+        if($data['status'] != "invited"){
+            echo "<div class='Game'>";
+        }else{
+            echo "<div class='Game' style='display:none;'>";
+        }
+    ?>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
 		<div class="controls" id="endTurn">
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
@@ -137,13 +148,18 @@
         <p style="text-align: right;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
-	<script src="js/hexagon-rewrite.js"></script>
-	<script src="js/HexagonGrid.js"></script>
-	<script src="js/drawHexGrid.js"></script>
-	<script src="js/drawHex.js"></script>
-	<script src="js/getSelectedTile.js"></script>
-	<script src="js/clickEvent.js"></script>
-	<script src="js/util.js"></script>
+    <?php
+        if($data['status'] != "invited"){
+            echo "<script src='js/hexagon-rewrite.js'></script>
+	        <script src='js/HexagonGrid.js'></script>
+            <script src='js/drawHexGrid.js'></script>
+            <script src='js/drawHex.js'></script>
+            <script src='js/getSelectedTile.js'></script>
+            <script src='js/clickEvent.js'></script>
+            <script src='js/util.js'></script>";
+        }
+    ?>
+	
 	
 </body>
 <script>
