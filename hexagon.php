@@ -14,8 +14,10 @@
 	<script src='http://code.jquery.com/jquery-1.10.2.min.js' language='Javascript' type='text/javascript'></script>
 	<script type="text/javascript" src="js/bootstrap-select.min.js"></script> 
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.simplecolorpicker.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
 
 	<style>
 	.Game {

@@ -27,7 +27,7 @@ foreach($_POST['players'] as $var){
     }
 }
 $ownersJson = json_encode($owners);
-$mapProperties = '{"owners":' . $ownersJson . ',"colors":["Orange","Purple"],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
+$mapProperties = '{"owners":' . $ownersJson . ',"colors":["'. $_POST['colorpicker'].'"],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
 foreach($_POST['players'] as $var){
     if($var != ""){
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

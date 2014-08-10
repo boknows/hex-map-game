@@ -15,8 +15,12 @@
 	<script type="text/javascript" src="js/bootstrap-select.min.js"></script> 
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/dashboard.js"></script>
+    <script src="js/jquery.simplecolorpicker.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
+    <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
+
 </head>
 <body>
 
@@ -25,7 +29,23 @@
 <table class="table table-striped" id="game_table" style="width: auto;">
 </table>
 <div class="container-fluid">
-	<h3>Start New Game</h3> 
+	<h3>Start New Game</h3>
+    Choose your color:
+        <div class="form-group">
+            <div class="col-sm-6">
+              <select name="colorpicker" id="colorpicker" class="form-control">
+                <option value="#FF0000" selected>Red</option>
+                <option value="#FF66FF">Pink</option>
+                <option value="#FF6600">Orange</option>
+                <option value="#FFFF00">Yellow</option>
+                <option value="#33CC33">Green</option>
+                <option value="#0000FF">Blue</option>
+                <option value="#00FFFF">Teal</option>
+                <option value="#AA70AA">Purple</option>
+              </select>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
 		<div class="input-group col-md-4">
 		<span class='input-group-addon'><b>Game Name:</b></span><input type='text' name='name' class='form-control' id='name'>
 		</div>
@@ -62,5 +82,8 @@
 print_r($_SESSION['user']);
 ?>
 </pre>
+<script>
+$('select[name="colorpicker"]').simplecolorpicker({theme: 'glyphicons'});
+</script>
 </body>
 </html>

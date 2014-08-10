@@ -23,6 +23,7 @@ games.getData(function(data){
 
 function createGame() {
 	var data = { 	
+                    colorpicker: $('#colorpicker').val(),
 					gameName: $('#name').val(),
 					players: [$('#player1').val(), 
 				    $('#player2').val(),
@@ -62,3 +63,4 @@ function createGame() {
             });   
         });
 }
+
