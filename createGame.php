@@ -27,17 +27,29 @@ foreach($_POST['players'] as $var){
     }
 }
 $ownersJson = json_encode($owners);
-$mapProperties = '{"owners":' . $ownersJson . ',"colors":["'. $_POST['colorpicker'].'"],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
+$mapProperties = '{"owners":' . $ownersJson . ',"colors":["'. $_POST['colorpicker'].'"';
+for($i=0;$i<count($owners)-1;$i++){
+    $mapProperties .= ',"NULL"';
+}   
+$mapProperties .= '],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
 foreach($_POST['players'] as $var){
     if($var != ""){
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, email, status, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :email, :status, :mapArray, :mapProperties)');
-        $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'invited', ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
-        print_r(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'invited', ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));
-        if (!$stmt) {
-            echo "\nPDO::errorInfo():\n";
-            print_r($db->errorInfo());
+        if($var == $_SESSION['user']['email']){
+            $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, email, status, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :email, :status, :mapArray, :mapProperties)');
+            $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'accepted', ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
+            if (!$stmt) {
+                echo "\nPDO::errorInfo():\n";
+                print_r($db->errorInfo());
+            } 
+        }else{
+            $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, email, status, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :email, :status, :mapArray, :mapProperties)');
+            $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'invited', ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
+            if (!$stmt) {
+                echo "\nPDO::errorInfo():\n";
+                print_r($db->errorInfo());
+            } 
         }
+        
     }
 }
 

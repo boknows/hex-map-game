@@ -18,6 +18,7 @@
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
+    <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
 
 	<style>
 	.Game {
@@ -76,8 +77,10 @@
         $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
         $stmt->execute(array(':gameID' => $_GET['id']));
         foreach ($stmt as $row) {
-	       $data['status'] = $row['status'];
+	        $data['status'] = $row['status'];
+            $data['mapProperties'] = $row['mapProperties'];
         }
+        $mapProp = json_decode($data['mapProperties']);
         if($data['status'] != "invited"){
             echo "<div class='Game'>";
         }else{
@@ -159,15 +162,123 @@
             <script src='js/getSelectedTile.js'></script>
             <script src='js/clickEvent.js'></script>
             <script src='js/util.js'></script>";
-        }
+            echo "<div class='inviteForm' style='display:none;'>";
+        }else{
+            echo "<div class='inviteForm'>";
+            echo "<script src='js/acceptInvite.js'></script>";
+        }     
     ?>
+        Choose your color:
+        <div class="form-group">
+            <div class="col-sm-6">
+              <select name="colorpicker" id="colorpicker" class="form-control">
+                <option value="#FF0000" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#FF0000"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Red</option>
+                <option value="#FF66FF" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#FF66FF"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Pink</option>
+                <option value="#FF6600" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#FF6600"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Orange</option>
+                <option value="#FFFF00" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#FFFF00"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Yellow</option>
+                <option value="#33CC33" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#33CC33"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Green</option>
+                <option value="#0000FF" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#0000FF"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Blue</option>
+                <option value="#00FFFF" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#00FFFF"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Teal</option>
+                <option value="#AA70AA" <?php 
+                    $trigger = false;
+                    for($i=0;$i<count($mapProp->colors);$i++){
+                        if($mapProp->colors[$i] == "#AA70AA"){
+                            $trigger = true;   
+                        }
+                    }
+                    if($trigger == true){
+                        echo "disabled";   
+                    } 
+                ?>>Purple</option>
+              </select>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div class='input-group'>
+		<button class="btn btn-success btn-large" id='acceptInvite' type='button' onclick=acceptInvite() data-loading-text="Loading...">Accept Invite</button>
+		</div>
+    </div><!-- end inviteForm -->
+    
 	
 	
 </body>
 <script>
 $('#transfer').on('changed', function (evt, data) {
-			console.log(data);
-		});
+console.log(data);
+});
+</script>
+<script>
+$('select[name="colorpicker"]').simplecolorpicker({theme: 'glyphicons'});
 </script>
 </html>
    

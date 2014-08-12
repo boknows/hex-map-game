@@ -25,14 +25,14 @@ function createGame() {
 	var data = { 	
                     colorpicker: $('#colorpicker').val(),
 					gameName: $('#name').val(),
-					players: [$('#player1').val(), 
+					players: [$('#username').val(),
+                    $('#player1').val(), 
 				    $('#player2').val(),
 					$('#player3').val(),
 					$('#player4').val(),
 					$('#player5').val(),
 					$('#player6').val(),
-					$('#player7').val(),
-					$('#player8').val()]
+					$('#player7').val()]
 				};
         $.ajax({
             url: "createGame.php",
