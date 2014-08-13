@@ -74,17 +74,17 @@
 <body>
 	<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
 	<?php
-        $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
-        $stmt->execute(array(':gameID' => $_GET['id']));
+        $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :email');
+        $stmt->execute(array(':gameID' => $_GET['id'], ':email' => $_SESSION['user']['email']));
         foreach ($stmt as $row) {
 	        $data['status'] = $row['status'];
             $data['mapProperties'] = $row['mapProperties'];
         }
         $mapProp = json_decode($data['mapProperties']);
-        if($data['status'] != "invited"){
-            echo "<div class='Game'>";
-        }else{
+        if($data['status'] == "invited" || $data['status'] == "accepted"){
             echo "<div class='Game' style='display:none;'>";
+        }else{
+            echo "<div class='Game'>";
         }
     ?>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
@@ -268,6 +268,15 @@
 		<button class="btn btn-success btn-large" id='acceptInvite' type='button' onclick=acceptInvite() data-loading-text="Loading...">Accept Invite</button>
 		</div>
     </div><!-- end inviteForm -->
+    <div id="accepted" style="display:<?php
+        if($data['status'] == "accepted"){
+            echo "inline";   
+        }else{
+            echo "none";   
+        }
+    ?>">
+    <p>Awaiting other players to accept...</p>
+    </div>
     
 	
 	

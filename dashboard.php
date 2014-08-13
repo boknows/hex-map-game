@@ -25,11 +25,6 @@
 <body>
 
 <p>Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
-    <pre>
-<?php 
-print_r($_SESSION);
-?>
-</pre>
 <h3>Active Games</h3>    
 <table class="table table-striped" id="game_table" style="width: auto;">
 </table>
@@ -80,11 +75,7 @@ print_r($_SESSION);
 		</div>
         <input type="hidden" id="username" value="<?php echo $_SESSION['user']['email']; ?>">
 </div>
-<pre>
-<?php
-print_r($_SESSION['user']);
-?>
-</pre>
+
 <script>
 $('select[name="colorpicker"]').simplecolorpicker({theme: 'glyphicons'});
 </script>
