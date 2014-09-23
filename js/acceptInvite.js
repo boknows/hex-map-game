@@ -1,7 +1,5 @@
 function acceptInvite () {
-    var data = { 	
-                    gameID: $('#game_id').val(),
-                };
+    var data = { gameID: $('#game_id').val(), };
     $.ajax({
         url: "getGame.php",
         type: "POST",

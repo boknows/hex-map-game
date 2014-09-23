@@ -15,6 +15,8 @@ foreach ($stmt as $row) {
 	$data['status']= $row['status'];
     $data['mapProperties']= $row['mapProperties'];
 }
+$stmt = $db->prepare('UPDATE games SET status = "accepted" WHERE email = :username AND gameID = :gameID' );
+$stmt->execute(array(':username' => $username, ':gameID' => $_POST['gameID']));
 
 echo JSON_encode($data);
 
