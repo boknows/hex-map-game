@@ -5,7 +5,9 @@ function acceptInvite () {
         type: "POST",
         dataType: 'JSON', 
         data: data,
-    }).success(function(){
-           
+        success: function(){
+            location.reload();
+        },
     });
+
 }

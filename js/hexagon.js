@@ -4,11 +4,13 @@ var Map = function(){
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
     this.hexes = {selectedX: null, selectedY: null, neighbors: null};
+    var data = { gameID: $('#game_id').val(), };
     this.getData = function(callback){
         $.ajax({
             url: "getMap.php",
             type: "POST",
-            dataType: 'JSON'
+            dataType: 'JSON',
+            data: data
         }).success(callback);
     };
 };

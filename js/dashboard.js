@@ -39,6 +39,9 @@ function createGame() {
             type: "POST",
             dataType: 'JSON', 
             data: data,
+            success: function(){
+                location.reload();
+            }
         }).success(function(){
             var Games = function(){
                 this.getData = function(callback){
