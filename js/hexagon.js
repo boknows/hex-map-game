@@ -4,7 +4,7 @@ var Map = function(){
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
     this.hexes = {selectedX: null, selectedY: null, neighbors: null};
-    var data = { gameID: $('#game_id').val(), };
+    var data = { param: "getAll", gameID: $('#game_id').val(), };
     this.getData = function(callback){
         $.ajax({
             url: "getMap.php",
@@ -26,6 +26,7 @@ map.getData(function(map_data){
 
 function updateMap(data, param){
 	if(param == "map"){
+		
 		$.ajax({
 		url: "updateMap.php",
 		data: data,
@@ -132,9 +133,7 @@ function updateMap(data, param){
 			this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 			$('#fortify').hide();
 		}, false);
-		
-		
-        
+		 
         //setup unit placement select box
        /* if(mapProperties.turnPhase == "unitPlacement"){
             $("#unitPlacement").show();

@@ -20,7 +20,7 @@ $stmt = $db->prepare("SELECT MAX(gameID) FROM games");
 $stmt->execute();
 $maxID = $stmt->fetchColumn();
 $maxID++;
-$owners = [];
+##$owners = [];
 foreach($_POST['players'] as $var){
     if($var != ""){
         $owners[] = $var;

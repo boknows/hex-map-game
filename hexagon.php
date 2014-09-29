@@ -73,6 +73,7 @@
 </head>
 <body>
 	<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
+	<input type="hidden" name="email" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
 	<?php
         $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :email');
         $stmt->execute(array(':gameID' => $_GET['id'], ':email' => $_SESSION['user']['email']));
@@ -117,7 +118,7 @@
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
         
-        <div class="controls" id="editMap">
+        <div class="controls" id="editMap" style="display:none">
             <div class="input-group col-md-4">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>

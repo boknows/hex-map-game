@@ -8,7 +8,7 @@ var Map = function(){
 	this.neighbors = {};
     this.neighborsPrev = {};
     this.dataPrev = null;
-	this.username = "bo_knows";
+	this.username = $('#username').val();
     this.unitCnt = 0;
 	this.ctx = null;
 	this.canvas = null;
@@ -17,13 +17,15 @@ var Map = function(){
             url: "getMap.php",
             type: "POST",
             dataType: 'JSON', 
-			data: { id: $('#game_id').val() },
+			data: { param: "getAll", gameID: $('#game_id').val() },
         }).success(callback);
     };
 };
 
 function updateMap(data, param){
 	if(param == "map"){
+		data.param = "updateMap";
+		data.gameID = $('#game_id').val();
 		$.ajax({
 		url: "updateMap.php",
 		data: data,
@@ -31,6 +33,8 @@ function updateMap(data, param){
 		dataType: 'JSON'
 		});
 	}else if(param == "mapProperties"){
+		data.param = "updateMapProperties";
+		data.gameID = $('#game_id').val();
 		$.ajax({
 		url: "updateMapProps.php",
 		data: data,
@@ -124,7 +128,7 @@ map.getData(function(map_data){
 	
 	var transferMaxButton = document.getElementById('transferMaxButton');
 	transferMaxButton.addEventListener('click', function (e) {
-		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + map.data[map.attack.attX][map.attack.attY].units - 1;
+		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
         map.selected.trigger = false;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -138,8 +142,8 @@ map.getData(function(map_data){
 	transferButton.addEventListener('click', function (e) {
 		var num = $('#transfer').val();
 		num = parseInt(num);
-		var tmp = map.data[map.attack.attX][map.attack.attY].units;
-		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units + num;
+		var tmp = parseInt(map.data[map.attack.attX][map.attack.attY].units);
+		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
@@ -234,7 +238,7 @@ map.getData(function(map_data){
         var msgA = null;
         if(map.dataProp.turnPhase == "unitPlacement"){
             var msg = document.getElementById('msg').innerHTML;
-            var units = calcUnits("bo_knows");
+            var units = calcUnits(map.username);
             msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
             document.getElementById('msg').innerHTML = msg;
         }

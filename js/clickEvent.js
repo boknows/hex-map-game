@@ -15,21 +15,26 @@ HexagonGrid.prototype.clickEvent = function (e) {
     map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
     
     //populate hex data to form for map editing
-    $('#type').val(map.data[tile.row][tile.column].type);
-    $('#owner').val(map.data[tile.row][tile.column].owner);
-    $('#units').val(map.data[tile.row][tile.column].units);
-    $('#color').val(map.data[tile.row][tile.column].color);
-    $('#n').val(map.data[tile.row][tile.column].n);
-    $('#ne').val(map.data[tile.row][tile.column].ne);
-    $('#se').val(map.data[tile.row][tile.column].se);
-    $('#s').val(map.data[tile.row][tile.column].s);
-    $('#sw').val(map.data[tile.row][tile.column].sw);
-    $('#nw').val(map.data[tile.row][tile.column].nw);
+    //$('#type').val(map.data[tile.row][tile.column].type);
+    //$('#owner').val(map.data[tile.row][tile.column].owner);
+    //$('#units').val(map.data[tile.row][tile.column].units);
+    //$('#color').val(map.data[tile.row][tile.column].color);
+    //$('#n').val(map.data[tile.row][tile.column].n);
+    //$('#ne').val(map.data[tile.row][tile.column].ne);
+    //$('#se').val(map.data[tile.row][tile.column].se);
+    //$('#s').val(map.data[tile.row][tile.column].s);
+    //$('#sw').val(map.data[tile.row][tile.column].sw);
+    //$('#nw').val(map.data[tile.row][tile.column].nw);
     //END map editor
     
     if (tile.column >= 0 && tile.row >= 0) {
         if(map.dataProp.turnPhase == "unitPlacement"){
-            
+			//var units = calcUnits(map.data, username);
+			var unitMenu = document.getElementById('place').innerHTML;
+			for(i=1;i<units+1;i++){
+				unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   
+			}
+			document.getElementById('place').innerHTML = unitMenu;	
         }else if(map.dataProp.turnPhase == "attack"){
             var cube = toCubeCoord(tile.column, tile.row);
             //check if prev click was an enemy neighbor, trigger = true
