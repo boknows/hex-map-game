@@ -52,6 +52,7 @@ foreach($_POST['players'] as $var){
         
     }
 }
+echo JSON_encode("Game Created");
 
 
 ?>

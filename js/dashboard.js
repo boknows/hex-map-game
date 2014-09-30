@@ -40,7 +40,15 @@ function createGame() {
             dataType: 'JSON', 
             data: data,
             success: function(){
-                location.reload();
+                //Clear values from Create Game Form
+				$('#name').val('');
+				$('#player1').val('');
+				$('#player2').val('');
+				$('#player3').val('');
+				$('#player4').val('');
+				$('#player5').val('');
+				$('#player6').val('');
+				$('#player7').val('');
             }
         }).success(function(){
             var Games = function(){
@@ -63,7 +71,9 @@ function createGame() {
                 txt = txt + "</tbody></table>";
                 console.log(txt);
                 document.getElementById('game_table').innerHTML = txt;	
-            });   
+            });  
+			
+			
         });
 }
 

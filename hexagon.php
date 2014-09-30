@@ -118,7 +118,7 @@
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
         
-        <div class="controls" id="editMap" style="display:none">
+        <div class="controls" id="editMap">
             <div class="input-group col-md-4">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>

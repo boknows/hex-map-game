@@ -30,13 +30,17 @@ function acceptInvite () {
 				dataType: 'JSON', 
 				data: data,
 				success: function(resp){
-					window.location.replace("hexagon.php?id=" + $('#game_id').val());
+					//window.location.replace("hexagon.php?id=" + $('#game_id').val());
 					if(resp == "started"){
-						console.log("Game is ready to start");
+						startGame($('#game_id').val());
 					}
 				},
 			});	
         },
     });	
     
+}
+
+function startGame(gameID) {
+	console.log(gameID);
 }
