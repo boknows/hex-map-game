@@ -1,21 +1,22 @@
 function acceptInvite () {
-    var data = { param: 'getMapProperties', gameID: $('#game_id').val(), color: $('#colorpicker').val()};
+    var data = { param: 'getAll', gameID: $('#game_id').val(), color: $('#colorpicker').val()};
 	$.ajax({
         url: "getMap.php",
         type: "POST",
         dataType: 'JSON', 
         data: data,
         success: function(resp){
-			var properties = JSON.parse(resp);
+			var mapProperties = JSON.parse(resp.mapProperties);
+			var mapArray = JSON.parse(resp.mapArray);
 			var email = 0;
-			for(i=0;i<properties.owners.length;i++){
-				if(properties.owners[i] == $('#email').val()){
+			for(i=0;i<mapProperties.owners.length;i++){
+				if(mapProperties.owners[i] == $('#email').val()){
 					email = i;
 				}
 			}
-			properties.colors[email] = $('#colorpicker').val();
-			properties = JSON.stringify(properties);
-			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: properties};
+			mapProperties.colors[email] = $('#colorpicker').val();
+			var mapPropertiesString = JSON.stringify(mapProperties);
+			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: mapPropertiesString};
 			$.ajax({
 				url: "getMap.php",
 				type: "POST",
@@ -32,7 +33,7 @@ function acceptInvite () {
 				success: function(resp){
 					//window.location.replace("hexagon.php?id=" + $('#game_id').val());
 					if(resp == "started"){
-						startGame($('#game_id').val());
+						startGame($('#game_id').val(), mapArray, mapProperties);
 					}
 				},
 			});	
@@ -41,6 +42,35 @@ function acceptInvite () {
     
 }
 
-function startGame(gameID) {
-	console.log(gameID);
+function startGame(gameID, mapArray, mapProperties) {
+	console.log(mapArray);
+	console.log(mapProperties);
+	//Roll dice to determine order of placement
+	var rolls = [];
+	var order = []; //separate array to keep order of rolls
+	for(i=0;i<mapProperties.owners.length;i++){
+		var tmp = rollDice();
+		rolls.push(tmp);
+		order.push(tmp);
+	}
+	rolls = rolls.sort(function(a, b){return b-a});
+	console.log(order);
+	console.log(rolls);
+	var owners = [];
+	var colors = [];
+	for(i=0;i<mapProperties.owners.length;i++){ //Sort owners/colors by rolls
+		for(j=0;j<order.length;j++){
+			if(rolls[i] == order[j]){
+				owners[i] = mapProperties.owners[j];
+				colors[i] = mapProperties.colors[j];
+			}
+		}
+	}
+	console.log("Owners", owners);
+	mapProperties.owners = owners;
+	mapProperties.colors = colors;
+	console.log("Map Owners", mapProperties);
+	
+
+	
 }
