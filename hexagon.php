@@ -167,8 +167,7 @@
         }else{
             echo "<div class='inviteForm'>";
             echo "<script src='js/acceptInvite.js'></script>
-			<script src='js/util.js'></script>";
-			
+			<script src='js/util.js'></script>";	
         }     
     ?>
         Choose your color:
