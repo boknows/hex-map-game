@@ -43,8 +43,6 @@ function acceptInvite () {
 }
 
 function startGame(gameID, mapArray, mapProperties) {
-	console.log(mapArray);
-	console.log(mapProperties);
 	//Roll dice to determine order of placement
 	var rolls = [];
 	var order = []; //separate array to keep order of rolls
@@ -54,8 +52,6 @@ function startGame(gameID, mapArray, mapProperties) {
 		order.push(tmp);
 	}
 	rolls = rolls.sort(function(a, b){return b-a});
-	console.log(order);
-	console.log(rolls);
 	var owners = [];
 	var colors = [];
 	for(i=0;i<mapProperties.owners.length;i++){ //Sort owners/colors by rolls
@@ -66,11 +62,41 @@ function startGame(gameID, mapArray, mapProperties) {
 			}
 		}
 	}
-	console.log("Owners", owners);
 	mapProperties.owners = owners;
 	mapProperties.colors = colors;
-	console.log("Map Owners", mapProperties);
+
+    //Scan Map, Count number of Land pieces
+    var countries = 0;
+    for(i=0;i<mapArray.length;i++){
+        for(j=0;j<mapArray[i].length;j++){
+            if(mapArray[i][j].type == "land"){
+                countries++;   
+            }
+        }
+    }
+    console.log("Countries: ", countries);
 	
+    //Initial Troop Placement. Randomly place 1 unit until they're all filled
+    var turn = 0;   var width = mapArray.length-1;    var length = mapArray[0].length-1;
+    for(i=0;i<countries;i++){
+        var trig = false;
+        while(trig == false){
+            var randWidth = Math.floor((Math.random() * width))+1; 
+            var randLength = Math.floor((Math.random() * length))+1; 
+            if(mapArray[randWidth][randLength].type == "land" && typeof(mapArray[randWidth][randLength].owner) != "undefined" && mapArray[randWidth][randLength].owner != ""){
+                console.log(randWidth + " " + randLength + " " + mapArray[randWidth][randLength].type + "=land ", typeof(mapArray[randWidth][randLength].owner) + "!=undefined ", mapArray[randWidth][randLength].owner + "!=blank");
+                mapArray[randWidth][randLength].owner = mapProperties.owners[turn];
+                mapArray[randWidth][randLength].units = parseInt(mapArray[randWidth][randLength].units) + 1;
+                trig = true;
+                if(turn == mapProperties.owners.length){
+                    turn = 0;
+                }else{
+                    turn++;   
+                }
+            }  
+        } 
+    }
+    console.log(mapArray);
 
 	
 }
