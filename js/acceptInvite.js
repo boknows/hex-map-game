@@ -95,67 +95,36 @@ function startGame(gameID, mapArray, mapProperties) {
 	var cycle = 0;
 	var maxCycles = (countries.length*3)/mapProperties.owners.length;
 	console.log("Length:", mapProperties.owners);
-
-	//Fill all countries with 1 unit
-	for(i=0;i<countries.length;i++){
-		if(countries[i].owner == ""){
-			countries[i].owner = mapProperties.owners[turn];
-			countries[i].units++;
-			if(turn == (mapProperties.owners.length-1)){
-				turn = 0;
-				cycle++;
-			}else{
-				turn++;   
-			}
-		}
-	}
 	
-	//Figure out first country in list available for owner who's turn it is
-	function nextTurn (owner){
-		var nxTurn = 0;
-		for(i=0;i<countries.length;i++){
-			if(countries[i].owner == owner){
-				return i;
-			}
-		}
+	var cntSplt = [];	//Countries Split array. Contains an array of countries for each player, as well as a total unit count to determine the end of unit placement
+	for(i=0;i<mapProperties.owners.length;i++){
+		cntSplt.push({arr: [], unitCnt: 0, owner: i, cntTurn: 0});
 	}
-	nxTurn = nextTurn(mapProperties.owners[turn]);
-	
-	while(cycle<maxCycles){
-		console.log("Turn:", turn, " " , nxTurn, " Cycle:", cycle);
-		countries[nxTurn].units++;
+	for(i=0;i<countries.length;i++){ //Claim all countries, add 1 unit to each
+		countries[i].units++;
+		cntSplt[turn].arr.push(countries[i]);
+		cntSplt[turn].unitCnt++;
 		if(turn == (mapProperties.owners.length-1)){
 			turn = 0;
 			cycle++;
 		}else{
 			turn++;   
 		}
-		if(nxTurn<countries.length-1){
-			nxTurn++;
+	}
+	while(cycle<maxCycles){ //Start at beginning of each players list of countries. Add 1 unit, move to next player. Repeat until Max units achieved.
+		cntSplt[turn].arr[cntSplt[turn].cntTurn].units++
+		if(cntSplt[turn].cntTurn < cntSplt[turn].arr.length-1){
+			cntSplt[turn].cntTurn++;
 		}else{
-			nxTurn = nextTurn(mapProperties.owners[turn]);
+			cntSplt[turn].cntTurn = 0;
+		}
+		cntSplt[turn].unitCnt++;
+		if(turn == (mapProperties.owners.length-1)){
+			turn = 0;
+			cycle++;
+		}else{
+			turn++;   
 		}
 	}
-	
-	var cnt1 = 0; var cnt2 = 0; var cnt3 = 0;
-	for(i=0;i<countries.length;i++){
-		if(countries[i].owner=="bo_knows@cfiresim.com"){
-			cnt1 = cnt1 + countries[i].units;
-		}
-		if(countries[i].owner=="bo_knows3@cfiresim.com"){
-			cnt2 = cnt2 + countries[i].units;
-		}
-		if(countries[i].owner=="lawrence.boland@gmail.com"){
-			cnt3 = cnt3 + countries[i].units;
-		}
-	}
-	console.log("Counts: " , cnt1, " ", cnt2, " ", cnt3);
-
-	console.log("MaxCycles:", maxCycles);
-	console.log("End cycles:", cycle);
-	//Initial Troop Placement (Fill up countries)
-	
-	console.log(countries);
-
 	
 }
