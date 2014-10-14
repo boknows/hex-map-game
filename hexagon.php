@@ -166,8 +166,14 @@
             echo "<div class='inviteForm' style='display:none;'>";
         }else{
             echo "<div class='inviteForm'>";
-            echo "<script src='js/acceptInvite.js'></script>
-			<script src='js/util.js'></script>";	
+			echo "<script src='js/hexagon-rewrite.js'></script>
+	        <script src='js/HexagonGrid.js'></script>
+            <script src='js/drawHexGrid.js'></script>
+            <script src='js/drawHex.js'></script>
+            <script src='js/getSelectedTile.js'></script>
+            <script src='js/clickEvent.js'></script>
+            <script src='js/util.js'></script>
+			<script src='js/acceptInvite.js'></script>";
         }     
     ?>
         Choose your color:

@@ -126,5 +126,18 @@ function startGame(gameID, mapArray, mapProperties) {
 			turn++;   
 		}
 	}
-	
+	for(i=0;i<cntSplt.length;i++){
+		for(j=0;j<cntSplt[i].arr.length;j++){
+			var l = cntSplt[i].arr[j].length;
+			var w = cntSplt[i].arr[j].width;
+			console.log("l:" , l , " w:", w, " ", mapProperties.owners[i]);
+			mapArray[w][l].owner = mapProperties.owners[i];
+			mapArray[w][l].units = cntSplt[i].arr[j].units;
+			mapArray[w][l].color = mapProperties.colors[i];
+		}
+	}
+	mapProperties.turnPhase = "unitPlacement";
+	console.log(mapProperties);
+	updateMap(mapArray, map);
+	updateMap(mapProperties, mapProperties);
 }

@@ -17,7 +17,8 @@ games.getData(function(data){
 	}
 	txt = txt + "</tbody></table>";
 	console.log(txt);
-	document.getElementById('game_table').innerHTML = txt;	
+	//document.getElementById('game_table').innerHTML = txt;	
+	$('#game_table').html(txt);
 	
 });
 
@@ -69,8 +70,7 @@ function createGame() {
                     txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i].date + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td><td>" + data.status[i] + "</td></tr>";
                 }
                 txt = txt + "</tbody></table>";
-                console.log(txt);
-                document.getElementById('game_table').innerHTML = txt;	
+				$('#game_table').html(txt);
             });  
 			
 			
