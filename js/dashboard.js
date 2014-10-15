@@ -72,8 +72,6 @@ function createGame() {
                 txt = txt + "</tbody></table>";
 				$('#game_table').html(txt);
             });  
-			
-			
         });
 }
 

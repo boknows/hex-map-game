@@ -23,25 +23,15 @@ var Map = function(){
 };
 
 function updateMap(data, param){
-	if(param == "map"){
-		data.param = "updateMap";
-		data.gameID = $('#game_id').val();
-		$.ajax({
-		url: "updateMap.php",
-		data: data,
-		type: "POST",
-		dataType: 'JSON'
-		});
-	}else if(param == "mapProperties"){
-		data.param = "updateMapProperties";
-		data.gameID = $('#game_id').val();
-		$.ajax({
-		url: "updateMapProps.php",
-		data: data,
-		type: "POST",
-		dataType: 'JSON'
-		});
-	}
+	console.log(data);
+	data.param = param;
+	data.gameID = $('#game_id').val();
+	$.ajax({
+	url: "getMap.php",
+	data: data,
+	type: "POST",
+	dataType: 'JSON'
+	});
 };
 
 var map = new Map();

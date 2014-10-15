@@ -17,8 +17,8 @@ foreach ($stmt as $row) {
     $data['mapProperties'][] = $row['mapProperties'];
 }
 if(count($data['status']) == 1){
-    //$stmt = $db->prepare('UPDATE games SET status = "started" WHERE gameID = :gameID');
-    //$stmt->execute(array(':gameID' => $_POST['gameID'])); 
+    $stmt = $db->prepare('UPDATE games SET status = "started" WHERE gameID = :gameID');
+    $stmt->execute(array(':gameID' => $_POST['gameID'])); 
     echo JSON_encode("started");
 }else{
     $stmt = $db->prepare('SELECT * FROM games WHERE email = :username AND gameID = :gameID' );

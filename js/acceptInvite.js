@@ -1,3 +1,15 @@
+function updateMap(data, param){
+	console.log(data);
+	data.param = param;
+	data.gameID = $('#game_id').val();
+	$.ajax({
+	url: "getMap.php",
+	data: data,
+	type: "POST",
+	dataType: 'JSON'
+	});
+};
+
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex ;
 
@@ -18,6 +30,7 @@ function shuffle(array) {
 }
 
 function acceptInvite () {
+	console.log("Hit the button!");
     var data = { param: 'getAll', gameID: $('#game_id').val(), color: $('#colorpicker').val()};
 	$.ajax({
         url: "getMap.php",
@@ -50,8 +63,8 @@ function acceptInvite () {
 				dataType: 'JSON', 
 				data: data,
 				success: function(resp){
-					//window.location.replace("hexagon.php?id=" + $('#game_id').val());
 					if(resp == "started"){
+						console.log("Success");
 						startGame($('#game_id').val(), mapArray, mapProperties);
 					}
 				},
@@ -89,12 +102,11 @@ function startGame(gameID, mapArray, mapProperties) {
             }
         }
     }
-
+	shuffle(countries);
     //Initial Troop Placement (Country Claiming). Randomly place 1 unit until they're all filled
     var turn = 0;
 	var cycle = 0;
 	var maxCycles = (countries.length*3)/mapProperties.owners.length;
-	console.log("Length:", mapProperties.owners);
 	
 	var cntSplt = [];	//Countries Split array. Contains an array of countries for each player, as well as a total unit count to determine the end of unit placement
 	for(i=0;i<mapProperties.owners.length;i++){
@@ -137,7 +149,22 @@ function startGame(gameID, mapArray, mapProperties) {
 		}
 	}
 	mapProperties.turnPhase = "unitPlacement";
-	console.log(mapProperties);
-	updateMap(mapArray, map);
-	updateMap(mapProperties, mapProperties);
+	var mapString = JSON.stringify(mapArray);
+	var data = {param: "updateMap", gameID: $('#game_id').val(), mapArray: mapString};
+	$.ajax({
+		url: "getMap.php",
+		type: "POST",
+		dataType: 'JSON', 
+		data: data,
+	});
+	
+	var mapPropertiesString = JSON.stringify(mapProperties);
+	var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: mapPropertiesString};
+	$.ajax({
+		url: "getMap.php",
+		type: "POST",
+		dataType: 'JSON', 
+		data: data,
+	});
+
 }
