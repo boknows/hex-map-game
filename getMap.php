@@ -33,5 +33,9 @@ if($_POST['param']=="updateMap"){
 	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray WHERE gameID = :gameID');
 	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray']));
 }
+if($_POST['param']=="updateAll"){
+	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray, mapProperties = :mapProperties WHERE gameID = :gameID');
+	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties']));
+}
 
 ?>

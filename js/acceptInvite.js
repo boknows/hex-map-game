@@ -47,7 +47,7 @@ function acceptInvite () {
 				}
 			}
 			mapProperties.colors[email] = $('#colorpicker').val();
-			var mapPropertiesString = JSON.stringify(mapProperties);
+			/*var mapPropertiesString = JSON.stringify(mapProperties);
 			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: mapPropertiesString};
 			$.ajax({
 				url: "getMap.php",
@@ -55,7 +55,7 @@ function acceptInvite () {
 				dataType: 'JSON', 
 				data: data,
 			});
-			
+			*/
 			var data = {gameID: $('#game_id').val()};
             $.ajax({
 				url: "getGame.php",
@@ -64,7 +64,6 @@ function acceptInvite () {
 				data: data,
 				success: function(resp){
 					if(resp == "started"){
-						console.log("Success");
 						startGame($('#game_id').val(), mapArray, mapProperties);
 					}
 				},
@@ -142,7 +141,6 @@ function startGame(gameID, mapArray, mapProperties) {
 		for(j=0;j<cntSplt[i].arr.length;j++){
 			var l = cntSplt[i].arr[j].length;
 			var w = cntSplt[i].arr[j].width;
-			console.log("l:" , l , " w:", w, " ", mapProperties.owners[i]);
 			mapArray[w][l].owner = mapProperties.owners[i];
 			mapArray[w][l].units = cntSplt[i].arr[j].units;
 			mapArray[w][l].color = mapProperties.colors[i];
@@ -150,21 +148,16 @@ function startGame(gameID, mapArray, mapProperties) {
 	}
 	mapProperties.turnPhase = "unitPlacement";
 	var mapString = JSON.stringify(mapArray);
-	var data = {param: "updateMap", gameID: $('#game_id').val(), mapArray: mapString};
+	var mapPropertiesString = JSON.stringify(mapProperties);
+	var data = {param: "updateAll", gameID: $('#game_id').val(), mapArray: mapString, mapProperties: mapPropertiesString};
 	$.ajax({
 		url: "getMap.php",
 		type: "POST",
-		dataType: 'JSON', 
 		data: data,
+		success: function (){
+			window.location.reload(true);
+		},
 	});
 	
-	var mapPropertiesString = JSON.stringify(mapProperties);
-	var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: mapPropertiesString};
-	$.ajax({
-		url: "getMap.php",
-		type: "POST",
-		dataType: 'JSON', 
-		data: data,
-	});
-
+	
 }
