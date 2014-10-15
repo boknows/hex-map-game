@@ -226,7 +226,7 @@ map.getData(function(map_data){
         document.getElementById('msg').innerHTML = msg;	
 
         var msgA = null;
-        if(map.dataProp.turnPhase == "unitPlacement"){
+        if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.username){
             var msg = document.getElementById('msg').innerHTML;
             var units = calcUnits(map.username);
             msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";

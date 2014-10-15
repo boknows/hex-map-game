@@ -19,14 +19,13 @@ var map = new Map();
 map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
-
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(10, 20, 10, 10, true);
 });
 
 function updateMap(data, param){
 	if(param == "map"){
-		
+		var data = {param: "updateMap", gameID: $('#game_id').val(), mapArray: data};
 		$.ajax({
 		url: "updateMap.php",
 		data: data,
@@ -34,6 +33,7 @@ function updateMap(data, param){
 		dataType: 'JSON'
 		});
 	}else if(param == "mapProperties"){
+		var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: data};
 		$.ajax({
 		url: "updateMapProps.php",
 		data: data,
