@@ -226,18 +226,55 @@ function cloneArr(arr){
 }
 
 function drawArrow(ctx, width, height, from, to, direction){
-/**  Function to simulate battle between two armies. 
-* @param {object} from - object containing the x,y coordinates of the beginning point of the arrow
-* @param {object} to - object containing the x,y coordinates of the end point of the arrow
-* @param {Text} direction - the direction in which the arrowhead is pointing. (n, ne, nw, s, se, sw)
-*/
-if(direction == "n"){
-	ctx.beginPath();
-	ctx.lineWidth = 5;
-	ctx.moveTo(from.x + width/2, from.y + (height/2) - (height/3));
-	ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
-	ctx.stroke();
-}
+	/**  Function to simulate battle between two armies. 
+	* @param {object} from - object containing the x,y coordinates of the beginning point of the arrow
+	* @param {object} to - object containing the x,y coordinates of the end point of the arrow
+	* @param {Text} direction - the direction in which the arrowhead is pointing. (n, ne, nw, s, se, sw)
+	* reference: http://stackoverflow.com/questions/839899/how-do-i-calculate-a-point-on-a-circle-s-circumference
+	*/
+	if(direction == "n"){
+		ctx.beginPath();
+		ctx.lineWidth = 5;
+		ctx.strokeStyle = "#FF0000";
+		ctx.moveTo(from.x + width/2, from.y + (height/2) - (height/2.5));
+		ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
+		ctx.stroke();
+		//draw arrowhead
+		var size = 6;
+		ctx.beginPath();
+		ctx.moveTo(to.x + width/2, to.y + height/2 + (height/5));
+		ctx.lineTo(to.x + width/2 - size/2, to.y + height/2 + (height/5) + size/2);
+		ctx.lineTo(to.x + width/2 + size/2, to.y + height/2 + (height/5) + size/2);
+		ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
+		ctx.fill();
+		ctx.stroke();
+	}
+	if(direction == "s"){
+		ctx.beginPath();
+		ctx.lineWidth = 5;
+		ctx.strokeStyle = "#FF0000";
+		ctx.moveTo(from.x + width/2, from.y + (height/2) + (height/5));
+		ctx.lineTo(to.x + width/2, to.y + height/10);
+		ctx.stroke();
+		//draw arrowhead
+		var size = 6;
+		ctx.beginPath();
+		ctx.moveTo(to.x + width/2, to.y + height/10);
+		ctx.lineTo(to.x + width/2 - size/2, to.y + height/10 - size/2);
+		ctx.lineTo(to.x + width/2 + size/2, to.y + height/10 - size/2);
+		ctx.lineTo(to.x + width/2, to.y + height/10);
+		ctx.fill();
+		ctx.stroke();
+	}
+	if(direction == "ne"){
+		ctx.beginPath();
+		ctx.lineWidth = 5;
+		ctx.strokeStyle = "#FF0000";
+		ctx.moveTo(from.x + width/2 + width/4, from.y + (height/2) + (height/5) - (height/3));
+		ctx.lineTo(to.x + width/2 - width/4, to.y + height/2);
+		ctx.stroke();
+	}
+	
 }
 
 function getDirection(x1, x2, y1, y2, z1, z2){

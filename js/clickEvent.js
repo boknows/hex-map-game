@@ -114,6 +114,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                             if(typeof map.selected.selRow != "undefined" && map.data[map.selected.selRow][map.selected.selCol].owner != map.data[offset.r][offset.q].owner){
                                 var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                                 var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+								
                                 this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
 								var toObject = {x: drawx2, y: drawy2};
 								if(map.data[offset.r][offset.q].type != "water"){
