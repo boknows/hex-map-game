@@ -27,14 +27,42 @@ HexagonGrid.prototype.clickEvent = function (e) {
     $('#nw').val(map.data[tile.row][tile.column].nw);
     //END map editor
     
-    if (tile.column >= 0 && tile.row >= 0) {
-        if(map.dataProp.turnPhase == "unitPlacement"){
-			//var units = calcUnits(map.data, username);
+    if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
+        if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email){
+			var cube = toCubeCoord(tile.column, tile.row);
 			var unitMenu = document.getElementById('place').innerHTML;
 			for(i=1;i<units+1;i++){
 				unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   
 			}
 			document.getElementById('place').innerHTML = unitMenu;	
+			var units = calcUnits(map.email);
+			if(map.unitCnt < units){
+				console.log("map.unitCnt:" + map.unitCnt, "Units: " + units);
+				var tmp = {row: tile.row, col: tile.column};
+				map.unitPlacement.push(tmp);
+				map.data[tile.row][tile.column].units++;
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+				for(var i=0, len=map.unitPlacement.length; i<len; i++){
+					var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
+					this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); //highlight attacker hex
+				}
+				map.attack.attY = map.selected.selCol;
+				map.attack.attX = map.selected.selRow;
+				map.attack.attY = map.selected.selCol;
+				map.attack.attX = map.selected.selRow;
+
+				//Update Text on Unit Placement HTML
+				map.unitCnt++;
+				var msg = document.getElementById('msg').innerHTML;
+				msg = map.unitCnt + " / " + units + " units placed.";
+				document.getElementById('msg').innerHTML = msg;
+				console.log("map.unitCnt:" + map.unitCnt, "Units: " + units);
+				console.log(map.unitPlacement);
+			}
+				
+			
         }else if(map.dataProp.turnPhase == "attack"){
             var cube = toCubeCoord(tile.column, tile.row);
             //check if prev click was an enemy neighbor, trigger = true
@@ -42,7 +70,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
             for(i=0;i<map.neighborsPrev.length;i++){
                 if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                     var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
-                    if(map.data[offset.r][offset.q].owner != map.username){
+                    if(map.data[offset.r][offset.q].owner != map.email){
                         trigger = true;  
                         console.log("attacker detected");
                         map.attack.attX = map.selected.selRowPrev;
@@ -69,7 +97,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                     this.drawHexGrid(this.rows, this.cols, 10, 10, true);
                 }else {
-                    if(map.data[map.selected.selRow][map.selected.selCol].owner == map.username){
+                    if(map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
                         var drawy3 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                         var drawx3 = (map.selected.selCol * this.side) + this.canvasOriginX;
                         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -100,7 +128,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 for(i=0;i<map.neighborsPrev.length;i++){
                     if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                         var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
-                        if(map.data[offset.r][offset.q].owner == map.username){
+                        if(map.data[offset.r][offset.q].owner == map.email){
                             map.selected.trigger2 = true;  
                             map.attack.attX = map.selected.selRowPrev;
                             map.attack.attY = map.selected.selColPrev;
@@ -121,7 +149,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     $('#fortify').show();
                 }
             }else if(map.selected.trigger1 == false && map.selected.trigger2 == false){
-                if(map.data[map.selected.selRow][map.selected.selCol].owner == map.username){
+                if(map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
                     map.selected.trigger1 = true;
                     $('#fortify').hide();
                     var drawy3 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);

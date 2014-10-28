@@ -1,11 +1,10 @@
 HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highlight, highlightColor, owner) {  
-
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
 	this.context.strokeStyle = "#000000";
 	this.context.lineWidth = 1;
     this.context.lineCap='round';
-
+	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
 	if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
@@ -82,13 +81,13 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
 		this.context.lineWidth = 1;
 		//Draw Circle inside Hex
+		this.context.beginPath();
 		if (highlight == true){
 			this.context.strokeStyle = highlightColor;
 			this.context.lineWidth = 3;
+		}else{
+			this.context.strokeStyle = "#000000";
 		}
-		
-		this.context.beginPath();
-        this.context.strokeStyle = "#000000";
 		this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
 		this.context.fill();
 		//this.context.lineWidth = 1;

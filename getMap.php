@@ -17,8 +17,8 @@ if($_POST['param']=="getMapProperties"){
 	echo JSON_encode($data);
 }
 if($_POST['param']=="getAll"){
-	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :username');
-	$stmt->execute(array(':gameID' => $_POST['gameID'], ':username' => $username));
+	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :email');
+	$stmt->execute(array(':gameID' => $_POST['gameID'], ':email' => $username));
 	foreach ($stmt as $row) {
 		$data['mapArray'] = $row['mapArray'];	
 		$data['mapProperties'] = $row['mapProperties'];
@@ -27,11 +27,11 @@ if($_POST['param']=="getAll"){
 }
 if($_POST['param']=="updateMapProperties"){
 	$stmt = $db->prepare('UPDATE games SET mapProperties = :mapProperties WHERE gameID = :gameID');
-	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapProperties' => $_POST['mapProperties']));
+	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapProperties' => $_POST['data']));
 }
 if($_POST['param']=="updateMap"){
 	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray WHERE gameID = :gameID');
-	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray']));
+	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['data']));
 }
 if($_POST['param']=="updateAll"){
 	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray, mapProperties = :mapProperties WHERE gameID = :gameID');

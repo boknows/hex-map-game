@@ -36,7 +36,13 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 		}
 		offsetColumn = !offsetColumn;
 	}
-	
+	if(map.dataProp.turnPhase == "unitPlacement"){
+		for(var i=0, len=map.unitPlacement.length; i<len; i++){
+			var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
+			this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); 
+		}
+	}
 };
 
 HexagonGrid.prototype.drawHexAtColRow = function(column, row, color) {

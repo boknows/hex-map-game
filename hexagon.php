@@ -89,7 +89,7 @@
         }
     ?>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		<div class="controls" id="endTurn">
+		<div class="controls" id="endTurn" style="display:none">
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
 			<button type="button" id="fortifyButton" class="btn btn-primary">Fortify</button>
 		</div>

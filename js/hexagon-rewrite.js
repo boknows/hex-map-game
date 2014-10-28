@@ -9,6 +9,7 @@ var Map = function(){
     this.neighborsPrev = {};
     this.dataPrev = null;
 	this.username = $('#username').val();
+	this.email = $('#email').val();
     this.unitCnt = 0;
 	this.ctx = null;
 	this.canvas = null;
@@ -17,7 +18,7 @@ var Map = function(){
             url: "getMap.php",
             type: "POST",
             dataType: 'JSON', 
-			data: { param: "getAll", gameID: $('#game_id').val() },
+			data: { param: "getAll", gameID: $('#game_id').val(), email: $('#email').val() },
         }).success(callback);
     };
 };
@@ -49,10 +50,12 @@ map.getData(function(map_data){
                 map.data[i][j].nw = "";
         }
     }*/
+
+	console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	
-	if(map.dataProp.turnPhase == "unitPlacement"){
+	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
 		$('#controls').hide();
 		$('#endTurn').hide();
 		$('#fortify').hide();
@@ -88,16 +91,16 @@ map.getData(function(map_data){
 	var endTurnButton = document.getElementById('endTurnButton');
 	endTurnButton.addEventListener('click', function (e) {
 		//turned off for testing
-		/*if(map.dataProp.turn == map.dataProp.owners.length-1){
+		if(map.dataProp.turn == map.dataProp.owners.length-1){
 			map.dataProp.turn = 0;
 		}else{
 			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
-		} */ 
+		}  
 		map.dataProp.turnPhase = "unitPlacement";
 		var data = { data: JSON.stringify(map.dataProp) };
-		updateMap(data, "mapProperties");
+		updateMap(data, "updateMapProperties");
 		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
 		$('#endTurn').hide();
         $('#controls').hide();
         $('#fortify').hide();
@@ -147,12 +150,28 @@ map.getData(function(map_data){
     var undoAll = document.getElementById('undoAll');
 	undoAll.addEventListener('click', function (e) {
         map.unitCnt = 0;
-        updateMsg();
-        var cln = cloneArr(map.dataPrev);
-        map.data = null;
-        map.data = cln;
+        var msg = document.getElementById('msg').innerHTML;
+		var units = calcUnits(map.email);
+		msg = map.unitCnt + " / " + units + " units placed.";
+		document.getElementById('msg').innerHTML = msg;
+		for(i=0;i<map.unitPlacement.length;i++){
+			map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].units--;
+		}	
         map.unitPlacement = null;
         map.unitPlacement = [];
+		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+	}, false);
+	
+	var undoLast = document.getElementById('undoLast');
+	undoLast.addEventListener('click', function (e) {
+		map.data[map.unitPlacement[map.unitPlacement.length-1].row][map.unitPlacement[map.unitPlacement.length-1].col].units--;
+		map.unitPlacement.pop();
+		map.unitCnt--;
+		var msg = document.getElementById('msg').innerHTML;
+		var units = calcUnits(map.email);
+		msg = map.unitCnt + " / " + units + " units placed.";
+		document.getElementById('msg').innerHTML = msg;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	}, false);
@@ -161,9 +180,9 @@ map.getData(function(map_data){
 	compPlc.addEventListener('click', function (e) {
         map.dataProp.turnPhase = "attack";
 		var data = { data: JSON.stringify(map.dataProp) };
-		updateMap(data, "mapProperties");
+		updateMap(data, "updateMapProperties");
         var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
         $('#unitButtons').hide();
@@ -216,6 +235,7 @@ map.getData(function(map_data){
 	}, false); 
     
     function updateMsg(){
+		console.log(map.dataProp.turnPhase, map.dataProp.owners[map.dataProp.turn], map.username);
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
         if(map.dataProp.turnPhase == "attack"){
@@ -226,12 +246,17 @@ map.getData(function(map_data){
         document.getElementById('msg').innerHTML = msg;	
 
         var msgA = null;
-        if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.username){
+        if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
             var msg = document.getElementById('msg').innerHTML;
-            var units = calcUnits(map.username);
+            var units = calcUnits(map.email);
             msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
             document.getElementById('msg').innerHTML = msg;
         }
+		if(map.dataProp.owners[map.dataProp.turn] != map.email){
+			var msg = document.getElementById('msg').innerHTML;
+			msg = msg + "<br>It is " + map.dataProp.owners[map.dataProp.turn] + "'s turn.";
+            document.getElementById('msg').innerHTML = msg;
+		}
     }
     updateMsg();
     
