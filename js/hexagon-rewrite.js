@@ -68,7 +68,6 @@ map.getData(function(map_data){
 		singleAttack();
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
-		
 		var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
 		var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 		var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
@@ -229,10 +228,23 @@ map.getData(function(map_data){
             map.data[offset.r][offset.q].se = $('#nw').val();
         }
         var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	}, false); 
+	
+	var attackMove = document.getElementById('attackMoveBtn');
+	attackMoveBtn.addEventListener('click', function (e) {
+		var move = $('#attackMoveDrop').val();
+		console.log("Move: " , move);
+		map.data[map.attack.defX][map.attack.defY].units = move;
+		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - move;
+		var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "updateMap");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		$('#attackMove').hide();
+	}, false);
     
     function updateMsg(){
 		console.log(map.dataProp.turnPhase, map.dataProp.owners[map.dataProp.turn], map.username);

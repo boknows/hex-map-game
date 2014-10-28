@@ -1,12 +1,22 @@
 function singleAttack() {
 	if(map.data[map.attack.attX][map.attack.attY].units > 1){
 		var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
+		console.log(losses);
+		
 		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 		
 		if(map.data[map.attack.defX][map.attack.defY].units == 0){
-			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
-			map.data[map.attack.attX][map.attack.attY].units = 1;
+			$('#attackMove').show();
+			var options = "";
+			for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
+				options = options + "<option value='" + i + "'>" + i + "</option>";
+			}	
+			
+			document.getElementById('attackMoveDrop').innerHTML = options;	
+			
+			//map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
+			//map.data[map.attack.attX][map.attack.attY].units = 1;
 			map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 			map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 			$('#controls').hide();
@@ -215,3 +225,43 @@ function cloneArr(arr){
     return clone;
 }
 
+function drawArrow(ctx, width, height, from, to, direction){
+/**  Function to simulate battle between two armies. 
+* @param {object} from - object containing the x,y coordinates of the beginning point of the arrow
+* @param {object} to - object containing the x,y coordinates of the end point of the arrow
+* @param {Text} direction - the direction in which the arrowhead is pointing. (n, ne, nw, s, se, sw)
+*/
+if(direction == "n"){
+	ctx.beginPath();
+	ctx.lineWidth = 5;
+	ctx.moveTo(from.x + width/2, from.y + (height/2) - (height/3));
+	ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
+	ctx.stroke();
+}
+}
+
+function getDirection(x1, x2, y1, y2, z1, z2){
+	var delX = 0; var delY = 0; var delZ = 0;
+	delX = x1 - x2;
+	delY = y1 - y2;
+	delZ = z1 - z2;
+	var direction = "";
+	if(delX == 0 && delY == 1 && delZ == -1){ 
+		return "n";
+	}
+	if(delX == 1 && delY == 0 && delZ == -1){ 
+		return "ne";
+	}
+	if(delX == 1 && delY == -1 && delZ == 0){ 
+		return "se";
+	}
+	if(delX == 0 && delY == -1 && delZ == 1){ 
+		return "s";
+	}
+	if(delX == -1 && delY == 0 && delZ == 1){ 
+		return "sw";
+	}
+	if(delX == -1 && delY == 1 && delZ == 0){
+		return "nw";
+	}
+}

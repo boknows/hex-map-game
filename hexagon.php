@@ -62,6 +62,12 @@
 		left: 1000px;
 		height: 40px;
 	}
+	.Game > #attackMove {
+		position: absolute;
+		bottom: 785px;
+		left: 1000px;
+		height: 40px;
+	}
     .Game > #editMap {
 		position: absolute;
 		bottom: 650px;
@@ -117,8 +123,11 @@
 			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
+		<div class="controls" id="attackMove" style="display:none">
+			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
+		</div>
         
-        <div class="controls" id="editMap" style="display:none">
+        <div class="controls" id="editMap" style="display:inline">
             <div class="input-group col-md-4">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>

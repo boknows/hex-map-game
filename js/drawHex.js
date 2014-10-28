@@ -77,7 +77,8 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.stroke();
 	}
 
-	if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){
+	//if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){  Removed the units>0 to show conquered hex during attack phase.
+	if(map.data[tile.row][tile.column].type != "water"){
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
 		this.context.lineWidth = 1;
 		//Draw Circle inside Hex
