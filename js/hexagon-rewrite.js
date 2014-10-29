@@ -77,6 +77,8 @@ map.getData(function(map_data){
 			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 		} 
+		var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "updateMap");
 	}, false);
 	
 	var contAttackButton = document.getElementById('continuousAttack');
