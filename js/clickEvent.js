@@ -78,6 +78,14 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         map.attack.defX = map.selected.selRow;
                         map.attack.defY = map.selected.selCol;
                         console.log(map.attack);
+						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+						var drawy = map.selected.selColPrev % 2 == 0 ? (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 : (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+                        var drawx = (map.selected.selColPrev * this.side) + this.canvasOriginX;						
+						this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map.data[map.selected.selRowPrev][map.selected.selColPrev].owner); //highlight attacker hex
+						var drawy2 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+                        var drawx2 = (map.selected.selCol * this.side) + this.canvasOriginX;
+						this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[map.selected.selRow][map.selected.selCol].owner); //highlight defender hex
                     }
                 }
             }
@@ -114,11 +122,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
                             if(typeof map.selected.selRow != "undefined" && map.data[map.selected.selRow][map.selected.selCol].owner != map.data[offset.r][offset.q].owner){
                                 var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                                 var drawx2 = (offset.q * this.side) + this.canvasOriginX;
-								
-                                this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
+								if(map.data[offset.r][offset.q].type != "water"){
+									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
+								}
 								var toObject = {x: drawx2, y: drawy2};
 								if(map.data[offset.r][offset.q].type != "water"){
-									drawArrow(this.context, this.width, this.height, fromObject, toObject, direction);
+									//drawArrow(this.context, this.width, this.height, fromObject, toObject, direction);
 								}
                             }						
                         }

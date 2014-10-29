@@ -23,10 +23,16 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	this.context.lineTo(x0, y0 + (this.height / 2));
 	if (fillColor && highlight == false) {
 		this.context.fillStyle = fillColor;
-		this.context.fill();
 	}
+	if (highlight == true){
+		//this.context.strokeStyle = highlightColor;
+		this.context.fillStyle = highlightColor;
+		this.context.globalAlpha=0.65;
+	}
+	this.context.fill();
 	this.context.closePath();
 	this.context.stroke();
+	this.context.globalAlpha=1;
 	if(map.data[tile.row][tile.column].s != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;
@@ -79,7 +85,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	//if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){  Removed the units>0 to show conquered hex during attack phase.
 	if(map.data[tile.row][tile.column].type != "water"){
-		this.context.fillStyle = map.data[tile.row][tile.column].color;
+		/*this.context.fillStyle = map.data[tile.row][tile.column].color;
 		this.context.lineWidth = 1;
 		//Draw Circle inside Hex
 		this.context.beginPath();
@@ -94,25 +100,28 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		//this.context.lineWidth = 1;
 		//this.context.strokeStyle = '#000000';
 		this.context.stroke();
-	
-		/*
+		*/
+		
 		//Draw smaller hex inside bigger hex - v2
+		
 		var numberOfSides = 6,
-		size = 16,
+		size = 24,
 		Xcenter = x0 + (this.width / 2),
 		Ycenter = y0 + (this.height / 2);
+		this.context.strokeStyle = map.data[tile.row][tile.column].color;
 		this.context.beginPath();
+		this.context.lineWidth = 5;
 		this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 		for (var i = 1; i <= numberOfSides;i += 1) {
 			this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 		}
-		this.context.fill();
 		this.context.closePath();
 		this.context.stroke();
-		*/
+		
 		
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
+		this.context.font = 'bold 13pt Arial';
         var clr = getContrastYIQ(map.data[tile.row][tile.column].color);
         this.context.fillStyle = clr;
 		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));

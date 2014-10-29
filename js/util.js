@@ -234,13 +234,13 @@ function drawArrow(ctx, width, height, from, to, direction){
 	*/
 	if(direction == "n"){
 		ctx.beginPath();
-		ctx.lineWidth = 5;
+		ctx.lineWidth = 3;
 		ctx.strokeStyle = "#FF0000";
 		ctx.moveTo(from.x + width/2, from.y + (height/2) - (height/2.5));
 		ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
 		ctx.stroke();
 		//draw arrowhead
-		var size = 6;
+		var size = 4;
 		ctx.beginPath();
 		ctx.moveTo(to.x + width/2, to.y + height/2 + (height/5));
 		ctx.lineTo(to.x + width/2 - size/2, to.y + height/2 + (height/5) + size/2);
@@ -251,13 +251,13 @@ function drawArrow(ctx, width, height, from, to, direction){
 	}
 	if(direction == "s"){
 		ctx.beginPath();
-		ctx.lineWidth = 5;
+		ctx.lineWidth = 3;
 		ctx.strokeStyle = "#FF0000";
 		ctx.moveTo(from.x + width/2, from.y + (height/2) + (height/5));
 		ctx.lineTo(to.x + width/2, to.y + height/10);
 		ctx.stroke();
 		//draw arrowhead
-		var size = 6;
+		var size = 4;
 		ctx.beginPath();
 		ctx.moveTo(to.x + width/2, to.y + height/10);
 		ctx.lineTo(to.x + width/2 - size/2, to.y + height/10 - size/2);
