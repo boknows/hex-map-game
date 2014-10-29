@@ -91,6 +91,34 @@ function calcUnits(username) {
 		}        
 	}
 	units = Math.floor(units/3); 
+	
+	//Calculate Bonuses - Make it more dynamic in the future
+	var bonus = [0,0,0,0,0,0,0];
+	for(i=0;i<map.data.length;i++){
+        for(j=0;j<map.data[i].length;j++){
+            if(map.data[i][j].owner == username){
+				bonus[map.data[i][j].group]++;
+			}
+        }
+    }
+	if(bonus[1]==9){
+		units = units + 5;
+	}
+	if(bonus[2]==4){
+		units = units + 2;
+	}
+	if(bonus[3]==7){
+		units = units + 5;
+	}
+	if(bonus[4]==6){
+		units = units + 3;
+	}
+	if(bonus[5]==10){
+		units = units + 7;
+	}
+	if(bonus[6]==4){
+		units = units + 2;
+	}
 	return units;
 };
 	
@@ -175,11 +203,12 @@ function getNeighbors (x, y, z){
 	var neighbors = [ {x: this.x+1 ,y: this.y-1 ,z: z}, {x: this.x+1 ,y: y,z: this.z-1 }, {x: x ,y: this.y+1 ,z: this.z-1 }, 
 					  {x: this.x-1 ,y: this.y+1 ,z: z}, {x: this.x-1 ,y: y,z: this.z+1 }, {x: x ,y: this.y-1 ,z: this.z+1 } ];
 	var chk = toOffsetCoord(x,y,z);
-	for(i=0;i<map.data[chk.r][chk.q].connect.length;i++){
-		var tmp = toCubeCoord(map.data[chk.r][chk.q].connect[i].col, map.data[chk.r][chk.q].connect[i].row);
-		neighbors.push(tmp);
+	if(typeof(map.data[chk.r][chk.q].connect) != "undefined" || map.data[chk.r][chk.q].connect != ""){
+		for(i=0;i<map.data[chk.r][chk.q].connect.length;i++){
+			var tmp = toCubeCoord(map.data[chk.r][chk.q].connect[i].col, map.data[chk.r][chk.q].connect[i].row);
+			neighbors.push(tmp);
+		}
 	}
-	
 	return neighbors;
 }
 

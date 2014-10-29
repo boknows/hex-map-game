@@ -51,7 +51,6 @@ map.getData(function(map_data){
 	console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-	
 	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
 		$('#controls').hide();
 		$('#endTurn').hide();

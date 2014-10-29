@@ -2,7 +2,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
 	this.context.strokeStyle = "#000000";
-	this.context.lineWidth = 1.75;
+	this.context.lineWidth = 1;
     this.context.lineCap='round';
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
@@ -39,12 +39,15 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	Ycenter = y0 + (this.height / 2);
 	//this.context.strokeStyle = map.data[tile.row][tile.column].color;
 	this.context.beginPath();
-	this.context.lineWidth = 1;
+	this.context.lineWidth = 1.5;
 	this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 	for (var i = 1; i <= numberOfSides;i += 1) {
 		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 	}
-	if (fillColor && highlight == false) {
+	if (fillColor && highlight == false && map.data[tile.row][tile.column].type =="land") {
+		//this.context.fillStyle = fillColor;
+		this.context.fillStyle = map.data[tile.row][tile.column].color;
+	}else{
 		this.context.fillStyle = fillColor;
 	}
 	if (highlight == true){
@@ -134,6 +137,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		size = this.radius-4.75,
 		Xcenter = x0 + (this.width / 2),
 		Ycenter = y0 + (this.height / 2);
+		this.context.fillStyle = fillColor;
 		this.context.strokeStyle = map.data[tile.row][tile.column].color;
 		this.context.beginPath();
 		this.context.lineWidth = 6;
@@ -141,6 +145,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		for (var i = 1; i <= numberOfSides;i += 1) {
 			this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 		}
+		this.context.fill();
 		this.context.closePath();
 		this.context.stroke();
 		
@@ -151,6 +156,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
         var clr = getContrastYIQ(map.data[tile.row][tile.column].color);
         this.context.fillStyle = clr;
 		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
+		this.context.fillStyle = "";
 	}
 };
 
