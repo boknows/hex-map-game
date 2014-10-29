@@ -72,7 +72,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
             for(i=0;i<map.neighborsPrev.length;i++){
                 if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                     var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
-                    if(map.data[offset.r][offset.q].owner != map.email && map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].type != "water"){
+                    if(map.data[offset.r][offset.q].owner != map.email && map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].owner != map.data[map.selected.selRow][map.selected.selCol].owner){
+						console.log("map.data[offset.r][offset.q].owner: ", map.data[offset.r][offset.q].owner, " != ", map.email , " and map.data[offset.r][offset.q].type: ", map.data[offset.r][offset.q].type , " != water", " and map.data[map.selected.selRow][map.selected.selCol].type: ", map.data[map.selected.selRow][map.selected.selCol].type, " != water ", " and map.data[map.selected.selRowPrev][map.selected.selColPrev].type: ", map.data[map.selected.selRowPrev][map.selected.selColPrev].type,  "!= water")
                         trigger = true;  
                         map.attack.attX = map.selected.selRowPrev;
                         map.attack.attY = map.selected.selColPrev;
@@ -82,7 +83,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                         this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 						var drawy = map.selected.selColPrev % 2 == 0 ? (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 : (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-                        var drawx = (map.selected.selColPrev * this.side) + this.canvasOriginX;						
+                        var drawx = (map.selected.selColPrev * this.side) + this.canvasOriginX;		
+											
 						this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map.data[map.selected.selRowPrev][map.selected.selColPrev].owner); //highlight attacker hex
 						var drawy2 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                         var drawx2 = (map.selected.selCol * this.side) + this.canvasOriginX;
@@ -113,29 +115,21 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                         this.drawHexGrid(this.rows, this.cols, 10, 10, true);
                         this.drawHex(drawx3, drawy3 - 6, "", "", true, "#00F2FF", map.data[tile.row][tile.column].owner); //highlight attacker hex
-						var fromObject = {x: drawx3, y: drawy3};
-						var fromCube = toCubeCoord(map.selected.selCol, map.selected.selRow);
                         for(i=0;i<map.neighbors.length;i++){
-                            var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
-
-							//Determine direction of neighbor from clicked hex
-							var direction = getDirection(map.neighbors[i].x, fromCube.x, map.neighbors[i].y, fromCube.y, map.neighbors[i].z, fromCube.z);
-							
+                            var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);							
                             if(typeof map.selected.selRow != "undefined" && map.data[map.selected.selRow][map.selected.selCol].owner != map.data[offset.r][offset.q].owner){
                                 var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                                 var drawx2 = (offset.q * this.side) + this.canvasOriginX;
 								if(map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
+									console.log("map.email:" , map.email);
 									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
-								}
-								var toObject = {x: drawx2, y: drawy2};
-								if(map.data[offset.r][offset.q].type != "water"){
-									//drawArrow(this.context, this.width, this.height, fromObject, toObject, direction);
 								}
                             }						
                         }
                     }
                 }
             }
+        }else if(map.dataProp.turnPhase == "fortify"){
         }else if(map.dataProp.turnPhase == "fortify"){
             var cube = toCubeCoord(tile.column, tile.row);
             if(map.selected.trigger1 == true && map.selected.trigger2 == false){
