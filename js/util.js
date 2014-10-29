@@ -7,16 +7,15 @@ function singleAttack() {
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 		
 		if(map.data[map.attack.defX][map.attack.defY].units == 0){
+			map.data[map.attack.defX][map.attack.defY].units++;
+			map.data[map.attack.attX][map.attack.attY].units--;
 			$('#attackMove').show();
 			var options = "";
 			for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
 				options = options + "<option value='" + i + "'>" + i + "</option>";
 			}	
-			
 			document.getElementById('attackMoveDrop').innerHTML = options;	
 			
-			//map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
-			//map.data[map.attack.attX][map.attack.attY].units = 1;
 			map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 			map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 			$('#controls').hide();
@@ -29,7 +28,7 @@ function singleAttack() {
 	}
 };
 function contAttack() {
-	while (map.data[map.attack.attX][map.attack.attY].units > 5){
+	while (map.data[map.attack.attX][map.attack.attY].units > 5 && map.data[map.attack.defX][map.attack.defY].units > 0){
         console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
             console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
 		if(map.data[map.attack.attX][map.attack.attY].units > 1){
@@ -38,14 +37,28 @@ function contAttack() {
 			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 			
 			if(map.data[map.attack.defX][map.attack.defY].units == 0){
-				map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
+				/*map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
 				map.data[map.attack.attX][map.attack.attY].units = 1;
 				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
+				$('#controls').hide();*/
+				map.data[map.attack.defX][map.attack.defY].units++;
+				map.data[map.attack.attX][map.attack.attY].units--;
+				$('#attackMove').show();
+				var options = "";
+				for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
+					options = options + "<option value='" + i + "'>" + i + "</option>";
+				}	
+				document.getElementById('attackMoveDrop').innerHTML = options;	
+				
+				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
+				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 				$('#controls').hide();
+			
+				break;
 			}
 			var data = { data: JSON.stringify(map.data) };
-			updateMap(data, "map");
+			updateMap(data, "updateMap");
 		}else{
 			console.log("Can't attack. Not enough units.");
 			$('#controls').hide();
@@ -146,6 +159,12 @@ function getNeighbors (x, y, z){
 	this.z = z;
 	var neighbors = [ {x: this.x+1 ,y: this.y-1 ,z: z}, {x: this.x+1 ,y: y,z: this.z-1 }, {x: x ,y: this.y+1 ,z: this.z-1 }, 
 					  {x: this.x-1 ,y: this.y+1 ,z: z}, {x: this.x-1 ,y: y,z: this.z+1 }, {x: x ,y: this.y-1 ,z: this.z+1 } ];
+	var chk = toOffsetCoord(x,y,z);
+	for(i=0;i<map.data[chk.r][chk.q].connect.length;i++){
+		var tmp = toCubeCoord(map.data[chk.r][chk.q].connect[i].col, map.data[chk.r][chk.q].connect[i].row);
+		neighbors.push(tmp);
+	}
+	
 	return neighbors;
 }
 

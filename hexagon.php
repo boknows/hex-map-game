@@ -34,19 +34,19 @@
 	}
 	.Game > #controls {
 		position: absolute;
-		bottom: 750px;
+		bottom: 730px;
 		left: 1000px;
 		height: 40px;
 	}
 	.Game > #endTurn {
 		position: absolute;
-		bottom: 785px;
+		bottom: 765px;
 		left: 1000px;
 		height: 40px;
 	}
 	.Game > #fortify {
 		position: absolute;
-		bottom: 750px;
+		bottom: 730px;
 		left: 1000px;
 		height: 40px;
 	}
@@ -64,8 +64,8 @@
 	}
 	.Game > #attackMove {
 		position: absolute;
-		bottom: 785px;
-		left: 1000px;
+		bottom: 815px;
+		left: 940px;
 		height: 40px;
 	}
     .Game > #editMap {
@@ -129,6 +129,12 @@
         
         <div class="controls" id="editMap" style="display:inline">
             <div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Row:</b></span><input type='text' name='row' class='form-control' id='row' value=''>
+            </div>
+			<div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Column:</b></span><input type='text' name='column' class='form-control' id='column' value=''>
+            </div>
+			<div class="input-group col-md-4">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>
             <div class="input-group col-md-4">
@@ -157,6 +163,12 @@
             </div>
             <div class="input-group col-md-4">
             <span class='input-group-addon'><b>NW:</b></span><input type='text' name='nw' class='form-control' id='nw' value=''>
+            </div>
+			<div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Connect:</b></span><input type='text' name='connect' class='form-control' id='connect' value=''>
+            </div>
+			<div class="input-group col-md-4">
+            <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
             </div>
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 

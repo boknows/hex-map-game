@@ -10,7 +10,7 @@ if(empty($_SESSION['user']))
 $username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 $db = new PDO('mysql:host=localhost;dbname=hex;charset=utf8', 'root', '');
 $stmt = $db->prepare('SELECT * FROM maps WHERE id = :id');
-$stmt->execute(array(':id' => '4'));
+$stmt->execute(array(':id' => '5'));
 foreach ($stmt as $row) {
 	$data['mapArray'] = $row['mapArray'];	
 	$data['mapProperties'] = $row['mapProperties'];

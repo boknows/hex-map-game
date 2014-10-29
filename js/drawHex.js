@@ -2,19 +2,19 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	this.context.font="bold 12px Helvetica";
 	this.owner = owner;
 	this.context.strokeStyle = "#000000";
-	this.context.lineWidth = 1;
+	this.context.lineWidth = 1.75;
     this.context.lineCap='round';
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
 	if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
 		if(map.data[tile.row][tile.column].type=="water"){
-			this.context.lineWidth = .1;
+			//this.context.lineWidth = .1;
 		}
 	}
 	
-	//Draw Main Hex
-	this.context.beginPath();
+	//Draw Main Hex old way
+	/*this.context.beginPath();
 	this.context.moveTo(x0 + this.width - this.side, y0);
 	this.context.lineTo(x0 + this.side, y0);
 	this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
@@ -32,6 +32,32 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	this.context.fill();
 	this.context.closePath();
 	this.context.stroke();
+	*/
+	var numberOfSides = 6,
+	size = this.radius,
+	Xcenter = x0 + (this.width / 2),
+	Ycenter = y0 + (this.height / 2);
+	//this.context.strokeStyle = map.data[tile.row][tile.column].color;
+	this.context.beginPath();
+	this.context.lineWidth = 1;
+	this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+	for (var i = 1; i <= numberOfSides;i += 1) {
+		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+	}
+	if (fillColor && highlight == false) {
+		this.context.fillStyle = fillColor;
+	}
+	if (highlight == true){
+		//this.context.strokeStyle = highlightColor;
+		this.context.fillStyle = highlightColor;
+		this.context.globalAlpha=0.65;
+	}
+	this.context.fill();
+	this.context.closePath();
+	this.context.stroke();
+	
+	
+	
 	this.context.globalAlpha=1;
 	if(map.data[tile.row][tile.column].s != ""){
 		this.context.beginPath();
@@ -105,12 +131,12 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		//Draw smaller hex inside bigger hex - v2
 		
 		var numberOfSides = 6,
-		size = 24,
+		size = this.radius-4.75,
 		Xcenter = x0 + (this.width / 2),
 		Ycenter = y0 + (this.height / 2);
 		this.context.strokeStyle = map.data[tile.row][tile.column].color;
 		this.context.beginPath();
-		this.context.lineWidth = 5;
+		this.context.lineWidth = 6;
 		this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 		for (var i = 1; i <= numberOfSides;i += 1) {
 			this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));

@@ -25,6 +25,10 @@ HexagonGrid.prototype.clickEvent = function (e) {
     $('#s').val(map.data[tile.row][tile.column].s);
     $('#sw').val(map.data[tile.row][tile.column].sw);
     $('#nw').val(map.data[tile.row][tile.column].nw);
+	$('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
+	$('#group').val(map.data[tile.row][tile.column].group);
+	$('#column').val(tile.column);
+	$('#row').val(tile.row);
     //END map editor
     
     if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
@@ -38,7 +42,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			var units = calcUnits(map.email);
 			//if(map.unitCnt < units){
 			if(map.unitCnt < 50){
-				console.log("map.unitCnt:" + map.unitCnt, "Units: " + units);
 				var tmp = {row: tile.row, col: tile.column};
 				map.unitPlacement.push(tmp);
 				map.data[tile.row][tile.column].units++;
@@ -59,8 +62,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 				var msg = document.getElementById('msg').innerHTML;
 				msg = map.unitCnt + " / " + units + " units placed.";
 				document.getElementById('msg').innerHTML = msg;
-				console.log("map.unitCnt:" + map.unitCnt, "Units: " + units);
-				console.log(map.unitPlacement);
 			}
 				
 			
@@ -71,7 +72,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
             for(i=0;i<map.neighborsPrev.length;i++){
                 if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                     var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
-                    if(map.data[offset.r][offset.q].owner != map.email){
+                    if(map.data[offset.r][offset.q].owner != map.email && map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].type != "water"){
                         trigger = true;  
                         map.attack.attX = map.selected.selRowPrev;
                         map.attack.attY = map.selected.selColPrev;
@@ -102,6 +103,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     delete map.selected.selRow;
                     delete map.selected.selColPrev;
                     delete map.selected.selRowPrev; 
+					$("#controls").hide();
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                     this.drawHexGrid(this.rows, this.cols, 10, 10, true);
                 }else {

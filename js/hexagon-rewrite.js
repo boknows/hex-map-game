@@ -42,15 +42,12 @@ map.getData(function(map_data){
     map.dataProp = JSON.parse(map_data.mapProperties);
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
-                map.data[i][j].n = "";
-                map.data[i][j].ne = "";
-                map.data[i][j].se = "";
-                map.data[i][j].s = "";
-                map.data[i][j].sw = "";
-                map.data[i][j].nw = "";
+                map.data[i][j].units = 0;
+				map.data[i][j].owner = "";
+				map.data[i][j].color = "";
         }
-    }*/
-
+    }
+	*/
 	console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
@@ -60,6 +57,8 @@ map.getData(function(map_data){
 		$('#endTurn').hide();
 		$('#fortify').hide();
 		$('#unitButtons').show();	
+	}else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
+		$('#endTurn').show();
 	}
 	
 	//UI Buttons
@@ -110,7 +109,7 @@ map.getData(function(map_data){
 	fortifyButton.addEventListener('click', function (e) {
 		map.dataProp.turnPhase = "fortify";
 		var data = { data: JSON.stringify(map.dataProp) };
-		updateMap(data, "mapProperties");
+		updateMap(data, "updateMapProperties");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		$('#controls').hide();
@@ -126,7 +125,7 @@ map.getData(function(map_data){
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
 		$('#fortify').hide();
 	}, false);
 	
@@ -142,7 +141,7 @@ map.getData(function(map_data){
         map.selected.trigger1 = false;
         map.selected.trigger2 = false;
 		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
 		$('#fortify').hide();
 	}, false);
     
@@ -197,6 +196,8 @@ map.getData(function(map_data){
         map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
         map.data[map.selected.selRow][map.selected.selCol].units = $('#units').val();
         map.data[map.selected.selRow][map.selected.selCol].color = $('#color').val();
+		map.data[map.selected.selRow][map.selected.selCol].group = $('#group').val();
+		map.data[map.selected.selRow][map.selected.selCol].connect = JSON.parse($('#connect').val());
         if($('#n').val() != ""){
             map.data[map.selected.selRow][map.selected.selCol].n = $('#n').val();
             var offset = toOffsetCoord(cube.x, cube.y+1, cube.z-1);
@@ -237,8 +238,8 @@ map.getData(function(map_data){
 	attackMoveBtn.addEventListener('click', function (e) {
 		var move = $('#attackMoveDrop').val();
 		console.log("Move: " , move);
-		map.data[map.attack.defX][map.attack.defY].units = move;
-		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - move;
+		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
+		map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
