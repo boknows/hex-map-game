@@ -28,7 +28,7 @@ function singleAttack() {
 	}
 };
 function contAttack(hexagonGrid) {
-	while (map.data[map.attack.attX][map.attack.attY].units > 5 && map.data[map.attack.defX][map.attack.defY].units > 0){
+	while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0){
         console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
             console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
 		if(map.data[map.attack.attX][map.attack.attY].units > 1){

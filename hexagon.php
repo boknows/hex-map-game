@@ -127,7 +127,7 @@
 			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
 		</div>
         
-        <div class="controls" id="editMap" style="display:inline">
+        <div class="controls" id="editMap" style="display:none">
             <div class="input-group col-md-4">
             <span class='input-group-addon'><b>Row:</b></span><input type='text' name='row' class='form-control' id='row' value=''>
             </div>

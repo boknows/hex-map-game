@@ -5,7 +5,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var localY = mouseY - this.canvasOriginY;
 	var tile = this.getSelectedTile(localX, localY);
     if(typeof map.selected.selCol != "undefined" && typeof map.selected.selRow != "undefined"){ //Set previous clicked hex
-        map.selected.selColPrev = map.selected.selCol;
+        map.selected.selCol3 = map.selected.selColPrev;
+		map.selected.selRow3 = map.selected.selRowPrev;
+		map.selected.selColPrev = map.selected.selCol;
         map.selected.selRowPrev = map.selected.selRow;
         map.neighborsPrev = map.neighbors;
     }
@@ -13,8 +15,20 @@ HexagonGrid.prototype.clickEvent = function (e) {
     map.selected.selRow=tile.row;
     var cube = toCubeCoord(tile.column, tile.row);
     map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
-    
+	
+	if(map.selected.selCol3 == map.selected.selCol && map.selected.selRow3 == map.selected.selRow){
+		map.selected.selCol = null;
+		map.selected.selRow = null;
+		map.selected.selColPrev = null;
+		map.selected.selRowPrev = null; 
+		map.selected.selCol3 = null; 
+		map.selected.selRow3 = null; 
+		$("#controls").hide();
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+	}
     //populate hex data to form for map editing
+	/*
     $('#type').val(map.data[tile.row][tile.column].type);
     $('#owner').val(map.data[tile.row][tile.column].owner);
     $('#units').val(map.data[tile.row][tile.column].units);
@@ -30,7 +44,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	$('#column').val(tile.column);
 	$('#row').val(tile.row);
     //END map editor
-    
+    */
     if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
         if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email){
 			var cube = toCubeCoord(tile.column, tile.row);
@@ -40,8 +54,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			}
 			document.getElementById('place').innerHTML = unitMenu;	
 			var units = calcUnits(map.email);
-			//if(map.unitCnt < units){
-			if(map.unitCnt < 50){
+			if(map.unitCnt < units){
 				var tmp = {row: tile.row, col: tile.column};
 				map.unitPlacement.push(tmp);
 				map.data[tile.row][tile.column].units++;
@@ -73,7 +86,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                     var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
                     if(map.data[offset.r][offset.q].owner != map.email && map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].type != "water" && map.data[map.selected.selRowPrev][map.selected.selColPrev].owner != map.data[map.selected.selRow][map.selected.selCol].owner){
-						console.log("map.data[offset.r][offset.q].owner: ", map.data[offset.r][offset.q].owner, " != ", map.email , " and map.data[offset.r][offset.q].type: ", map.data[offset.r][offset.q].type , " != water", " and map.data[map.selected.selRow][map.selected.selCol].type: ", map.data[map.selected.selRow][map.selected.selCol].type, " != water ", " and map.data[map.selected.selRowPrev][map.selected.selColPrev].type: ", map.data[map.selected.selRowPrev][map.selected.selColPrev].type,  "!= water")
                         trigger = true;  
                         map.attack.attX = map.selected.selRowPrev;
                         map.attack.attY = map.selected.selColPrev;
@@ -121,7 +133,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                                 var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                                 var drawx2 = (offset.q * this.side) + this.canvasOriginX;
 								if(map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
-									console.log("map.email:" , map.email);
 									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
 								}
                             }						
@@ -129,7 +140,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }
                 }
             }
-        }else if(map.dataProp.turnPhase == "fortify"){
         }else if(map.dataProp.turnPhase == "fortify"){
             var cube = toCubeCoord(tile.column, tile.row);
             if(map.selected.trigger1 == true && map.selected.trigger2 == false){
@@ -360,5 +370,4 @@ HexagonGrid.prototype.clickEvent = function (e) {
         
 	}
     */
-    console.log(map.attack);
 };

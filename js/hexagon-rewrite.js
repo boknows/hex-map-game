@@ -3,7 +3,7 @@ var Map = function(){
     var mapData;
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
-    this.selected = {selCol: null, selRow: null, selColPrev: null, selRowPrev: null, trigger1: false, trigger2: false};
+    this.selected = {selCol: null, selRow: null, selColPrev: null, selRowPrev: null, selCol3: null, selRow3: null, trigger1: false, trigger2: false};
 	this.unitPlacement = [];
 	this.neighbors = {};
     this.neighborsPrev = {};
