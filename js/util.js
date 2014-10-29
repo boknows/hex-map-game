@@ -15,10 +15,10 @@ function singleAttack() {
 				options = options + "<option value='" + i + "'>" + i + "</option>";
 			}	
 			document.getElementById('attackMoveDrop').innerHTML = options;	
-			
 			map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 			map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
 			$('#controls').hide();
+			$('#endTurn').hide();
 		}
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "map");
@@ -27,7 +27,7 @@ function singleAttack() {
 		$('#controls').hide();
 	}
 };
-function contAttack() {
+function contAttack(hexagonGrid) {
 	while (map.data[map.attack.attX][map.attack.attY].units > 5 && map.data[map.attack.defX][map.attack.defY].units > 0){
         console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
             console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
@@ -45,6 +45,7 @@ function contAttack() {
 				map.data[map.attack.defX][map.attack.defY].units++;
 				map.data[map.attack.attX][map.attack.attY].units--;
 				$('#attackMove').show();
+				$('#endTurn').hide();
 				var options = "";
 				for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
 					options = options + "<option value='" + i + "'>" + i + "</option>";
@@ -53,9 +54,19 @@ function contAttack() {
 				
 				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
+				var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+				var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+				var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+				var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+				hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+				hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+				hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
+				hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 				$('#controls').hide();
-			
 				break;
+			}else{
+				hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+				hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
 			}
 			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "updateMap");

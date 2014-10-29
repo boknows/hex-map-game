@@ -81,9 +81,7 @@ map.getData(function(map_data){
 	
 	var contAttackButton = document.getElementById('continuousAttack');
 	contAttackButton.addEventListener('click', function (e) {
-		contAttack();
-		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+		contAttack(hexagonGrid);
 	}, false);
 	
 	var endTurnButton = document.getElementById('endTurnButton');
@@ -245,6 +243,7 @@ map.getData(function(map_data){
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		$('#attackMove').hide();
+		$('#endTurn').show();
 	}, false);
     
     function updateMsg(){
