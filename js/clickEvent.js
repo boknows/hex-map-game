@@ -23,7 +23,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
 		map.selected.selRowPrev = null; 
 		map.selected.selCol3 = null; 
 		map.selected.selRow3 = null; 
-		$("#controls").hide();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 	}
@@ -43,9 +42,11 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	$('#group').val(map.data[tile.row][tile.column].group);
 	$('#column').val(tile.column);
 	$('#row').val(tile.row);
+	*/
     //END map editor
-    */
+    
     if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
+		
         if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email){
 			var cube = toCubeCoord(tile.column, tile.row);
 			var unitMenu = document.getElementById('place').innerHTML;
@@ -91,7 +92,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         map.attack.attY = map.selected.selColPrev;
                         map.attack.defX = map.selected.selRow;
                         map.attack.defY = map.selected.selCol;
-                        console.log(map.attack);
 						this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                         this.drawHexGrid(this.rows, this.cols, 10, 10, true);
 						var drawy = map.selected.selColPrev % 2 == 0 ? (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 : (map.selected.selRowPrev * this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -105,7 +105,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 }
             }
             if(trigger == true){
-                $('#controls').show();
+                $('#attack').show();
             }else{
                 var msg = document.getElementById('msg').innerHTML;
                 if(map.dataProp.turnPhase == "attack"){
@@ -117,7 +117,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     delete map.selected.selRow;
                     delete map.selected.selColPrev;
                     delete map.selected.selRowPrev; 
-					$("#controls").hide();
+					$('#attack').hide();
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                     this.drawHexGrid(this.rows, this.cols, 10, 10, true);
                 }else {
@@ -135,6 +135,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 								if(map.data[offset.r][offset.q].type != "water" && map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
 									this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[tile.row][tile.column].owner); //highlight defender hex
 								}
+								
                             }						
                         }
                     }
@@ -147,7 +148,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     console.log("Erased!");
                     map.selected.trigger1 = false;
                     map.selected.trigger2 = false;
-                    $('#fortify').hide();
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                     this.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
                 }
@@ -163,7 +163,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         }
                     }
                 } 
-                if(map.selected.trigger1 === true && map.selected.trigger2 === true){
+                if(map.selected.trigger1 === true && map.selected.trigger2 === true && map.data[map.selected.selRowPrev][map.selected.selColPrev].units > 1){
                     var tran = "";
                     for(i=1;i<map.data[map.selected.selRowPrev][map.selected.selColPrev].units;i++){
                         var tran2 = "<option value='" + i + "'>" + i + "</option>";
@@ -174,10 +174,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     map.selected.trigger2 = false;
                     $('#fortify').show();
                 }
-            }else if(map.selected.trigger1 == false && map.selected.trigger2 == false){
+            }else if(map.selected.trigger1 == false && map.selected.trigger2 == false && map.data[map.selected.selRowPrev][map.selected.selColPrev].units > 1){
                 if(map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
                     map.selected.trigger1 = true;
-                    $('#fortify').hide();
                     var drawy3 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                     var drawx3 = (map.selected.selCol * this.side) + this.canvasOriginX;
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

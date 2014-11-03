@@ -32,10 +32,10 @@
 		width: 100%;
 		height: 100%;
 	}
-	.Game > #controls {
+	#panel {
 		position: absolute;
-		bottom: 730px;
-		left: 1000px;
+		bottom: 770px;
+		left: 700px;
 		height: 40px;
 	}
 	.Game > #endTurn {
@@ -58,8 +58,8 @@
 	}
 	.Game > #unitButtons {
 		position: absolute;
-		bottom: 785px;
-		left: 1000px;
+		bottom: 770px;
+		left: 700px;
 		height: 40px;
 	}
 	.Game > #attackMove {
@@ -95,7 +95,8 @@
         }
     ?>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		<div class="controls" id="endTurn" style="display:none">
+		<div id="panel">
+		<div class="controls" id="endTurn">
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
 			<button type="button" id="fortifyButton" class="btn btn-primary">Fortify</button>
 		</div>
@@ -114,60 +115,60 @@
 			<button type="button" class="btn btn-success" id="transferButton">Move</button>
 			<button type="button" class="btn btn-danger" id="transferMaxButton">Move(max)</button>
 		</div>
-		<div class="controls" id="controls" style="display:none">
+		<div class="controls" id="attack">
 			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
 			<button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
 		</div>
+		<div class="controls" id="attackMove" style="display:none">
+			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
+		</div>
+        </div>
 		<div class="controls" id="unitButtons" style="display:none">
 			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button>
 			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
-		<div class="controls" id="attackMove" style="display:none">
-			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
-		</div>
-        
         <div class="controls" id="editMap" style="display:none">
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>Row:</b></span><input type='text' name='row' class='form-control' id='row' value=''>
             </div>
-			<div class="input-group col-md-4">
+			<div class="input-group">
             <span class='input-group-addon'><b>Column:</b></span><input type='text' name='column' class='form-control' id='column' value=''>
             </div>
-			<div class="input-group col-md-4">
+			<div class="input-group">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>Units:</b></span><input type='text' name='units' class='form-control' id='units' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>Owner:</b></span><input type='text' name='owner' class='form-control' id='owner' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group ">
             <span class='input-group-addon'><b>Color:</b></span><input type='text' name='color' class='form-control' id='color' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>N:</b></span><input type='text' name='n' class='form-control' id='n' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>NE:</b></span><input type='text' name='ne' class='form-control' id='ne' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>SE:</b></span><input type='text' name='se' class='form-control' id='se' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>S:</b></span><input type='text' name='s' class='form-control' id='s' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>SW:</b></span><input type='text' name='sw' class='form-control' id='sw' value=''>
             </div>
-            <div class="input-group col-md-4">
+            <div class="input-group">
             <span class='input-group-addon'><b>NW:</b></span><input type='text' name='nw' class='form-control' id='nw' value=''>
             </div>
-			<div class="input-group col-md-4">
+			<div class="input-group">
             <span class='input-group-addon'><b>Connect:</b></span><input type='text' name='connect' class='form-control' id='connect' value=''>
             </div>
-			<div class="input-group col-md-4">
+			<div class="input-group">
             <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
             </div>
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>

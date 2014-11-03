@@ -1,30 +1,46 @@
 function singleAttack() {
 	if(map.data[map.attack.attX][map.attack.attY].units > 1){
 		var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
-		console.log(losses);
-		
 		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 		
 		if(map.data[map.attack.defX][map.attack.defY].units == 0){
 			map.data[map.attack.defX][map.attack.defY].units++;
 			map.data[map.attack.attX][map.attack.attY].units--;
-			$('#attackMove').show();
-			var options = "";
-			for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
-				options = options + "<option value='" + i + "'>" + i + "</option>";
-			}	
-			document.getElementById('attackMoveDrop').innerHTML = options;	
+			$('#attack').hide();
+			if(map.data[map.attack.attX][map.attack.attY].units > 1){
+				$('#attackMove').show();
+				var options = "";
+				for(i=1;i<map.data[map.attack.attX][map.attack.attY].units;i++){
+					options = options + "<option value='" + i + "'>" + i + "</option>";
+				}	
+				document.getElementById('attackMoveDrop').innerHTML = options;
+			}
+				
 			map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
 			map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
-			$('#controls').hide();
-			$('#endTurn').hide();
+			//$('#endTurn').hide();
 		}
 		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "map");
+		updateMap(data, "updateMap");
+		var chk = calcEndState(map.email);
+		if(chk == true){
+			map.dataProp.turnPhase = "ended";
+			var data = { data: JSON.stringify(map.dataProp) };
+			updateMap(data, "updateMapProperties");
+			data.param = "update";
+			data.gameID = $('#game_id').val();
+			data.status = "ended";
+			$.ajax({
+				url: "changeStatus.php",
+				data: data,
+				type: "POST",
+				dataType: 'JSON'
+			});
+		}
 	}else{
 		console.log("Can't attack. Not enough units.");
-		$('#controls').hide();
+		$('#attack').hide();
 	}
 };
 function contAttack(hexagonGrid) {
@@ -37,6 +53,7 @@ function contAttack(hexagonGrid) {
 			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 			
 			if(map.data[map.attack.defX][map.attack.defY].units == 0){
+				$('#attack').hide();
 				/*map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
 				map.data[map.attack.attX][map.attack.attY].units = 1;
 				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
@@ -72,6 +89,21 @@ function contAttack(hexagonGrid) {
 			}
 			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "updateMap");
+			var chk = calcEndState(map.email);
+			if(chk == true){
+				map.dataProp.turnPhase = "ended";
+				var data = { data: JSON.stringify(map.dataProp) };
+				updateMap(data, "updateMapProperties");
+				data.param = "update";
+				data.gameID = $('#game_id').val();
+				data.status = "ended";
+				$.ajax({
+					url: "changeStatus.php",
+					data: data,
+					type: "POST",
+					dataType: 'JSON'
+				});
+			}
 		}else{
 			console.log("Can't attack. Not enough units.");
 			$('#controls').hide();
@@ -364,4 +396,29 @@ function getDirection(x1, x2, y1, y2, z1, z2){
 	if(delX == -1 && delY == 1 && delZ == 0){
 		return "nw";
 	}
+}
+
+function calcEndState (username){
+	var countries = 0;
+	for(i=0;i<map.data.length;i++){
+		for(j=0;j<map.data[i].length;j++){
+			if(map.data[i][j].type != "water"){
+				countries++;   
+			}
+		}        
+	}
+	var occupied = 0;
+	for(i=0;i<map.data.length;i++){
+		for(j=0;j<map.data[i].length;j++){
+			if(map.data[i][j].owner == username){
+				occupied++;   
+			}
+		}        
+	}
+	if ((countries-occupied) == 0){
+		return true;
+	}else{
+		return false;
+	}
+	
 }

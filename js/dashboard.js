@@ -10,7 +10,6 @@ var Games = function(){
 var games = new Games();
 games.getData(function(data){
     //var data = JSON.parse(gameData);
-    console.log(data);
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
 	for(i=0, len=data.gameID.length; i<len; i++){
 		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i].date + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td><td>" + data.status[i] + "</td></tr>";

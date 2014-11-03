@@ -24,7 +24,6 @@ var Map = function(){
 };
 
 function updateMap(data, param){
-	console.log(data);
 	data.param = param;
 	data.gameID = $('#game_id').val();
 	$.ajax({
@@ -52,12 +51,14 @@ map.getData(function(map_data){
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-		$('#controls').hide();
-		$('#endTurn').hide();
-		$('#fortify').hide();
+		$('#panel').hide();
 		$('#unitButtons').show();	
 	}else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-		$('#endTurn').show();
+		$('#panel').show();
+		$('#attack').hide();
+	}
+	if(map.dataProp.owners[map.dataProp.turn] != map.email){
+		$('#panel').hide();
 	}
 	
 	//UI Buttons
@@ -98,9 +99,7 @@ map.getData(function(map_data){
 		updateMap(data, "updateMapProperties");
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
-		$('#endTurn').hide();
-        $('#controls').hide();
-        $('#fortify').hide();
+		$('#panel').hide();
         updateMsg();
 	}, false);
 	
@@ -111,8 +110,6 @@ map.getData(function(map_data){
 		updateMap(data, "updateMapProperties");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-		$('#controls').hide();
-        $('#fortify').hide();
         updateMsg();
 	}, false);	
 	
@@ -139,9 +136,9 @@ map.getData(function(map_data){
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
         map.selected.trigger1 = false;
         map.selected.trigger2 = false;
+		$('#fortify').hide();
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
-		$('#fortify').hide();
 	}, false);
     
     var undoAll = document.getElementById('undoAll');
@@ -182,15 +179,15 @@ map.getData(function(map_data){
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-        $('#unitButtons').hide();
-        $('#endTurn').show();
+		$('#unitButtons').hide();
+        $('#panel').show();
+		$('#attack').hide();
         updateMsg();
 	}, false);
     
     var updateMapBtn = document.getElementById('updateMap');
 	updateMapBtn.addEventListener('click', function (e) {
         var cube = toCubeCoord(map.selected.selCol, map.selected.selRow);
-        console.log(map.data[map.selected.selRow][map.selected.selCol].type);
 		map.data[map.selected.selRow][map.selected.selCol].type = $('#type').val();
         map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
         map.data[map.selected.selRow][map.selected.selCol].units = $('#units').val();
@@ -236,19 +233,18 @@ map.getData(function(map_data){
 	var attackMove = document.getElementById('attackMoveBtn');
 	attackMoveBtn.addEventListener('click', function (e) {
 		var move = $('#attackMoveDrop').val();
-		console.log("Move: " , move);
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
 		map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		$('#panel').show();
 		$('#attackMove').hide();
 		$('#endTurn').show();
 	}, false);
     
     function updateMsg(){
-		console.log(map.dataProp.turnPhase, map.dataProp.owners[map.dataProp.turn], map.username);
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
         if(map.dataProp.turnPhase == "attack"){
