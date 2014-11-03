@@ -72,7 +72,7 @@ map.getData(function(map_data){
 		var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
 		var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 		if(map.data[map.attack.attX][map.attack.attY].units == 1){
-		
+			$('#attack').hide();
 		}else{
 			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex

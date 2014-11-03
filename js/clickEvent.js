@@ -4,6 +4,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var localX = mouseX - this.canvasOriginX;
 	var localY = mouseY - this.canvasOriginY;
 	var tile = this.getSelectedTile(localX, localY);
+	//Add clicks to a click array for tracking
+	if(map.clicks){
+		map.clicks.push({col: tile.column, row: tile.row});
+	}else{
+		map.clicks = [{col: tile.column, row: tile.row}];
+	}
     if(typeof map.selected.selCol != "undefined" && typeof map.selected.selRow != "undefined"){ //Set previous clicked hex
         map.selected.selCol3 = map.selected.selColPrev;
 		map.selected.selRow3 = map.selected.selRowPrev;
@@ -47,7 +53,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
     
     if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
 		
-        if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email){
+        if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email && map.dataProp.owners[map.dataProp.turn] == map.email){
 			var cube = toCubeCoord(tile.column, tile.row);
 			var unitMenu = document.getElementById('place').innerHTML;
 			for(i=1;i<units+1;i++){
