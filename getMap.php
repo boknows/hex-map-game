@@ -6,7 +6,6 @@ if(empty($_SESSION['user']))
     die("Redirecting to index.php"); 
 }
 $username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
-$db = new PDO('mysql:host=localhost;dbname=hex;charset=utf8', 'root', '');
 
 if($_POST['param']=="getMapProperties"){
 	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :username');

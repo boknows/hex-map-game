@@ -24,8 +24,8 @@
 	.Game {
 		position: relative;
 		border: 1px solid orange;
-		width: 1200px;
-		height: 900px;
+		width: 666px;
+		height: 500px;
 	}
 	.Game > canvas {
 		position: absolute;
@@ -94,7 +94,7 @@
             echo "<div class='Game'>";
         }
     ?>
-		<canvas id="HexCanvas" width="1200" height="900"></canvas>
+		<canvas id="HexCanvas" width="666" height="500"></canvas>
 		<div id="panel">
 		<div class="controls" id="endTurn">
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
