@@ -21,16 +21,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 		map.neighborsPrev = getNeighbors(cube.x,cube.y,cube.z);
 	}
 	console.log(map.neighborsPrev, map.neighbors);
-	if(map.selected.selCol3 == map.selected.selCol && map.selected.selRow3 == map.selected.selRow){
-		map.selected.selCol = null;
-		map.selected.selRow = null;
-		map.selected.selColPrev = null;
-		map.selected.selRowPrev = null; 
-		map.selected.selCol3 = null; 
-		map.selected.selRow3 = null; 
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.drawHexGrid(this.rows, this.cols, 10, 10, true);
-	}
+
     //populate hex data to form for map editing
 	/*
     $('#type').val(map.data[tile.row][tile.column].type);

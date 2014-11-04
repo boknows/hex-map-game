@@ -3,12 +3,11 @@ var Map = function(){
     var mapData;
     this.data = null;
     this.attack = {attX: null, attY: null, defX: null, defY: null};
-    this.selected = {selCol: null, selRow: null, nCol: null, nRow: null};
+    this.selected = {col: null, row: null, nCol: null, nRow: null};
 	this.unitPlacement = [];
 	this.clickState = null;
 	this.neighbors = [];
     this.neighborsPrev = [];
-    this.dataPrev = null;
 	this.username = $('#username').val();
 	this.email = $('#email').val();
     this.unitCnt = 0;
@@ -38,7 +37,6 @@ function updateMap(data, param){
 var map = new Map();
 map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
-    map.dataPrev = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
@@ -118,7 +116,8 @@ map.getData(function(map_data){
 	transferMaxButton.addEventListener('click', function (e) {
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
-        map.selected.trigger = false;
+        map.selected = null;
+		map.clickState = null;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
@@ -135,8 +134,8 @@ map.getData(function(map_data){
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-        map.selected.trigger1 = false;
-        map.selected.trigger2 = false;
+		map.selected = null;
+		map.clickState = null;
 		$('#fortify').hide();
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
