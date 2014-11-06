@@ -117,10 +117,11 @@
 		</div>
 		<div class="controls" id="attack">
 			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
-			<button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
+			<br><button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
 		</div>
 		<div class="controls" id="attackMove" style="display:none">
 			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
+			<br><button type="button" id="attackMoveAllBtn" class="btn btn-danger">Move All</button> 
 		</div>
         </div>
 		<div class="controls" id="unitButtons" style="display:none">

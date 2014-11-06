@@ -230,10 +230,12 @@ map.getData(function(map_data){
 	}, false); 
 	
 	var attackMove = document.getElementById('attackMoveBtn');
-	attackMoveBtn.addEventListener('click', function (e) {
+	attackMove.addEventListener('click', function (e) {
 		var move = $('#attackMoveDrop').val();
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
 		map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
+		map.clickState = null;
+		map.selected = null;
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -242,7 +244,22 @@ map.getData(function(map_data){
 		$('#attackMove').hide();
 		$('#endTurn').show();
 	}, false);
-    
+	
+    var attackMoveAll = document.getElementById('attackMoveAllBtn');
+	attackMoveAll.addEventListener('click', function (e) {
+		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
+		map.data[map.attack.attX][map.attack.attY].units = 1;
+		map.clickState = null;
+		map.selected = null;
+		var data = { data: JSON.stringify(map.data) };
+		updateMap(data, "updateMap");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		$('#panel').show();
+		$('#attackMove').hide();
+		$('#endTurn').show();
+	}, false);
+	
     function updateMsg(){
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";

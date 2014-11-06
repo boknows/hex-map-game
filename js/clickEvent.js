@@ -176,7 +176,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 					for(var i=0;i<map.neighbors.length;i++){
 						if(cube.x == map.neighbors[i].x && cube.y == map.neighbors[i].y && cube.z == map.neighbors[i].z){
 							var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
-							if(map.data[offset.r][offset.q].owner != map.email){
+							if(map.data[offset.r][offset.q].owner != map.email && map.data[offset.r][offset.q].type != "water"){
 								map.selected.nCol = tile.column;
 								map.selected.nRow = tile.row;
 								map.attack = {attX: map.selected.row, attY: map.selected.col, defX: map.selected.nRow, defY: map.selected.nCol};
@@ -227,7 +227,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	
 	//Draw Logic for after clicks made
 	if(map.dataProp.turnPhase == "attack"){
-		if(map.clickState == "select"){
+		if(map.clickState == "select" && map.data[tile.row][tile.column].type != "water"){
 			var cube = toCubeCoord(tile.column, tile.row);
 			map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
 			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -258,6 +258,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			}
 			map.clickState = null;
 			map.selected = null;
+			$('#attack').hide();
 		}
 		if(map.clickState == "nSelect"){
 			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
@@ -289,6 +290,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			
 			map.clickState = null;
 			map.selected = null;
+			$('#attack').hide();
 		}
 	}
 	if(map.dataProp.turnPhase == "fortify"){
