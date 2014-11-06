@@ -31,26 +31,43 @@ for($i=0;$i<count($owners)-1;$i++){
     $mapProperties .= ',"NULL"';
 }   
 $mapProperties .= '],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
-foreach($_POST['players'] as $var){
-    if($var != ""){
-        if($var == $_SESSION['user']['email']){
-            $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, email, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :email, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties)');
-            $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'accepted', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
-            if (!$stmt) {
-                echo "\nPDO::errorInfo():\n";
-                print_r($db->errorInfo());
-            } 
-        }else{
-            $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, email, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :email, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties)');
-            $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':email' => $var, ':status' => 'invited', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
-            if (!$stmt) {
-                echo "\nPDO::errorInfo():\n";
-                print_r($db->errorInfo());
-            } 
-        }
-        
-    }
+$stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties)');
+$stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
+if (!$stmt) {
+	echo "\nPDO::errorInfo():\n";
+	print_r($db->errorInfo());
 }
+
+$inQuery = implode(',', array_fill(0, count($_POST['players']), '?'));
+$stmt = $db->prepare(
+    'SELECT *
+     FROM users
+     WHERE email IN(' . $inQuery . ')'
+);
+foreach ($_POST['players'] as $k => $email){
+    $stmt->bindValue(($k+1), $email);
+}
+$stmt->execute();
+
+foreach ($stmt as $row) {
+	$games['email'][] = $row['email'];	
+	$games['gameQueue'][] = $row['gameQueue'];
+}
+
+for($i=0;$i<count($games);$i++){
+	$str = json_decode($games['gameQueue'][$i]);
+	if($games['email'][$i] == $_SESSION['user']['email']){
+		$str->append('{"gameID": ' . $maxID . ', "status":"accepted"}');
+	}else{
+		$str->append('{"gameID": ' . $maxID . ', "status":"invited"}');
+	}
+	$str = json_encode($str);
+	$stmt = $db->prepare('UPDATE users SET gameQueue = :str WHERE email = :email');
+	$stmt->execute(array(':str' => $str, ':email' => $games['email'][$i]));  
+}
+
+
+
 echo JSON_encode("Game Created");
 
 
