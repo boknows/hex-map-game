@@ -53,17 +53,17 @@ foreach ($stmt as $row) {
 	$games['email'][] = $row['email'];	
 	$games['gameQueue'][] = $row['gameQueue'];
 }
-
 for($i=0;$i<count($games);$i++){
-	$str = json_decode($games['gameQueue'][$i]);
+	$str = json_decode($games['gameQueue'][$i], true);
+	
 	if($games['email'][$i] == $_SESSION['user']['email']){
-		$str->append('{"gameID": ' . $maxID . ', "status":"accepted"}');
+		$str[] = array('gameID' => $maxID, 'status' => "accepted"); 
 	}else{
-		$str->append('{"gameID": ' . $maxID . ', "status":"invited"}');
+		$str[] = array('gameID' => $maxID, 'status' => "invited"); 
 	}
-	$str = json_encode($str);
+	print_r($str);
 	$stmt = $db->prepare('UPDATE users SET gameQueue = :str WHERE email = :email');
-	$stmt->execute(array(':str' => $str, ':email' => $games['email'][$i]));  
+	$stmt->execute(array(':str' => JSON_encode($str), ':email' => $games['email'][$i]));  
 }
 
 

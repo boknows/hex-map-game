@@ -14,12 +14,13 @@ if($_POST['param'] == "active"){
 	}
 	$obj = json_decode($data['gameQueue']);
 	echo "Game Queue: <pre>" . print_r($obj) . "</pre>";
-	for ($i=0; $i<count($data['created']); $i++){
-		$epoch = $data['created'][$i]; 
-		$dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
-		$dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
-		$data['created'][$i] = $dt;
-	}
+	echo "Type:" . gettype($obj);
+	#for ($i=0; $i<count($data['created']); $i++){
+	#	$epoch = $data['created'][$i]; 
+	#	$dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
+	#	$dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
+	#	$data['created'][$i] = $dt;
+	#}
 
 }
 
