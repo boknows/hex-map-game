@@ -132,9 +132,35 @@ HexagonGrid.prototype.clickEvent = function (e) {
             }
         }else */
 		//Click Logic
-		if(map.dataProp.turnPhase == "fortify"){
+		var cube = toCubeCoord(tile.column, tile.row);
+		if(map.dataProp.turnPhase == "attack"){
 			console.log("Click State Before:" , map.clickState);
-			var cube = toCubeCoord(tile.column, tile.row);
+			if(map.clickState == null && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email){
+				map.clickState = "select";
+				map.selected = {col: tile.column, row: tile.row};
+			}else if(map.clickState == "select"){
+				if(map.selected.col == tile.column && map.selected.row == tile.row){
+					console.log("Erased!");
+					map.clickState = "selectClear";
+				}else{
+					for(var i=0;i<map.neighbors.length;i++){
+						if(cube.x == map.neighbors[i].x && cube.y == map.neighbors[i].y && cube.z == map.neighbors[i].z){
+							var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+							if(map.data[offset.r][offset.q].owner != map.email){
+								map.selected.nCol = tile.column;
+								map.selected.nRow = tile.row;
+								map.attack = {attX: map.selected.row, attY: map.selected.col, defX: map.selected.nRow, defY: map.selected.nCol};
+								map.clickState = "nSelect";
+							}
+						}
+					}
+				}
+			}else if(map.clickState == "nSelect"){
+				map.clickState = "nSelectClear";
+			}
+			console.log("Click State After:" , map.clickState);
+		}
+		if(map.dataProp.turnPhase == "fortify"){
 			if(map.clickState == null){
 				map.clickState = "select";
 				if(map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email){
@@ -168,13 +194,73 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			}else if(map.clickState == "nSelect"){
 				map.clickState = "nSelectClear";
 			}
-
-			console.log("Click State After:" , map.clickState);
-        }
-		
+        }	
     }
 	
 	//Draw Logic for after clicks made
+	if(map.dataProp.turnPhase == "attack"){
+		if(map.clickState == "select"){
+			var cube = toCubeCoord(tile.column, tile.row);
+			map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map.data[map.selected.row][map.selected.col].owner); //highlight selected
+			
+			for(var i=0;i<map.neighbors.length;i++){
+				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner != map.data[offset.r][offset.q].owner && map.data[offset.r][offset.q].type !="water"){
+					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+					this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[offset.r][offset.q].owner); //highlight neighbor hexes
+				}						
+			}
+		}
+		if(map.clickState == "selectClear"){
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.row][map.selected.col].owner); //clear selected hex
+			
+			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
+				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner != map.data[offset.r][offset.q].owner && map.data[offset.r][offset.q].type !="water"){
+					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+					this.drawHex(drawx2, drawy2 - 6, "#99CC66", "", false, "", map.data[offset.r][offset.q].owner); 						
+				}						
+			}
+			map.clickState = null;
+			map.selected = null;
+		}
+		if(map.clickState == "nSelect"){
+			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
+				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.data[offset.r][offset.q].owner && map.data[offset.r][offset.q].type !="water"){
+					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+					this.drawHex(drawx2, drawy2 - 6, "#99CC66", "", false, "", map.data[offset.r][offset.q].owner); 						
+				}						
+			}
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map.data[map.selected.row][map.selected.col].owner); //highlight selected
+			
+			var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
+		}
+		if(map.clickState == "nSelectClear"){
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.row][map.selected.col].owner); //clear selected hex
+			
+			var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.nRow][map.selected.nCol].owner); //clear nSelected hex
+			
+			map.clickState = null;
+			map.selected = null;
+		}
+	}
 	if(map.dataProp.turnPhase == "fortify"){
 		if(map.clickState == "selectClear"){
 			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
