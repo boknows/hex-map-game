@@ -32,7 +32,10 @@ function createGame() {
 					$('#player4').val(),
 					$('#player5').val(),
 					$('#player6').val(),
-					$('#player7').val()]
+					$('#player7').val()],
+					minPlayers: $('#minPlayers').val(),
+					maxPlayers: $('#maxPlayers').val(),
+					publicPrivate: $('#publicPrivate').val(),
 				};
         $.ajax({
             url: "createGame.php",

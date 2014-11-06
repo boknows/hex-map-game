@@ -70,6 +70,15 @@
 		<div class="input-group col-md-4">
 		<span class='input-group-addon'><b>Opponent 7 Email:</b></span><input type='text' name='player7' class='form-control' id='player7'>
 		</div>
+		<div class="input-group col-md-4">
+		<span class='input-group-addon'><b>Minimum Players:</b></span><select class='form-control' id='minPlayers'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
+		</div>
+		<div class="input-group col-md-4">
+		<span class='input-group-addon'><b>Maximum Players:</b></span><select class='form-control' id='maxPlayers'><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
+		</div>
+		<div class="input-group col-md-4">
+		<span class='input-group-addon'><b>Public/Private Game:</b></span><select class='form-control' id='publicPrivate'><option value='public'>Public</option><option value='private'>Private</option></select>
+		</div>
 		<div class='input-group'>
 		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGame() data-loading-text="Creating...">Create Game</button>
 		</div>
