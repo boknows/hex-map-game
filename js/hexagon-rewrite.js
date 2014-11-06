@@ -7,7 +7,6 @@ var Map = function(){
 	this.unitPlacement = [];
 	this.clickState = null;
 	this.neighbors = [];
-    this.neighborsPrev = [];
 	this.username = $('#username').val();
 	this.email = $('#email').val();
     this.unitCnt = 0;
