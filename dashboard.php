@@ -46,13 +46,11 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 				  <select name="colorpicker" id="colorpicker" class="form-control">
-					<option value="#FF0000" selected>Red</option>
-					<option value="#FF66FF">Pink</option>
+					<option value="#FF66FF" selected>Pink</option>
 					<option value="#FF6600">Orange</option>
 					<option value="#FFFF00">Yellow</option>
 					<option value="#33CC33">Green</option>
 					<option value="#0000FF">Blue</option>
-					<option value="#00FFFF">Teal</option>
 					<option value="#AA70AA">Purple</option>
 				  </select>
 				</div>

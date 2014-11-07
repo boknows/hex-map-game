@@ -133,7 +133,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
         }else */
 		//Click Logic
 		var cube = toCubeCoord(tile.column, tile.row);
-        if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email){
+        if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.email && map.dataProp.owners[map.dataProp.turn]==map.email){
 			var unitMenu = document.getElementById('place').innerHTML;
 			for(var i=1;i<units+1;i++){
 				unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   

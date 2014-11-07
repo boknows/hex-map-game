@@ -228,17 +228,6 @@
         <div class="form-group">
             <div class="col-sm-6">
               <select name="colorpicker" id="colorpicker" class="form-control">
-                <option value="#FF0000" <?php 
-                    $trigger = false;
-                    for($i=0;$i<count($mapProp->colors);$i++){
-                        if($mapProp->colors[$i] == "#FF0000"){
-                            $trigger = true;   
-                        }
-                    }
-                    if($trigger == true){
-                        echo "disabled";   
-                    } 
-                ?>>Red</option>
                 <option value="#FF66FF" <?php 
                     $trigger = false;
                     for($i=0;$i<count($mapProp->colors);$i++){
@@ -294,17 +283,6 @@
                         echo "disabled";   
                     } 
                 ?>>Blue</option>
-                <option value="#00FFFF" <?php 
-                    $trigger = false;
-                    for($i=0;$i<count($mapProp->colors);$i++){
-                        if($mapProp->colors[$i] == "#00FFFF"){
-                            $trigger = true;   
-                        }
-                    }
-                    if($trigger == true){
-                        echo "disabled";   
-                    } 
-                ?>>Teal</option>
                 <option value="#AA70AA" <?php 
                     $trigger = false;
                     for($i=0;$i<count($mapProp->colors);$i++){
