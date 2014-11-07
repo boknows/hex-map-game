@@ -30,7 +30,6 @@ function shuffle(array) {
 }
 
 function acceptInvite () {
-	console.log("Hit the button!");
     var data = { param: 'getAll', gameID: $('#game_id').val(), color: $('#colorpicker').val()};
 	$.ajax({
         url: "getMap.php",
@@ -69,8 +68,11 @@ function acceptInvite () {
 				dataType: 'JSON', 
 				data: data,
 				success: function(resp){
+					console.log("done");
 					if(resp == "started"){
 						startGame($('#game_id').val(), mapArray, mapProperties);
+					}else if (resp == "accepted"){
+						window.location.reload(true);
 					}
 				},
 			});	

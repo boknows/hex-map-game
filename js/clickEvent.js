@@ -191,7 +191,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			console.log("Click State After:" , map.clickState);
 		}
 		if(map.dataProp.turnPhase == "fortify"){
-			if(map.clickState == null && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1){
+			if(map.clickState == null && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1 && map.dataProp.fortifiesUsed < map.dataProp.fortifies){
 				map.clickState = "select";
 				map.selected = {col: tile.column, row: tile.row};
 			}else if(map.clickState == "select"){

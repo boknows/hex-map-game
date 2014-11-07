@@ -30,7 +30,7 @@ $mapProperties = '{"owners":' . $ownersJson . ',"colors":["'. $_POST['colorpicke
 for($i=0;$i<count($owners)-1;$i++){
     $mapProperties .= ',"NULL"';
 }   
-$mapProperties .= '],"turn":0,"turnPhase":"invited","fortifies":6,"rows":8,"cols":14}';
+$mapProperties .= '],"turn":0,"turnPhase":"invited","fortifies":3,"fortifiesUsed":0,"rows":8,"cols":14}';
 $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties)');
 $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
 if (!$stmt) {

@@ -89,6 +89,7 @@ map.getData(function(map_data){
 		//turned off for testing
 		if(map.dataProp.turn == map.dataProp.owners.length-1){
 			map.dataProp.turn = 0;
+			map.dataProp.fortifiesUsed = 0;
 		}else{
 			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
 		}  
@@ -115,13 +116,21 @@ map.getData(function(map_data){
 	transferMaxButton.addEventListener('click', function (e) {
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
 		map.data[map.attack.attX][map.attack.attY].units = 1;
+		map.dataProp.fortifiesUsed++;
         map.selected = null;
 		map.clickState = null;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
+		var data = { data: JSON.stringify(map.dataProp) };
+		updateMap(data, "updateMapProperties");
 		$('#fortify').hide();
+		//Update Text on Unit Placement HTML
+		var msg = document.getElementById('msg').innerHTML;
+		msg = map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
+		document.getElementById('msg').innerHTML = msg;
+
 	}, false);
 	
 	var transferButton = document.getElementById('transferButton');
@@ -129,6 +138,7 @@ map.getData(function(map_data){
 		var num = $('#transfer').val();
 		num = parseInt(num);
 		var tmp = parseInt(map.data[map.attack.attX][map.attack.attY].units);
+		map.dataProp.fortifiesUsed++;
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -138,6 +148,12 @@ map.getData(function(map_data){
 		$('#fortify').hide();
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
+		var data = { data: JSON.stringify(map.dataProp) };
+		updateMap(data, "updateMapProperties");
+		//Update Text on Unit Placement HTML
+		var msg = document.getElementById('msg').innerHTML;
+		msg = map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
+		document.getElementById('msg').innerHTML = msg;
 	}, false);
     
     var undoAll = document.getElementById('undoAll');
@@ -275,6 +291,11 @@ map.getData(function(map_data){
             var msg = document.getElementById('msg').innerHTML;
             var units = calcUnits(map.email);
             msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
+            document.getElementById('msg').innerHTML = msg;
+        }
+		if(map.dataProp.turnPhase == "fortify" && map.dataProp.owners[map.dataProp.turn] == map.email){
+            var msg = document.getElementById('msg').innerHTML;
+            msg = msg + "<br>" + map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
             document.getElementById('msg').innerHTML = msg;
         }
 		if(map.dataProp.owners[map.dataProp.turn] != map.email){

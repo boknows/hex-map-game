@@ -66,6 +66,8 @@ if($ready == true){
     $stmt = $db->prepare('UPDATE games SET status = "started", mapProperties = :mapProperties WHERE gameID = :gameID');
     $stmt->execute(array(':gameID' => $_POST['gameID'], ':mapProperties' => json_encode($mapProp))); 
     echo JSON_encode("started");
+}else{
+	echo JSON_encode("accepted");
 }
 
 

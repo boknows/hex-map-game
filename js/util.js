@@ -24,6 +24,7 @@ function singleAttack() {
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
 		var chk = calcEndState(map.email);
+		console.log("EndState:", chk);
 		if(chk == true){
 			map.dataProp.turnPhase = "ended";
 			var data = { data: JSON.stringify(map.dataProp) };
@@ -90,6 +91,7 @@ function contAttack(hexagonGrid) {
 			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "updateMap");
 			var chk = calcEndState(map.email);
+			console.log("EndState:", chk);
 			if(chk == true){
 				map.dataProp.turnPhase = "ended";
 				var data = { data: JSON.stringify(map.dataProp) };
@@ -150,6 +152,10 @@ function calcUnits(username) {
 	}
 	if(bonus[6]==4){
 		units = units + 2;
+	}
+	
+	if(units<3){
+		units = 3;
 	}
 	return units;
 };

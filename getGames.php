@@ -25,7 +25,7 @@ if($_POST['param'] == "active"){
 		$stmt = $db->prepare(
 			'SELECT *
 			 FROM games
-			 WHERE gameID IN(' . $inQuery . ')'
+			 WHERE gameID IN(' . $inQuery . ') AND status!="ended"'
 		);
 		foreach ($ids as $k => $id){
 			$stmt->bindValue(($k+1), $id);
