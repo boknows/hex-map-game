@@ -8,10 +8,10 @@ var Games = function(){
         }).success(callback);
     };
 };
+
 var games = new Games();
 games.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
-
 	for(i=0, len=data.gameID.length; i<len; i++){
 		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
 		if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#username').val()){
@@ -24,6 +24,7 @@ games.getData(function(data){
 	$('#game_table').html(txt);
 	
 });
+
 
 var GamesPublic = function(){
     this.getData = function(callback){
