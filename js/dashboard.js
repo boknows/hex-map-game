@@ -10,19 +10,16 @@ var Games = function(){
 };
 var games = new Games();
 games.getData(function(data){
-    console.log(data);
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
 	for(i=0, len=data.gameID.length; i<len; i++){
-		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i].date + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
-        console.log(txt);
+		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
 	}
 	txt = txt + "</tbody></table>";
-	console.log(txt);
 	$('#game_table').html(txt);
 	
 });
 
-var Games = function(){
+var GamesPublic = function(){
     this.getData = function(callback){
         $.ajax({
             url: "getGames.php",
@@ -32,12 +29,12 @@ var Games = function(){
         }).success(callback);
     };
 };
-var games = new Games();
-games.getData(function(data){
-    //var data = JSON.parse(gameData);
+
+var gamesPublic = new GamesPublic();
+gamesPublic.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
 	for(i=0, len=data.gameID.length; i<len; i++){
-		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i].date + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
+		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
 	}
 	txt = txt + "</tbody></table>";
 	console.log(txt);

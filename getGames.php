@@ -5,8 +5,9 @@ if(empty($_SESSION['user']))
     header("Location: index.php");
     die("Redirecting to index.php"); 
 }
+$username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
+
 if($_POST['param'] == "active"){
-	$username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 	$stmt = $db->prepare('SELECT * FROM users WHERE email = :username');
 	$stmt->execute(array(':username' => $username));
 	foreach ($stmt as $row) {	
@@ -45,6 +46,34 @@ if($_POST['param'] == "active"){
     echo JSON_encode($games);
 }
 
-
+if($_POST['param'] == "public"){
+	$stmt = $db->prepare('SELECT * FROM games WHERE status = "invites"');
+	$stmt->execute();
+	foreach ($stmt as $row) {	
+		$games['gameID'][] = $row['gameID'];	
+        $games['game_name'][] = $row['game_name'];
+        $games['created'][] = $row['created'];
+	}
+    
+    $stmt = $db->prepare('SELECT * FROM users WHERE email = :username');
+	$stmt->execute(array(':username' => $username));
+	foreach ($stmt as $row) {	
+		$data['gameQueue'] = $row['gameQueue'];
+	}
+	$gamesQ = json_decode($data['gameQueue'], true);
+    foreach($gamesQ as $game){
+         $ids[] = $game['gameID']; 
+         $status[] = $game['status'];
+    }
+    
+    for($i=0;$i<count($games['gameID']);$i++){
+        for($j=0;$j<count($ids);$j++){
+            if($games['gameID']==$ids[$j]){
+                $activeGames[] = array("gameID"=>$ids[$j],"game_name"=>$games['game_name'][$i],"created"=>$games['created'][$i]);
+            }
+        }
+    }
+    echo JSON_encode($activeGames);
+}
 
 ?>
