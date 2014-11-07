@@ -8,16 +8,16 @@ if(empty($_SESSION['user']))
 $username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 
 if($_POST['param']=="getMapProperties"){
-	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :username');
-	$stmt->execute(array(':gameID' => $_POST['gameID'], ':username' => $username));
+	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
+	$stmt->execute(array(':gameID' => $_POST['gameID']));
 	foreach ($stmt as $row) {
 		$data = $row['mapProperties'];
 	}
 	echo JSON_encode($data);
 }
 if($_POST['param']=="getAll"){
-	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :email');
-	$stmt->execute(array(':gameID' => $_POST['gameID'], ':email' => $username));
+	$stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
+	$stmt->execute(array(':gameID' => $_POST['gameID']));
 	foreach ($stmt as $row) {
 		$data['mapArray'] = $row['mapArray'];	
 		$data['mapProperties'] = $row['mapProperties'];

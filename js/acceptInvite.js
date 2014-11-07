@@ -46,16 +46,22 @@ function acceptInvite () {
 					email = i;
 				}
 			}
-			mapProperties.colors[email] = $('#colorpicker').val();
-			/*var mapPropertiesString = JSON.stringify(mapProperties);
-			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), mapProperties: mapPropertiesString};
+			if(email == 0){
+				mapProperties.owners.push($('#email').val());
+				mapProperties.colors.push($('#colorpicker').val());
+			}else{
+				mapProperties.colors[email] = $('#colorpicker').val();
+			}
+			console.log(mapProperties);
+			var mapPropertiesString = JSON.stringify(mapProperties);
+			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), data: mapPropertiesString};
 			$.ajax({
 				url: "getMap.php",
 				type: "POST",
 				dataType: 'JSON', 
 				data: data,
 			});
-			*/
+			
 			var data = {gameID: $('#game_id').val()};
             $.ajax({
 				url: "getGame.php",
@@ -74,6 +80,7 @@ function acceptInvite () {
 }
 
 function startGame(gameID, mapArray, mapProperties) {
+	console.log(mapProperties);
 	var order = []; //track order
 	for(i=0;i<mapProperties.owners.length;i++){
 		order[i] = mapProperties.owners[i];

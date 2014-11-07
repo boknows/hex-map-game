@@ -10,9 +10,15 @@ var Games = function(){
 };
 var games = new Games();
 games.getData(function(data){
-	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
+	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
+
 	for(i=0, len=data.gameID.length; i<len; i++){
-		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
+		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
+		if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#username').val()){
+			txt = txt + "<td>Your turn!</td><tr>";
+		}else{
+			txt = txt + "<td></td><tr>";
+		}
 	}
 	txt = txt + "</tbody></table>";
 	$('#game_table').html(txt);
@@ -33,11 +39,12 @@ var GamesPublic = function(){
 var gamesPublic = new GamesPublic();
 gamesPublic.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
-	for(i=0, len=data.gameID.length; i<len; i++){
-		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td></tr>";
+
+	for(i=0, len=data.length; i<len; i++){
+		txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
 	}
 	txt = txt + "</tbody></table>";
-	console.log(txt);
+	
 	$('#publicGames').html(txt);
 	
 });

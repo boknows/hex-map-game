@@ -81,18 +81,44 @@
 	<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
 	<input type="hidden" name="email" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
 	<?php
-        $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID AND email = :email');
-        $stmt->execute(array(':gameID' => $_GET['id'], ':email' => $_SESSION['user']['email']));
+        $stmt = $db->prepare('SELECT * FROM games WHERE gameID = :gameID');
+        $stmt->execute(array(':gameID' => $_GET['id']));
         foreach ($stmt as $row) {
 	        $data['status'] = $row['status'];
+			$data['publicPrivate'] = $row['publicPrivate'];
             $data['mapProperties'] = $row['mapProperties'];
+			$data['minPlayers'] = $row['minPlayers'];
+			$data['maxPlayers'] = $row['maxPlayers'];
         }
         $mapProp = json_decode($data['mapProperties']);
-        if($data['status'] == "invited" || $data['status'] == "accepted"){
-            echo "<div class='Game' style='display:none;'>";
+
+		//For public invites, check if user is invited AND if game is public
+		$publicInv = false;
+		for($i=0;$i<count($mapProp->owners);$i++){
+			if($mapProp->owners[$i] == $_SESSION['user']['email']){
+				$publicInv = true;
+			}
+		}
+		
+		
+        if($data['status'] == "invites"){
+			$stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
+			$stmt->execute(array(':email' => $_SESSION['user']['email']));
+			foreach ($stmt as $row) {	
+				$player['email'] = $row['email'];
+				$player['gameQueue'] = json_decode($row['gameQueue'], true);
+			}
+			$accepted = false;
+			for($i=0;$i<count($player['gameQueue']);$i++){
+				if($player['gameQueue'][$i]['gameID']==$_GET['id'] && $player['gameQueue'][$i]['status']=="accepted"){
+					$accepted = true; 
+				}
+			}
+			echo "<div class='Game' style='display:none;'>";
         }else{
             echo "<div class='Game'>";
         }
+		
     ?>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
 		<div id="panel">
@@ -178,7 +204,7 @@
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php
-        if($data['status'] != "invited"){
+        if($data['status'] == "started"){
             echo "<script src='js/hexagon-rewrite.js'></script>
 	        <script src='js/HexagonGrid.js'></script>
             <script src='js/drawHexGrid.js'></script>
@@ -187,10 +213,15 @@
             <script src='js/clickEvent.js'></script>
             <script src='js/util.js'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
-        }else{
-            echo "<div class='inviteForm'>";
-			echo "<script src='js/util.js'></script>
+        }else if($data['status'] == "invites"){
+			if($accepted == true){
+				echo "<div class='inviteForm' style='display:none;'>";
+			}else if ($accepted == false){
+				echo "<div class='inviteForm'>";
+				echo "<script src='js/util.js'></script>
 			<script src='js/acceptInvite.js'></script>";
+			}
+			
         }     
     ?>
         Choose your color:
@@ -294,7 +325,7 @@
 		</div>
     </div><!-- end inviteForm -->
     <div id="accepted" style="display:<?php
-        if($data['status'] == "accepted"){
+		if($accepted == true){
             echo "inline";   
         }else{
             echo "none";   
