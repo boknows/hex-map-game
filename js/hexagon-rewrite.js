@@ -89,10 +89,10 @@ map.getData(function(map_data){
 		//turned off for testing
 		if(map.dataProp.turn == map.dataProp.owners.length-1){
 			map.dataProp.turn = 0;
-			map.dataProp.fortifiesUsed = 0;
 		}else{
 			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
 		}  
+		map.dataProp.fortifiesUsed = 0;
 		map.dataProp.turnPhase = "unitPlacement";
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
