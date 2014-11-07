@@ -5,16 +5,54 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	var localY = mouseY - this.canvasOriginY;
 	var tile = this.getSelectedTile(localX, localY);
 	//Add clicks to a click array for tracking
-	if(typeof(map.clicks) != "undefined"){
-		map.clicks.push({col: tile.column, row: tile.row, selected: null, type: null});
+	if(map.dataProp.turnPhase == "fortify"){
+		if(map.data[tile.row][tile.column].owner == map.email){
+			if(typeof(map.clicks) != "undefined"){
+				map.clicks.push({col: tile.column, row: tile.row, selected: null, type: null});
+			}else{
+				map.clicks = [{col: tile.column, row: tile.row, selected: null, type: null}];
+			}
+			if(map.clicks.length > 3){
+				map.clicks.shift();
+			}
+		}else{
+			if(map.clickState != null){
+				map.clickState = "fortifyClear";
+			}
+		}	
+	}else if(map.dataProp.turnPhase == "attack"){
+		if(map.clickState == "select"){
+			if(map.data[tile.row][tile.column].owner == map.email){
+				map.clickState = "attackClear";
+			}
+		}else if(map.clickState == "nSelect"){
+			if((map.selected.row != tile.row && map.selected.col != tile.column) || (map.selected.nRow != tile.row && map.selected.col != tile.column)){
+				map.clickState = "attackClear";
+			}
+		}else{
+			if(typeof(map.clicks) != "undefined"){
+				map.clicks.push({col: tile.column, row: tile.row, selected: null, type: null});
+			}else{
+				map.clicks = [{col: tile.column, row: tile.row, selected: null, type: null}];
+			}
+			if(map.clicks.length > 3){
+				map.clicks.shift();
+			}
+		}
 	}else{
-		map.clicks = [{col: tile.column, row: tile.row, selected: null, type: null}];
+		if(typeof(map.clicks) != "undefined"){
+			map.clicks.push({col: tile.column, row: tile.row, selected: null, type: null});
+		}else{
+			map.clicks = [{col: tile.column, row: tile.row, selected: null, type: null}];
+		}
+		if(map.clicks.length > 3){
+			map.clicks.shift();
+		}
+    }
+	if(typeof(map.clicks) != "undefined"){
+		var clickTotal = map.clicks.length - 1;
 	}
-	if(map.clicks.length > 3){
-		map.clicks.shift();
-	}
-	var clickTotal = map.clicks.length - 1;
-	
+	console.log(map.clicks);
     //populate hex data to form for map editing
 	/*
     $('#type').val(map.data[tile.row][tile.column].type);
@@ -69,7 +107,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 		}
 		if(map.dataProp.turnPhase == "attack"){
 			console.log("Click State Before:" , map.clickState);
-			if(map.clickState == null && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email){
+			if(map.clickState == null && map.data[tile.row][tile.column].owner == map.email){
 				map.clickState = "select";
 				map.selected = {col: tile.column, row: tile.row};
 			}else if(map.clickState == "select"){
@@ -92,17 +130,17 @@ HexagonGrid.prototype.clickEvent = function (e) {
 			}else if(map.clickState == "nSelect"){
 				map.clickState = "nSelectClear";
 			}
-			console.log("Click State After:" , map.clickState);
+			console.log("Click State After:" , map.clickState, map.selected);
 		}
 		if(map.dataProp.turnPhase == "fortify"){
 			console.log("Click State Before:" , map.clickState);
 
-			if(map.clickState == null && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1 && map.dataProp.fortifiesUsed < map.dataProp.fortifies){
+			if(map.clickState == null && map.data[tile.row][tile.column].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1 && map.dataProp.fortifiesUsed < map.dataProp.fortifies){
 				map.clickState = "select";
 				map.selected = {col: tile.column, row: tile.row};
-			}else if(map.clickState == "select" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email){
+			}else if(map.clickState == "select" && map.data[tile.row][tile.column].owner == map.email){
 				console.log
-				if((map.selected.col == tile.column && map.selected.row == tile.row) || (map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner != map.email)){
+				if((map.selected.col == tile.column && map.selected.row == tile.row) || (map.data[tile.row][tile.column].owner != map.email)){
 					map.clickState = "selectClear";
 				}else{
 					for(var i=0;i<map.neighbors.length;i++){
@@ -125,7 +163,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 						}
 					}
 				}
-			}else if(map.clickState == "nSelect" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.email){
+			}else if(map.clickState == "nSelect" && map.data[tile.row][tile.column].owner == map.email){
 				map.clickState = "nSelectClear";
 			}
 
@@ -135,9 +173,28 @@ HexagonGrid.prototype.clickEvent = function (e) {
 	
 	//Draw Logic for after clicks made
 	if(map.dataProp.turnPhase == "attack"){
+		if(map.clickState == "attackClear"){
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.row][map.selected.col].owner); //clear selected hex
+			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
+				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[tile.row][tile.column].owner != map.data[offset.r][offset.q].owner){
+					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawx2 = (offset.q * this.side) + this.canvasOriginX;	
+					if(map.data[offset.r][offset.q].type != "water"){
+						this.drawHex(drawx2, drawy2 - 6, "#99CC66", "", false, "", map.data[offset.r][offset.q].owner); 
+					}					
+				}						
+			}
+			map.clickState = null;
+			map.selected = null;
+			$('#attack').hide();
+		}
 		if(map.clickState == "select" && map.data[tile.row][tile.column].type != "water"){
 			var cube = toCubeCoord(tile.column, tile.row);
 			map.neighbors = getNeighbors(cube.x,cube.y,cube.z);
+			
 			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
 			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
 			this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", map.data[map.selected.row][map.selected.col].owner); //highlight selected
@@ -172,7 +229,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 		if(map.clickState == "nSelect"){
 			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
 				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
-				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.data[offset.r][offset.q].owner && map.data[offset.r][offset.q].type !="water"){
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner != map.data[offset.r][offset.q].owner && map.data[offset.r][offset.q].type !="water"){
 					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
 					var drawx2 = (offset.q * this.side) + this.canvasOriginX;
 					this.drawHex(drawx2, drawy2 - 6, "#99CC66", "", false, "", map.data[offset.r][offset.q].owner); 						
@@ -203,6 +260,23 @@ HexagonGrid.prototype.clickEvent = function (e) {
 		}
 	}
 	if(map.dataProp.turnPhase == "fortify"){
+		if(map.clickState == "fortifyClear"){
+			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+			var drawx = (map.selected.col * this.side) + this.canvasOriginX;
+			this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.row][map.selected.col].owner); //clear selected hex
+			
+			for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
+				var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
+				if(typeof map.clicks[clickTotal].row != "undefined" && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].owner == map.data[offset.r][offset.q].owner){
+					var drawy2 = offset.q % 2 == 0 ? (offset.r * this.height) + this.canvasOriginY + 6 : (offset.r * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+					var drawx2 = (offset.q * this.side) + this.canvasOriginX;
+					this.drawHex(drawx2, drawy2 - 6, "#99CC66", "", false, "", map.data[offset.r][offset.q].owner); 						
+				}						
+			}
+			map.clickState = null;
+			map.selected = null;
+			$('#fortify').hide();
+		}
 		if(map.clickState == "selectClear"){
 			console.log(map.neighbors, clickTotal);
 			var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
