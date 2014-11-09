@@ -26,10 +26,10 @@ function updateMap(data, param){
 	data.param = param;
 	data.gameID = $('#game_id').val();
 	$.ajax({
-	url: "getMap.php",
-	data: data,
-	type: "POST",
-	dataType: 'JSON'
+        url: "getMap.php",
+        data: data,
+        type: "POST",
+        dataType: 'JSON'
 	});
 };
 
@@ -37,6 +37,7 @@ var map = new Map();
 map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
+    map.log = JSON.parse(map_data.log);
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
                 map.data[i][j].units = 0;
@@ -187,6 +188,7 @@ map.getData(function(map_data){
     
     var compPlc = document.getElementById('compPlc');
 	compPlc.addEventListener('click', function (e) {
+        compareMap(map.data);
         map.dataProp.turnPhase = "attack";
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
@@ -197,6 +199,7 @@ map.getData(function(map_data){
 		$('#unitButtons').hide();
         $('#panel').show();
 		$('#attack').hide();
+        
         updateMsg();
 	}, false);
     
@@ -279,26 +282,25 @@ map.getData(function(map_data){
     function updateMsg(){
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
-        if(map.dataProp.turnPhase == "attack"){
-            msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to attack with.";
-        }else if(map.dataProp.turnPhase == "fortify"){
-            msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to move units from.";
-        }
-        document.getElementById('msg').innerHTML = msg;	
-
-        var msgA = null;
-        if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-            var msg = document.getElementById('msg').innerHTML;
-            var units = calcUnits(map.email);
-            msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
-            document.getElementById('msg').innerHTML = msg;
-        }
-		if(map.dataProp.turnPhase == "fortify" && map.dataProp.owners[map.dataProp.turn] == map.email){
-            var msg = document.getElementById('msg').innerHTML;
-            msg = msg + "<br>" + map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
-            document.getElementById('msg').innerHTML = msg;
-        }
-		if(map.dataProp.owners[map.dataProp.turn] != map.email){
+        if(map.dataProp.owners[map.dataProp.turn] == map.email){
+            if(map.dataProp.turnPhase == "attack"){
+                msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to attack with.";
+            }else if(map.dataProp.turnPhase == "fortify"){
+                msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to move units from.";
+            }
+            if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
+                var msg = document.getElementById('msg').innerHTML;
+                var units = calcUnits(map.email);
+                msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
+                document.getElementById('msg').innerHTML = msg;
+            }
+            if(map.dataProp.turnPhase == "fortify" && map.dataProp.owners[map.dataProp.turn] == map.email){
+                var msg = document.getElementById('msg').innerHTML;
+                msg = msg + "<br>" + map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
+                document.getElementById('msg').innerHTML = msg;
+            }
+            document.getElementById('msg').innerHTML = msg;	
+        }else if(map.dataProp.owners[map.dataProp.turn] != map.email){
 			var msg = document.getElementById('msg').innerHTML;
 			msg = msg + "<br>It is " + map.dataProp.owners[map.dataProp.turn] + "'s turn.";
             document.getElementById('msg').innerHTML = msg;

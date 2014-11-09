@@ -428,3 +428,21 @@ function calcEndState (username){
 	}
 	
 }
+
+function compareMap (map){
+    var preMap = new Map();
+    preMap.getData(function(preMap_data){
+        preMap.data = JSON.parse(preMap_data.mapArray);
+        var cmpArr = [];
+        for(var i=0;i<map.length;i++){
+            for(var j=0;j<map[i].length;j++){
+                console.log(map[i][j].units, preMap.data[i][j].units);
+                if(map[i][j].units != preMap.data[i][j].units){
+                    var unitChgNum = map[i][j].units - preMap.data[i][j].units;
+                    cmpArr.push({col: j, row: i, unitChg: unitChgNum});
+                }
+            }
+        }
+        console.log(cmpArr); 
+    });
+}

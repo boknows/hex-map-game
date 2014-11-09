@@ -51,7 +51,6 @@ function acceptInvite () {
 			}else{
 				mapProperties.colors[email] = $('#colorpicker').val();
 			}
-			console.log(mapProperties);
 			var mapPropertiesString = JSON.stringify(mapProperties);
 			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), data: mapPropertiesString};
 			$.ajax({
@@ -68,7 +67,6 @@ function acceptInvite () {
 				dataType: 'JSON', 
 				data: data,
 				success: function(resp){
-					console.log("done");
 					if(resp == "started"){
 						startGame($('#game_id').val(), mapArray, mapProperties);
 					}else if (resp == "accepted"){
@@ -82,7 +80,7 @@ function acceptInvite () {
 }
 
 function startGame(gameID, mapArray, mapProperties) {
-	console.log(mapProperties);
+    var mapLog = []; //History log
 	var order = []; //track order
 	for(i=0;i<mapProperties.owners.length;i++){
 		order[i] = mapProperties.owners[i];
@@ -124,6 +122,9 @@ function startGame(gameID, mapArray, mapProperties) {
 		countries[i].units++;
 		cntSplt[turn].arr.push(countries[i]);
 		cntSplt[turn].unitCnt++;
+        
+        var history = mapProperties.owners[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added.";
+        mapLog.push(history);
 		if(turn == (mapProperties.owners.length-1)){
 			turn = 0;
 			cycle++;
@@ -133,6 +134,7 @@ function startGame(gameID, mapArray, mapProperties) {
 	}
 	while(cycle<maxCycles){ //Start at beginning of each players list of countries. Add 1 unit, move to next player. Repeat until Max units achieved.
 		cntSplt[turn].arr[cntSplt[turn].cntTurn].units++
+        
 		if(cntSplt[turn].cntTurn < cntSplt[turn].arr.length-1){
 			cntSplt[turn].cntTurn++;
 		}else{
@@ -155,6 +157,7 @@ function startGame(gameID, mapArray, mapProperties) {
 			mapArray[w][l].color = mapProperties.colors[i];
 		}
 	}
+    
 	mapProperties.turnPhase = "unitPlacement";
 	var mapString = JSON.stringify(mapArray);
 	var mapPropertiesString = JSON.stringify(mapProperties);

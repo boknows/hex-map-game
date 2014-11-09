@@ -21,6 +21,7 @@ if($_POST['param']=="getAll"){
 	foreach ($stmt as $row) {
 		$data['mapArray'] = $row['mapArray'];	
 		$data['mapProperties'] = $row['mapProperties'];
+        $data['log'] = $row['log'];
 	}
 	echo JSON_encode($data);
 }
