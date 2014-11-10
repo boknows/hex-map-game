@@ -3,10 +3,10 @@ function updateMap(data, param){
 	data.param = param;
 	data.gameID = $('#game_id').val();
 	$.ajax({
-	url: "getMap.php",
-	data: data,
-	type: "POST",
-	dataType: 'JSON'
+		url: "getMap.php",
+		data: data,
+		type: "POST",
+		dataType: 'JSON'
 	});
 };
 
