@@ -158,7 +158,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			//window.location.replace("dashboard.php");
+			window.location.replace("dashboard.php");
 		}
 	});
 }
