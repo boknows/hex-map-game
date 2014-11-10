@@ -35,6 +35,7 @@ $(document).ready(function() {
 			},
 			
 		}
+		
 	}); 
 	$('#player3').select2({
 		placeholder: "Select an opponent",
@@ -136,11 +137,20 @@ $(document).ready(function() {
 
 
 function createGame() {
-	console.log($("#player2").select2().text());
+	var users = [];
+	for(var i = 1;i<8;i++){
+		if($("#player"+i).select2("data") != null){
+			users.push($("#player"+i).select2("data"));
+		}
+	}
+	for(var j =0; j<users.length;j++){
+		users[j] = users[j].text;
+	}	
+	console.log(users);
 	var data = { 	
 				colorpicker: $('#colorpicker').val(),
 				gameName: $('#name').val(),
-				players: [$('#username').val(),
+				emails: [$('#username').val(),
 				$("#player1").select2("val"), 
 				$("#player2").select2("val"), 
 				$("#player3").select2("val"), 
@@ -148,6 +158,7 @@ function createGame() {
 				$("#player5").select2("val"), 
 				$("#player6").select2("val"), 
 				$("#player7").select2("val"), ],
+				usernames: users,
 				minPlayers: $('#minPlayers').val(),
 				maxPlayers: $('#maxPlayers').val(),
 				publicPrivate: $('#publicPrivate').val(),
@@ -158,7 +169,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			window.location.replace("dashboard.php");
+			//window.location.replace("dashboard.php");
 		}
 	});
 }

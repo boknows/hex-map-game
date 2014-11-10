@@ -20,13 +20,21 @@ $stmt->execute();
 $maxID = $stmt->fetchColumn();
 $maxID++;
 $owners = array();
-foreach($_POST['players'] as $var){
+foreach($_POST['emails'] as $var){
     if($var != ""){
         $owners[] = $var;
     }
 }
 $ownersJson = json_encode($owners);
-$mapProperties = '{"owners":' . $ownersJson . ',"colors":["'. $_POST['colorpicker'].'"';
+$users = array();
+foreach($_POST['usernames'] as $var){
+    if($var != ""){
+        $users[] = $var;
+    }
+}
+$usersJson = json_encode($users);
+
+$mapProperties = '{"owners":' . $ownersJson . ',"users":' . $usersJson . ',"colors":["'. $_POST['colorpicker'].'"';
 for($i=0;$i<count($owners)-1;$i++){
     $mapProperties .= ',"NULL"';
 }   
@@ -38,13 +46,13 @@ if (!$stmt) {
 	print_r($db->errorInfo());
 }
 
-$inQuery = implode(',', array_fill(0, count($_POST['players']), '?'));
+$inQuery = implode(',', array_fill(0, count($_POST['emails']), '?'));
 $stmt = $db->prepare(
     'SELECT *
      FROM users
      WHERE email IN(' . $inQuery . ')'
 );
-foreach ($_POST['players'] as $k => $email){
+foreach ($_POST['emails'] as $k => $email){
     $stmt->bindValue(($k+1), $email);
 }
 $stmt->execute();
