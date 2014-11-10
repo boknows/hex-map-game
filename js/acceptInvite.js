@@ -40,19 +40,21 @@ function acceptInvite () {
 			var mapProperties = JSON.parse(resp.mapProperties);
 			var mapArray = JSON.parse(resp.mapArray);
 			var email = 0;
+            var public = false;
 			for(i=0;i<mapProperties.owners.length;i++){
 				if(mapProperties.owners[i] == $('#email').val()){
 					email = i;
 				}
 			}
-			if(email == 0){
+			if(email == 0){ //If player isn't in owners list, they are joining a public game without being invited
 				mapProperties.owners.push($('#email').val());
 				mapProperties.colors.push($('#colorpicker').val());
+                public = true;
 			}else{
 				mapProperties.colors[email] = $('#colorpicker').val();
 			}
 			var mapPropertiesString = JSON.stringify(mapProperties);
-			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), data: mapPropertiesString};
+			var data = {param: "updateMapProperties", gameID: $('#game_id').val(), data: mapPropertiesString, pubPriv: public};
 			$.ajax({
 				url: "getMap.php",
 				type: "POST",
@@ -60,7 +62,7 @@ function acceptInvite () {
 				data: data,
 			});
 			
-			var data = {gameID: $('#game_id').val()};
+			var data = {gameID: $('#game_id').val(), pubPriv: public};
             $.ajax({
 				url: "getGame.php",
 				type: "POST",

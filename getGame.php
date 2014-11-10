@@ -60,6 +60,9 @@ for($i=0;$i<count($players['gameQueue']);$i++){
 		}
 	}
 }
+if(count($mapProp->owners) < $data['minPlayers']){
+    $ready = false;
+}
 
 if($ready == true){
 	$mapProp->turnPhase = "unitPlacement";

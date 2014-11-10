@@ -71,24 +71,31 @@ if($_POST['param'] == "public"){
 		$status = array();
 		$publicGames = array();
 		
-		if($gamesQ != ""){
-			for($i=0;$i<count($gamesQ);$i++){
-				$ids[] = $gamesQ[$i]['gameID'];
-				$status[] = $gamesQ[$i]['status'];
-			}
-			for($i=0;$i<count($games['gameID']);$i++){
-				$trig = false;
-				for($j=0;$j<count($ids);$j++){
-					if($games['gameID'][$i]==$ids[$j]){
-						$trig = true;
-					}
-				}
-				if($trig == false){
-					$publicGames[] = array("gameID"=>$games['gameID'][$i],"game_name"=>$games['game_name'][$i],"created"=>$games['created'][$i]);
-				}
-			}
-			echo JSON_encode($publicGames);
-		}
+		if($gamesQ == ""){
+            $gamesQ = array();
+        }
+        for($i=0;$i<count($gamesQ);$i++){
+            $ids[] = $gamesQ[$i]['gameID'];
+            $status[] = $gamesQ[$i]['status'];
+        }
+        for($i=0;$i<count($games['gameID']);$i++){
+            $trig = false;
+            for($j=0;$j<count($ids);$j++){
+                if($games['gameID'][$i]==$ids[$j]){
+                    $trig = true;
+                }
+            }
+            if($trig == false){
+                $publicGames[] = array("gameID"=>$games['gameID'][$i],"game_name"=>$games['game_name'][$i],"created"=>$games['created'][$i]);
+            }
+        }
+        for ($i=0; $i<count($publicGames); $i++){
+            $epoch = $publicGames[$i]['created']; 
+            $dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
+            $publicGames[$i]['created'] = $dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
+        }
+        echo JSON_encode($publicGames);
+		
 	}
 		
 	
