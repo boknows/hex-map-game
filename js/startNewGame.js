@@ -12,7 +12,6 @@ $(document).ready(function() {
 				};
 			},
 			results: function (data, page) {
-				console.log(data);
 				return {results: data};
 			},
 			
@@ -138,19 +137,21 @@ $(document).ready(function() {
 
 function createGame() {
 	var users = [];
+	console.log($('#username').val());
+	users.push($('#username').val());
 	for(var i = 1;i<8;i++){
 		if($("#player"+i).select2("data") != null){
 			users.push($("#player"+i).select2("data"));
 		}
 	}
-	for(var j =0; j<users.length;j++){
+	for(var j=1; j<users.length;j++){ // skip first entry, as that is pulled from HTML
 		users[j] = users[j].text;
 	}	
-	console.log(users);
+	
 	var data = { 	
 				colorpicker: $('#colorpicker').val(),
 				gameName: $('#name').val(),
-				emails: [$('#username').val(),
+				emails: [$('#email').val(),
 				$("#player1").select2("val"), 
 				$("#player2").select2("val"), 
 				$("#player3").select2("val"), 
@@ -162,6 +163,7 @@ function createGame() {
 				minPlayers: $('#minPlayers').val(),
 				maxPlayers: $('#maxPlayers').val(),
 				publicPrivate: $('#publicPrivate').val(),
+				fortifies: $('#maxFortifies').val()
 			};
 	$.ajax({
 		url: "createGame.php",

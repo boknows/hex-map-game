@@ -29,7 +29,8 @@
 </head>
 <body>
 <div class="row-fluid">
-	<input type="hidden" id="username" value="<?php echo $_SESSION['user']['email']; ?>">
+	<input type="hidden" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
+	<input type="hidden" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
 	<div class="col-md-12">
 		<h3>Start New Game</h3>
 		Choose your color:
@@ -74,12 +75,15 @@
 		<span class='input-group-addon'><b>Minimum Players:</b></span><select class='form-control' id='minPlayers'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
 		</div>
 		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Maximum Players:</b></span><select class='form-control' id='maxPlayers'><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
+		<span class='input-group-addon'><b>Maximum Players:</b></span><select class='form-control' id='maxPlayers' disabled><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
 		</div>
 		<div class="input-group col-md-9">
 		<span class='input-group-addon'><b>Public/Private Game:</b></span><select class='form-control' id='publicPrivate'><option value='public'>Public</option><option value='private'>Private</option></select>
 		</div>
-
+		<h3>Game Options</h3>
+		<div class="input-group col-md-9">
+		<span class='input-group-addon'><b>Maximum Fortifies:</b></span><input type='text' name='maxFortifies' class='form-control' id='maxFortifies' value="1">
+		</div>
 		<div class='input-group'>
 		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGame() data-loading-text="Creating...">Create Game</button>
 		</div>

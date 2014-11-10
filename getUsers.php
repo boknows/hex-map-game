@@ -1,12 +1,16 @@
 <?php 
 require("config.php");
-
+if(empty($_SESSION['user'])) 
+{
+    header("Location: index.php");
+    die("Redirecting to index.php"); 
+}
 if($_GET['q']){
-	$stmt = $db->prepare('SELECT * FROM users WHERE username LIKE :q');
-	$stmt->execute(array(':q' => "%" . $_GET['q'] . "%"));
+	$stmt = $db->prepare('SELECT * FROM users WHERE username LIKE :q AND username != :username');
+	$stmt->execute(array(':q' => "%" . $_GET['q'] . "%", ':username' => $_SESSION['user']['username']));
 }else{
-	$stmt = $db->prepare('SELECT * FROM users');
-	$stmt->execute();
+	$stmt = $db->prepare('SELECT * FROM users WHERE username != :username');
+	$stmt->execute(array(':username' => $_SESSION['user']['username']));
 }
 
 foreach ($stmt as $row) {	

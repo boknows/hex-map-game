@@ -7,12 +7,12 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
-	if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
+	/*if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
 		if(map.data[tile.row][tile.column].type=="water"){
 			//this.context.lineWidth = .1;
 		}
 	}
-	
+	*/
 	//Draw Main Hex old way
 	/*this.context.beginPath();
 	this.context.moveTo(x0 + this.width - this.side, y0);
@@ -50,6 +50,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	}else{
 		this.context.fillStyle = fillColor;
 	}
+
 	if (highlight == true){
 		//this.context.strokeStyle = highlightColor;
 		this.context.fillStyle = highlightColor;

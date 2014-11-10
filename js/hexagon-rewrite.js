@@ -46,7 +46,7 @@ map.getData(function(map_data){
         }
     }
 	*/
-	console.log(map.data);
+	console.log(map.dataProp);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
@@ -278,6 +278,28 @@ map.getData(function(map_data){
 		$('#attackMove').hide();
 		$('#endTurn').show();
 	}, false);
+	
+	//UI - Players List
+	var x0 = hexagonGrid.width*(map.dataProp.cols-2);
+	var y0 = 25;
+	for(var i =0;i<map.dataProp.colors.length;i++){
+		var numberOfSides = 6, size = hexagonGrid.radius, Xcenter = x0 + (hexagonGrid.width / 2), Ycenter = y0 + (hexagonGrid.height / 2);
+		hexagonGrid.context.strokeStyle = map.dataProp.colors[i];
+		hexagonGrid.context.beginPath();
+		hexagonGrid.context.lineWidth = 1.5;
+		hexagonGrid.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+		for (var j = 1; j <= numberOfSides;j += 1) {
+			hexagonGrid.context.lineTo (Xcenter + size * Math.cos(j * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(j * 2 * Math.PI / numberOfSides));
+		}
+		
+		hexagonGrid.context.fillStyle = map.dataProp.colors[i];
+		hexagonGrid.context.fill();
+		hexagonGrid.context.closePath();
+		hexagonGrid.context.stroke();
+		console.log(y0);
+		y0 = y0 + (hexagonGrid.width*(i+1));	
+		console.log(y0);
+	}
 	
     function updateMsg(){
         var msg = document.getElementById('msg').innerHTML;
