@@ -1,3 +1,4 @@
+
 var Games = function(){
     this.getData = function(callback){
         $.ajax({

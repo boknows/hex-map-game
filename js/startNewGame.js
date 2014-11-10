@@ -158,15 +158,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			//Clear values from Create Game Form
-			$('#name').val('');
-			$('#player1').val('');
-			$('#player2').val('');
-			$('#player3').val('');
-			$('#player4').val('');
-			$('#player5').val('');
-			$('#player6').val('');
-			$('#player7').val('');
+			window.location.replace("dashboard.php");
 		}
 	});
 }
