@@ -24,13 +24,12 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
 				};
 			},
-			results: function (data, page) {
+			results: function (data) {
 				console.log(data);
 				return {results: data};
 			},
@@ -135,8 +134,9 @@ $(document).ready(function() {
 });
 
 
+
 function createGame() {
-	console.log($("#player1").select2("val"));
+	console.log($("#player2").select2().text());
 	var data = { 	
 				colorpicker: $('#colorpicker').val(),
 				gameName: $('#name').val(),
@@ -158,7 +158,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			window.location.replace("dashboard.php");
+			//window.location.replace("dashboard.php");
 		}
 	});
 }

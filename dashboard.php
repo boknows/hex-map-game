@@ -13,11 +13,9 @@
     <title>Hex</title>
 	<script src='http://code.jquery.com/jquery-1.10.2.min.js' language='Javascript' type='text/javascript'></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-
     <script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/toggles.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/toggles.css" rel="stylesheet">
+
 
 
 </head>
@@ -58,8 +56,6 @@
 	</div>
 </div>
 
-<script>
-$('.toggle-slide').toggles({click:false});
-</script>
+
 </body>
 </html>
