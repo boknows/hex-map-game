@@ -134,20 +134,16 @@ $(document).ready(function() {
 });
 
 
-
 function createGame() {
 	var users = [];
-	console.log($('#username').val());
+	console.log($("#player2").select2('data').text);
 	users.push($('#username').val());
 	for(var i = 1;i<8;i++){
 		if($("#player"+i).select2("data") != null){
-			users.push($("#player"+i).select2("data"));
+			users.push($("#player"+i).select2('data').text);
 		}
 	}
-	for(var j=1; j<users.length;j++){ // skip first entry, as that is pulled from HTML
-		users[j] = users[j].text;
-	}	
-	
+
 	var data = { 	
 				colorpicker: $('#colorpicker').val(),
 				gameName: $('#name').val(),

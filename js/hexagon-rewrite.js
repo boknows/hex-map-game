@@ -280,25 +280,38 @@ map.getData(function(map_data){
 	}, false);
 	
 	//UI - Players List
-	var x0 = hexagonGrid.width*(map.dataProp.cols-2);
+	var uiCanvas = document.getElementById("UICanvas");
+	var ctxUI = uiCanvas.getContext("2d");
+	var x0 = hexagonGrid.width*(map.dataProp.cols+1);
 	var y0 = 25;
 	for(var i =0;i<map.dataProp.colors.length;i++){
+		//Draw hex representing player's color
 		var numberOfSides = 6, size = hexagonGrid.radius, Xcenter = x0 + (hexagonGrid.width / 2), Ycenter = y0 + (hexagonGrid.height / 2);
-		hexagonGrid.context.strokeStyle = map.dataProp.colors[i];
-		hexagonGrid.context.beginPath();
-		hexagonGrid.context.lineWidth = 1.5;
-		hexagonGrid.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+		ctxUI.strokeStyle = map.dataProp.colors[i];
+		ctxUI.beginPath();
+		ctxUI.lineWidth = 1.5;
+		ctxUI.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 		for (var j = 1; j <= numberOfSides;j += 1) {
-			hexagonGrid.context.lineTo (Xcenter + size * Math.cos(j * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(j * 2 * Math.PI / numberOfSides));
+			ctxUI.lineTo (Xcenter + size * Math.cos(j * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(j * 2 * Math.PI / numberOfSides));
 		}
+		ctxUI.fillStyle = map.dataProp.colors[i];
+		ctxUI.fill();
+		ctxUI.closePath();
+		ctxUI.stroke();
 		
-		hexagonGrid.context.fillStyle = map.dataProp.colors[i];
-		hexagonGrid.context.fill();
-		hexagonGrid.context.closePath();
-		hexagonGrid.context.stroke();
-		console.log(y0);
-		y0 = y0 + (hexagonGrid.width*(i+1));	
-		console.log(y0);
+		//Draw text with player name
+		ctxUI.textAlign="left"; 
+		if(map.dataProp.turn == i){
+			ctxUI.font = 'bold 13pt Arial';
+		}else{
+			ctxUI.font = '13pt Arial';
+		}
+        ctxUI.fillStyle = "#000000";
+		ctxUI.fillText(map.dataProp.users[i], x0 + hexagonGrid.width + 5, y0 + (hexagonGrid.height/1.75) );
+		ctxUI.fillStyle = "";
+		
+		y0 = y0 + hexagonGrid.height + 5;	
+		
 	}
 	
     function updateMsg(){
@@ -361,10 +374,3 @@ if(typeof map == "undefined"){
 	//console.log(data);
 }
 */
-
-//if(mapProperties.owners[mapProperties.turn] != username){ 
-	//if it's not a players turn, hide UI elements
-//	$('#endTurn').hide();
-//	$('#controls').hide();
-//	$('#fortify').hide();
-//}

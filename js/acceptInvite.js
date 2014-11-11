@@ -91,13 +91,19 @@ function startGame(gameID, mapArray, mapProperties) {
 	shuffle(order);
 	var owners = [];
 	var colors = [];
+	var users = [];
 	for(i=0;i<mapProperties.owners.length;i++){ //Update owners/colors based on shuffle
 		for(j=0;j<order.length;j++){
 			if(mapProperties.owners[i] == order[j]){
 				colors[j] = mapProperties.colors[i];
+				users[j] = mapProperties.users[i];
 			}
 		}
 	}
+	console.log(mapProperties.users, users);
+	console.log(mapProperties.owners, order);
+	console.log(mapProperties.colors, colors);
+	mapProperties.users = users;
 	mapProperties.owners = order;
 	mapProperties.colors = colors;
 
@@ -169,7 +175,7 @@ function startGame(gameID, mapArray, mapProperties) {
 		type: "POST",
 		data: data,
 		success: function (){
-			window.location.reload(true);
+			//window.location.reload(true);
 		},
 	});
 	

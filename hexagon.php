@@ -120,7 +120,9 @@
         }
 		
     ?>
+		<canvas id="UICanvas" width="1200" height="900"></canvas>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
+		
 		<div id="panel">
 		<div class="controls" id="endTurn">
 			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
@@ -151,8 +153,8 @@
 		</div>
         </div>
 		<div class="controls" id="unitButtons" style="display:none">
-			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button>
-			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button>
+			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button><br>
+			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button><br>
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>
 		</div>
         <div class="controls" id="editMap" style="display:none">

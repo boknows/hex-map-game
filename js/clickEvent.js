@@ -1,4 +1,5 @@
 HexagonGrid.prototype.clickEvent = function (e) {
+	console.log(map.dataProp.owners[map.dataProp.turn], map.email);
     if(map.dataProp.owners[map.dataProp.turn] == map.email){
         var mouseX = e.pageX;
         var mouseY = e.pageY;

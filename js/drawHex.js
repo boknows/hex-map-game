@@ -7,32 +7,6 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 
-	/*if(!typeof map.data[tile.row][tile.column].type == "undefined" ){
-		if(map.data[tile.row][tile.column].type=="water"){
-			//this.context.lineWidth = .1;
-		}
-	}
-	*/
-	//Draw Main Hex old way
-	/*this.context.beginPath();
-	this.context.moveTo(x0 + this.width - this.side, y0);
-	this.context.lineTo(x0 + this.side, y0);
-	this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
-	this.context.lineTo(x0 + this.side, y0 + this.height);
-	this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
-	this.context.lineTo(x0, y0 + (this.height / 2));
-	if (fillColor && highlight == false) {
-		this.context.fillStyle = fillColor;
-	}
-	if (highlight == true){
-		//this.context.strokeStyle = highlightColor;
-		this.context.fillStyle = highlightColor;
-		this.context.globalAlpha=0.65;
-	}
-	this.context.fill();
-	this.context.closePath();
-	this.context.stroke();
-	*/
 	var numberOfSides = 6,
 	size = this.radius,
 	Xcenter = x0 + (this.width / 2),
@@ -45,22 +19,18 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 	}
 	if (fillColor && highlight == false && map.data[tile.row][tile.column].type =="land") {
-		//this.context.fillStyle = fillColor;
 		this.context.fillStyle = map.data[tile.row][tile.column].color;
 	}else{
 		this.context.fillStyle = fillColor;
 	}
 
 	if (highlight == true){
-		//this.context.strokeStyle = highlightColor;
 		this.context.fillStyle = highlightColor;
 		this.context.globalAlpha=0.65;
 	}
 	this.context.fill();
 	this.context.closePath();
 	this.context.stroke();
-	
-	
 	
 	this.context.globalAlpha=1;
 	if(map.data[tile.row][tile.column].s != ""){
@@ -113,27 +83,8 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.stroke();
 	}
 
-	//if(map.data[tile.row][tile.column].type != "water" && map.data[tile.row][tile.column].units > 0){  Removed the units>0 to show conquered hex during attack phase.
 	if(map.data[tile.row][tile.column].type != "water"){
-		/*this.context.fillStyle = map.data[tile.row][tile.column].color;
-		this.context.lineWidth = 1;
-		//Draw Circle inside Hex
-		this.context.beginPath();
-		if (highlight == true){
-			this.context.strokeStyle = highlightColor;
-			this.context.lineWidth = 3;
-		}else{
-			this.context.strokeStyle = "#000000";
-		}
-		this.context.arc(x0 + (this.width/2), y0 + (this.height/2), (this.height/4), 0, 2 * Math.PI, false);
-		this.context.fill();
-		//this.context.lineWidth = 1;
-		//this.context.strokeStyle = '#000000';
-		this.context.stroke();
-		*/
-		
 		//Draw smaller hex inside bigger hex - v2
-		
 		var numberOfSides = 6,
 		size = this.radius-4.75,
 		Xcenter = x0 + (this.width / 2),
@@ -150,12 +101,15 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.closePath();
 		this.context.stroke();
 		
-		
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
 		this.context.font = 'bold 13pt Arial';
-        var clr = getContrastYIQ(map.data[tile.row][tile.column].color);
+		//Code for contrasting text with background color
+        /*var clr = getContrastYIQ(map.data[tile.row][tile.column].color); //contrast against player color 
+		var clr = getContrastYIQ(fillColor); //contrast against land color (fillColor)
         this.context.fillStyle = clr;
+		*/
+		this.context.fillStyle = "#000000";
 		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 		this.context.fillStyle = "";
 	}
