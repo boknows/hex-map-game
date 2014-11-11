@@ -39,7 +39,7 @@ for($i=0;$i<count($owners)-1;$i++){
     $mapProperties .= ',"NULL"';
 }   
 $mapProperties .= '],"turn":0,"turnPhase":"invites","fortifies":' . $_POST['fortifies'] . ',"fortifiesUsed":0,"rows":8,"cols":14,"creator":"' . $_SESSION['user']['email'] . '"}';
-$stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, log) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]")');
+$stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, mapLog) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]")');
 $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
 if (!$stmt) {
 	echo "\nPDO::errorInfo():\n";

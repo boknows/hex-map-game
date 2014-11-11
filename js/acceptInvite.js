@@ -41,7 +41,7 @@ function acceptInvite () {
 			var mapArray = JSON.parse(resp.mapArray);
 			var email = 0;
             var public = false;
-			for(i=0;i<mapProperties.owners.length;i++){
+			for(var i=0;i<mapProperties.owners.length;i++){
 				if(mapProperties.owners[i] == $('#email').val()){
 					email = i;
 				}
@@ -84,7 +84,7 @@ function acceptInvite () {
 function startGame(gameID, mapArray, mapProperties) {
     var mapLog = []; //History log
 	var order = []; //track order
-	for(i=0;i<mapProperties.owners.length;i++){
+	for(var i=0;i<mapProperties.owners.length;i++){
 		order[i] = mapProperties.owners[i];
 	}
 	//Randomize order of owners
@@ -92,25 +92,22 @@ function startGame(gameID, mapArray, mapProperties) {
 	var owners = [];
 	var colors = [];
 	var users = [];
-	for(i=0;i<mapProperties.owners.length;i++){ //Update owners/colors based on shuffle
-		for(j=0;j<order.length;j++){
+	for(var i=0;i<mapProperties.owners.length;i++){ //Update owners/colors based on shuffle
+		for(var j=0;j<order.length;j++){
 			if(mapProperties.owners[i] == order[j]){
 				colors[j] = mapProperties.colors[i];
 				users[j] = mapProperties.users[i];
 			}
 		}
 	}
-	console.log(mapProperties.users, users);
-	console.log(mapProperties.owners, order);
-	console.log(mapProperties.colors, colors);
 	mapProperties.users = users;
 	mapProperties.owners = order;
 	mapProperties.colors = colors;
 
     //Scan Map, Count number of Land pieces
 	var countries = [];
-    for(i=0;i<mapArray.length;i++){
-        for(j=0;j<mapArray[i].length;j++){
+    for(var i=0;i<mapArray.length;i++){
+        for(var j=0;j<mapArray[i].length;j++){
             if(mapArray[i][j].type == "land"){
 				countries.push({width: i, length: j, owner: "", units: 0});
             }
@@ -122,17 +119,18 @@ function startGame(gameID, mapArray, mapProperties) {
 	var cycle = 0;
 	var maxCycles = (countries.length*3)/mapProperties.owners.length;
 	
-	var cntSplt = [];	//Countries Split array. Contains an array of countries for each player, as well as a total unit count to determine the end of unit placement
-	for(i=0;i<mapProperties.owners.length;i++){
-		cntSplt.push({arr: [], unitCnt: 0, owner: i, cntTurn: 0});
+	var cntSplt = []; //Countries Split array. Contains an array of countries for each player, as well as a total unit count to determine the end of unit placement
+	var cntSpltProp = [];	
+	for(var i=0;i<mapProperties.owners.length;i++){
+		cntSplt.push([]);
+		cntSpltProp.push({cntTurn: 0, unitCnt:0});
 	}
-	for(i=0;i<countries.length;i++){ //Claim all countries, add 1 unit to each
-		countries[i].units++;
-		cntSplt[turn].arr.push(countries[i]);
-		cntSplt[turn].unitCnt++;
-        
-        var history = mapProperties.owners[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added.";
-        mapLog.push(history);
+	for(var i=0;i<countries.length;i++){ //add 1 unit to each country for claiming purposes
+		countries[i].units++;      
+	}
+	for(var i=0;i<countries.length;i++){ 
+		cntSplt[turn].push(countries[i]); //Add a claimed country to a specific players country array. 
+		mapLog.push(mapProperties.owners[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added."); 
 		if(turn == (mapProperties.owners.length-1)){
 			turn = 0;
 			cycle++;
@@ -140,42 +138,46 @@ function startGame(gameID, mapArray, mapProperties) {
 			turn++;   
 		}
 	}
-	while(cycle<maxCycles){ //Start at beginning of each players list of countries. Add 1 unit, move to next player. Repeat until Max units achieved.
-		cntSplt[turn].arr[cntSplt[turn].cntTurn].units++
-        
-		if(cntSplt[turn].cntTurn < cntSplt[turn].arr.length-1){
-			cntSplt[turn].cntTurn++;
+	for(var i=cycle;i<maxCycles;){
+		var cntTurn = cntSpltProp[turn].cntTurn;
+		cntSplt[turn][cntTurn].units++
+		if(cntTurn < cntSplt[turn].length-1){
+			cntSpltProp[turn].cntTurn++;
 		}else{
-			cntSplt[turn].cntTurn = 0;
+			cntSpltProp[turn].cntTurn = 0;
 		}
-		cntSplt[turn].unitCnt++;
+		cntSpltProp[turn].unitCnt++;
 		if(turn == (mapProperties.owners.length-1)){
 			turn = 0;
-			cycle++;
+			i++;
 		}else{
 			turn++;   
 		}
+		console.log(i, maxCycles);
+		
 	}
-	for(i=0;i<cntSplt.length;i++){
-		for(j=0;j<cntSplt[i].arr.length;j++){
-			var l = cntSplt[i].arr[j].length;
-			var w = cntSplt[i].arr[j].width;
+
+	for(var i=0;i<cntSplt.length;i++){
+		for(var j=0;j<cntSplt[i].length;j++){
+			var l = cntSplt[i][j].length;
+			var w = cntSplt[i][j].width;
 			mapArray[w][l].owner = mapProperties.owners[i];
-			mapArray[w][l].units = cntSplt[i].arr[j].units;
+			mapArray[w][l].units = cntSplt[i][j].units;
 			mapArray[w][l].color = mapProperties.colors[i];
 		}
 	}
-    
+
 	mapProperties.turnPhase = "unitPlacement";
 	var mapString = JSON.stringify(mapArray);
 	var mapPropertiesString = JSON.stringify(mapProperties);
-	var data = {param: "updateAll", gameID: $('#game_id').val(), mapArray: mapString, mapProperties: mapPropertiesString};
+	var mapLogString = JSON.stringify(mapLog);
+	var data = {param: "updateAll", gameID: $('#game_id').val(), mapArray: mapString, mapProperties: mapPropertiesString, mapLog: mapLogString};
 	$.ajax({
 		url: "getMap.php",
 		type: "POST",
 		data: data,
 		success: function (){
-			//window.location.reload(true);
+			window.location.reload(true);
 		},
 	});
 	

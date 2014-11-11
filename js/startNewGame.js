@@ -136,7 +136,6 @@ $(document).ready(function() {
 
 function createGame() {
 	var users = [];
-	console.log($("#player2").select2('data').text);
 	users.push($('#username').val());
 	for(var i = 1;i<8;i++){
 		if($("#player"+i).select2("data") != null){
@@ -167,7 +166,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			//window.location.replace("dashboard.php");
+			window.location.replace("dashboard.php");
 		}
 	});
 }

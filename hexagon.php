@@ -307,7 +307,6 @@
 </body>
 <script>
 $('#transfer').on('changed', function (evt, data) {
-console.log(data);
 });
 </script>
 <script>

@@ -37,7 +37,7 @@ var map = new Map();
 map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
-    map.log = JSON.parse(map_data.log);
+    map.log = JSON.parse(map_data.mapLog);
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
                 map.data[i][j].units = 0;
