@@ -17,7 +17,6 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				currentHexX = col * this.side + originX;
 				currentHexY = (row * this.height) + originY + (this.height * 0.5);
 			}
-
 			if (isDebug) {
 				debugText = hexNum;
 				hexNum++;

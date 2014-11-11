@@ -48,12 +48,12 @@ map.getData(function(map_data){
 	*/
 	console.log(map.dataProp);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
-    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 160, 10, true);
 	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-		$('#panel').hide();
 		$('#unitButtons').show();	
+		$('#attack').hide();
+		$('#endTurn').hide();
 	}else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-		$('#panel').show();
 		$('#attack').hide();
 	}
 	if(map.dataProp.owners[map.dataProp.turn] != map.email){
@@ -65,7 +65,7 @@ map.getData(function(map_data){
 	singleAttackButton.addEventListener('click', function (e) {
 		singleAttack();
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
 		var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 		var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
@@ -100,6 +100,7 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
 		$('#panel').hide();
+		showPlayers();
         updateMsg();
 	}, false);
 	
@@ -109,7 +110,7 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
         updateMsg();
 	}, false);	
 	
@@ -121,7 +122,7 @@ map.getData(function(map_data){
         map.selected = null;
 		map.clickState = null;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
 		var data = { data: JSON.stringify(map.dataProp) };
@@ -143,7 +144,7 @@ map.getData(function(map_data){
 		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
 		map.data[map.attack.attX][map.attack.attY].units = tmp - num;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		map.selected = null;
 		map.clickState = null;
 		$('#fortify').hide();
@@ -170,7 +171,7 @@ map.getData(function(map_data){
         map.unitPlacement = null;
         map.unitPlacement = [];
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 	}, false);
 	
 	var undoLast = document.getElementById('undoLast');
@@ -183,7 +184,7 @@ map.getData(function(map_data){
 		msg = map.unitCnt + " / " + units + " units placed.";
 		document.getElementById('msg').innerHTML = msg;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 	}, false);
     
     var compPlc = document.getElementById('compPlc');
@@ -195,7 +196,7 @@ map.getData(function(map_data){
         var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		$('#unitButtons').hide();
         $('#panel').show();
 		$('#attack').hide();
@@ -245,7 +246,7 @@ map.getData(function(map_data){
         var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 	}, false); 
 	
 	var attackMove = document.getElementById('attackMoveBtn');
@@ -258,7 +259,7 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		$('#panel').show();
 		$('#attackMove').hide();
 		$('#endTurn').show();
@@ -273,47 +274,49 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		$('#panel').show();
 		$('#attackMove').hide();
 		$('#endTurn').show();
 	}, false);
 	
 	//UI - Players List
-	var uiCanvas = document.getElementById("UICanvas");
-	var ctxUI = uiCanvas.getContext("2d");
-	var x0 = hexagonGrid.width*(map.dataProp.cols+1);
-	var y0 = 25;
-	for(var i =0;i<map.dataProp.colors.length;i++){
-		//Draw hex representing player's color
-		var numberOfSides = 6, size = hexagonGrid.radius, Xcenter = x0 + (hexagonGrid.width / 2), Ycenter = y0 + (hexagonGrid.height / 2);
-		ctxUI.strokeStyle = map.dataProp.colors[i];
-		ctxUI.beginPath();
-		ctxUI.lineWidth = 1.5;
-		ctxUI.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
-		for (var j = 1; j <= numberOfSides;j += 1) {
-			ctxUI.lineTo (Xcenter + size * Math.cos(j * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(j * 2 * Math.PI / numberOfSides));
+	function showPlayers(){
+		var uiCanvas = document.getElementById("UICanvas");
+		var ctxUI = uiCanvas.getContext("2d");
+		var x0 = hexagonGrid.width*(map.dataProp.cols);
+		var y0 = 25;
+		for(var i =0;i<map.dataProp.colors.length;i++){
+			//Draw hex representing player's color
+			var numberOfSides = 6, size = hexagonGrid.radius/2, Xcenter = x0 + (hexagonGrid.width / 2), Ycenter = y0 + (hexagonGrid.height / 2);
+			ctxUI.strokeStyle = map.dataProp.colors[i];
+			ctxUI.beginPath();
+			ctxUI.lineWidth = 1.5;
+			ctxUI.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+			for (var j = 1; j <= numberOfSides;j += 1) {
+				ctxUI.lineTo (Xcenter + size * Math.cos(j * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(j * 2 * Math.PI / numberOfSides));
+			}
+			ctxUI.fillStyle = map.dataProp.colors[i];
+			ctxUI.fill();
+			ctxUI.closePath();
+			ctxUI.stroke();
+			
+			//Draw text with player name
+			ctxUI.textAlign="left"; 
+			if(map.dataProp.turn == i){
+				ctxUI.font = 'bold 13pt Arial';
+			}else{
+				ctxUI.font = '13pt Arial';
+			}
+			ctxUI.fillStyle = "#000000";
+			ctxUI.fillText(map.dataProp.users[i], x0 + hexagonGrid.width/1.2, y0 + (hexagonGrid.height/1.75) );
+			ctxUI.fillStyle = "";
+			
+			y0 = y0 + hexagonGrid.height/1.5;	
+			
 		}
-		ctxUI.fillStyle = map.dataProp.colors[i];
-		ctxUI.fill();
-		ctxUI.closePath();
-		ctxUI.stroke();
-		
-		//Draw text with player name
-		ctxUI.textAlign="left"; 
-		if(map.dataProp.turn == i){
-			ctxUI.font = 'bold 13pt Arial';
-		}else{
-			ctxUI.font = '13pt Arial';
-		}
-        ctxUI.fillStyle = "#000000";
-		ctxUI.fillText(map.dataProp.users[i], x0 + hexagonGrid.width + 5, y0 + (hexagonGrid.height/1.75) );
-		ctxUI.fillStyle = "";
-		
-		y0 = y0 + hexagonGrid.height + 5;	
-		
 	}
-	
+	showPlayers();
     function updateMsg(){
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";

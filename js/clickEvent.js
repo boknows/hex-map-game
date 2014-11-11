@@ -89,7 +89,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     map.unitPlacement.push(tmp);
                     map.data[tile.row][tile.column].units++;
                     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.drawHexGrid(this.rows, this.cols, 10, 10, true);
+                    this.drawHexGrid(this.rows, this.cols, this.canvasOriginX, this.canvasOriginY, true);
                     for(var i=0, len=map.unitPlacement.length; i<len; i++){
                         var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                         var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;

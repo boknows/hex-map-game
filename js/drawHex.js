@@ -11,7 +11,6 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	size = this.radius,
 	Xcenter = x0 + (this.width / 2),
 	Ycenter = y0 + (this.height / 2);
-	//this.context.strokeStyle = map.data[tile.row][tile.column].color;
 	this.context.beginPath();
 	this.context.lineWidth = 1.5;
 	this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          

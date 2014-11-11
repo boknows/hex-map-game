@@ -21,58 +21,44 @@
     <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
 
 	<style>
-	.Game {
-		position: relative;
-		border: 1px solid orange;
-		width: 1200px;
-		height: 900px;
-	}
-	.Game > canvas {
+	canvas {
 		position: absolute;
 		width: 100%;
 		height: 100%;
+		left: 160px;
+		width: 1200px;
+		height: 900px;
 	}
 	#panel {
 		position: absolute;
-		bottom: 770px;
-		left: 700px;
-		height: 40px;
 	}
-	.Game > #endTurn {
+	#endTurn {
 		position: absolute;
-		bottom: 765px;
-		left: 1000px;
-		height: 40px;
 	}
-	.Game > #fortify {
+	#attack {
 		position: absolute;
-		bottom: 730px;
-		left: 1000px;
-		height: 40px;
 	}
-    .Game > #unitPlacement {
+	#attackMove {
 		position: absolute;
-		bottom: 785px;
-		left: 1000px;
-		height: 40px;
 	}
-	.Game > #unitButtons {
+	#fortify {
 		position: absolute;
-		bottom: 770px;
-		left: 700px;
-		height: 40px;
+		top: 160px;
+		width: 325px;
 	}
-	.Game > #attackMove {
+	#unitButtons {
 		position: absolute;
-		bottom: 815px;
-		left: 940px;
-		height: 40px;
+		top: 60px;
 	}
+	
     .Game > #editMap {
 		position: absolute;
 		bottom: 650px;
         left: 800px;
 		height: 40px;
+	}
+	button {
+		margin-top: 3px;
 	}
 
 	</style>
@@ -118,15 +104,18 @@
         }else{
             echo "<div class='Game'>";
         }
-		
+		if($data['status'] == "started"){
+			$accepted = false;
+		}
     ?>
 		<canvas id="UICanvas" width="1200" height="900"></canvas>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
 		
 		<div id="panel">
+		<h2><u>Actions</u></h2>
 		<div class="controls" id="endTurn">
-			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
 			<button type="button" id="fortifyButton" class="btn btn-primary">Fortification Phase</button>
+			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
 		</div>
         <div class="controls" id="unitPlacement" style="display:none">
             <p>Select number of units, then click a hexagon.</p> 
@@ -135,17 +124,16 @@
 			</div>
         </div>
 		<div class="controls" id="fortify" style="display:none">
-			<div class="btn-group" data-resize="auto">
-				Transfer: 
-				<select id="transfer"></select> Units.
-			</div>
-			<br>
-			<button type="button" class="btn btn-success" id="transferButton">Move</button>
-			<button type="button" class="btn btn-danger" id="transferMaxButton">Move(max)</button>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Transfer:</b></span><select class='form-control' id='transfer'></select>
+			<span class='input-group-addon'><b>Units</b></span>
+			</div>	
+			<button type="button" class="btn btn-success" id="transferButton">Transfer</button>
+			<br><button type="button" class="btn btn-warning" id="transferMaxButton">Transfer(max)</button>			
 		</div>
 		<div class="controls" id="attack">
-			<button type="button" id="singleAttack" class="btn btn-primary">Single Attack</button>
-			<br><button type="button" id ="continuousAttack" class="btn btn-primary">Continuous Attack</button>
+			<button type="button" id="singleAttack" class="btn btn-danger">Single Attack</button>
+			<br><button type="button" id ="continuousAttack" class="btn btn-danger">Continuous Attack</button>
 		</div>
 		<div class="controls" id="attackMove" style="display:none">
 			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
