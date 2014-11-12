@@ -1,4 +1,33 @@
 
+//Print Hexagon graphic for greeting.
+var welcome = document.getElementById("welcomeCanvas"); 
+var ctx = welcome.getContext('2d');
+var username = $('#username').val();
+
+var radius = 25;
+var height = Math.sqrt(3) * radius;
+var width = 2 * radius;
+var side = (3 / 2) * radius;
+var numberOfSides = 6,
+size = radius,
+Xcenter = 10 + (width / 2),
+Ycenter = 10 + (height / 2);
+ctx.beginPath();
+ctx.lineWidth = 1.5;
+ctx.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+for (var i = 1; i <= numberOfSides;i += 1) {
+	ctx.lineTo(Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+}
+ctx.fill();
+ctx.closePath();
+ctx.stroke();
+
+//Draw text with player name
+ctx.textAlign = "left";
+ctx.font = 'bold 16pt Arial';
+ctx.fillStyle = "#000000";
+ctx.fillText("Welcome, " + username, Xcenter + width / 1.2, Ycenter + (height / 6));
+
 var Games = function(){
     this.getData = function(callback){
         $.ajax({
@@ -15,7 +44,7 @@ games.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
 	for(i=0, len=data.gameID.length; i<len; i++){
 		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
-		if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#username').val() && data.mapProperties[i].turnPhase != "invites"){
+		if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#email').val() && data.mapProperties[i].turnPhase != "invites"){
 			txt = txt + "<td>Your turn!</td><tr>";
 		}else if(data.mapProperties[i].turnPhase == "invites"){
 			txt = txt + "<td>Invite Phase</td><tr>";
@@ -42,11 +71,14 @@ var GamesPublic = function(){
 
 var gamesPublic = new GamesPublic();
 gamesPublic.getData(function(data){
+	console.log(data);
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
-
-	for(i=0, len=data.length; i<len; i++){
-		txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
+	if(data != "None"){
+		for(i=0, len=data.length; i<len; i++){
+			txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
+		}
 	}
+	
 	txt = txt + "</tbody></table>";
 	
 	$('#publicGames').html(txt);

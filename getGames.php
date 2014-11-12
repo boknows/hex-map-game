@@ -94,8 +94,10 @@ if($_POST['param'] == "public"){
             $dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
             $publicGames[$i]['created'] = $dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
         }
-        echo JSON_encode($publicGames);
-		
+        
+        echo JSON_encode($publicGames);	
+	}else{
+		echo JSON_encode("None");
 	}
 		
 	

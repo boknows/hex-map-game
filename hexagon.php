@@ -112,40 +112,40 @@
     ?>
 		<canvas id="UICanvas" width="1200" height="900"></canvas>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		
+		<div id="notYourTurn"></div>
 		<div id="panel">
-		<h2><u>Actions</u></h2>
-		<div class="controls" id="endTurn">
-            <p id="fortUnits"></p>
-			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
-			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
-		</div>
-        <div class="controls" id="unitPlacement" style="display:none">
-            <p>Select number of units, then click a hexagon.</p> 
-            <div class="btn-group" data-resize="auto">
-				<select id="place"></select> Units.
-			</div>
-        </div>
-		<div class="controls" id="fortify" style="display:none">
-			<div class="input-group col-md-9">
-			<span class='input-group-addon'><b>Transfer:</b></span><select class='form-control' id='transfer'></select>
-			<span class='input-group-addon'><b>Units</b></span>
-			</div>	
-			<button type="button" class="btn btn-success" id="transferButton">Transfer</button>
-			<br><button type="button" class="btn btn-warning" id="transferMaxButton">Transfer(max)</button>			
-		</div>
-		<div class="controls" id="attack">
-			<button type="button" id="singleAttack" class="btn btn-danger">Single Attack</button>
-			<br><button type="button" id ="continuousAttack" class="btn btn-danger">Continuous Attack</button>
-		</div>
-		<div class="controls" id="attackMove" style="display:none">
-            <div class="input-group col-md-9">
-            <span class='input-group-addon'><b>Move</b></span><select class='form-control' id="attackMoveDrop"></select>
+    		<h2><u>Actions</u></h2>
+    		<div class="controls" id="endTurn">
+                <p id="fortUnits"></p>
+    			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
+    			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
+    		</div>
+            <div class="controls" id="unitPlacement" style="display:none">
+                <p>Select number of units, then click a hexagon.</p> 
+                <div class="btn-group" data-resize="auto">
+    				<select id="place"></select> Units.
+    			</div>
             </div>
-            Units to defeated hexagon.<br>
-			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button>
-			<button type="button" id="attackMoveAllBtn" class="btn btn-warning">Move All</button> 
-		</div>
+    		<div class="controls" id="fortify" style="display:none">
+    			<div class="input-group col-md-9">
+    			<span class='input-group-addon'><b>Transfer:</b></span><select class='form-control' id='transfer'></select>
+    			<span class='input-group-addon'><b>Units</b></span>
+    			</div>	
+    			<button type="button" class="btn btn-success" id="transferButton">Transfer</button>
+    			<br><button type="button" class="btn btn-warning" id="transferMaxButton">Transfer(max)</button>			
+    		</div>
+    		<div class="controls" id="attack">
+    			<button type="button" id="singleAttack" class="btn btn-danger">Single Attack</button>
+    			<br><button type="button" id ="continuousAttack" class="btn btn-danger">Continuous Attack</button>
+    		</div>
+    		<div class="controls" id="attackMove" style="display:none">
+                <div class="input-group col-md-9">
+                <span class='input-group-addon'><b>Move</b></span><select class='form-control' id="attackMoveDrop"></select>
+                </div>
+                Units to defeated hexagon.<br>
+    			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button>
+    			<button type="button" id="attackMoveAllBtn" class="btn btn-warning">Move All</button> 
+    		</div>
         </div>
 		<div class="controls" id="unitButtons" style="display:none">
             <p id="units"></p>
@@ -198,7 +198,7 @@
             </div>
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
-        <textarea id="log" style="width:400px;height:200px" readonly>Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</textarea>
+        <textarea id="log" style="width:400px;height:200px" readonly></textarea>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php

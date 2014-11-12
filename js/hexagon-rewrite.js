@@ -82,6 +82,9 @@ map.getData(function(map_data){
         $('#fortifyButton').css('display','none');
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
+    	var notYourTurn = document.getElementById('notYourTurn').innerHTML;
+        notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
+        document.getElementById('notYourTurn').innerHTML = notYourTurn;
         $('#panel').hide();
     }
 	
