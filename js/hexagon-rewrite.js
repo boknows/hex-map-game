@@ -75,6 +75,12 @@ map.getData(function(map_data){
     } else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         $('#attack').hide();
     }
+    if(map.dataProp.turnPhase == "fortify"){
+    	var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
+        $('#fortifyButton').css('display','none');
+    }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
         $('#panel').hide();
     }
@@ -140,6 +146,7 @@ map.getData(function(map_data){
 
     var fortifyButton = document.getElementById('fortifyButton');
     fortifyButton.addEventListener('click', function(e) {
+    	$('#fortifyButton').css('display','none');
         map.dataProp.turnPhase = "fortify";
         updateLog("--------------------");
         updateLog("It is now the fortify phase.");
@@ -154,6 +161,10 @@ map.getData(function(map_data){
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
         updateLogDisp(hexagonGrid);
         showPlayers();
+
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
     }, false);
 	
     var transferMaxButton = document.getElementById('transferMaxButton');
@@ -163,6 +174,9 @@ map.getData(function(map_data){
         map.dataProp.fortifiesUsed++;
         map.selected = null;
         map.clickState = null;
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
         updateLogDisp(hexagonGrid);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -186,6 +200,9 @@ map.getData(function(map_data){
         map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
         map.data[map.attack.attX][map.attack.attY].units = tmp - num;
         updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
 
         updateLogDisp(hexagonGrid);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);

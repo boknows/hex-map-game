@@ -34,6 +34,7 @@
 	}
 	#endTurn {
 		position: absolute;
+        width: 250px;
 	}
 	#attack {
 		position: absolute;
@@ -115,6 +116,7 @@
 		<div id="panel">
 		<h2><u>Actions</u></h2>
 		<div class="controls" id="endTurn">
+            <p id="fortUnits"></p>
 			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
 			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
 		</div>
