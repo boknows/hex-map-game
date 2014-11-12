@@ -25,7 +25,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		left: 160px;
+		left: 130px;
 		width: 1200px;
 		height: 900px;
 	}

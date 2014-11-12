@@ -1,6 +1,6 @@
-function singleAttack() {
+function singleAttack(hexagonGrid) {
 	if(map.data[map.attack.attX][map.attack.attY].units > 1){
-		var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
+		var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
 		map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
 		map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 		
@@ -46,19 +46,14 @@ function singleAttack() {
 function contAttack(hexagonGrid) {
 	while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0){
         console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
-            console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
+        console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
 		if(map.data[map.attack.attX][map.attack.attY].units > 1){
-			var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "");
+			var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
 			map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
 			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 			
 			if(map.data[map.attack.defX][map.attack.defY].units == 0){
 				$('#attack').hide();
-				/*map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.attX][map.attack.attY].units - 1;
-				map.data[map.attack.attX][map.attack.attY].units = 1;
-				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
-				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
-				$('#controls').hide();*/
 				map.data[map.attack.defX][map.attack.defY].units++;
 				map.data[map.attack.attX][map.attack.attY].units--;
 				$('#attackMove').show();
@@ -90,7 +85,6 @@ function contAttack(hexagonGrid) {
 			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "updateMap");
 			var chk = calcEndState(map.email);
-			console.log("EndState:", chk);
 			if(chk == true){
 				map.dataProp.turnPhase = "ended";
 				var data = { data: JSON.stringify(map.dataProp) };
@@ -255,7 +249,7 @@ function rollDice () {
 	return rand;
 }
 
-function battle(att, def, attTer, defTer){
+function battle(att, def, attTer, defTer, hexagonGrid){
 	/**  Function to simulate battle between two armies. 
 	* @param {Number} att - number of attacking armies
 	* @param {Number} def - number of defending armies
@@ -305,10 +299,11 @@ function battle(att, def, attTer, defTer){
 	var attString = "Attacker rolls: [" + attString.slice(0,attString.length-1) + "]";
 	var defString = "Defender rolls: [" + defString.slice(0,defString.length-1) + "]";
 	var resultString = "Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.";
+	updateLog("--------------------");
 	updateLog(attString);
 	updateLog(defString);
 	updateLog(resultString);
-
+	updateLogDisp(hexagonGrid);
 	var losses = { att: attLoses, def: defLoses };
 	console.log(attString);
 	console.log(defString);
@@ -327,58 +322,6 @@ function cloneArr(arr){
         }
     }
     return clone;
-}
-
-function drawArrow(ctx, width, height, from, to, direction){
-	/**  Function to simulate battle between two armies. 
-	* @param {object} from - object containing the x,y coordinates of the beginning point of the arrow
-	* @param {object} to - object containing the x,y coordinates of the end point of the arrow
-	* @param {Text} direction - the direction in which the arrowhead is pointing. (n, ne, nw, s, se, sw)
-	* reference: http://stackoverflow.com/questions/839899/how-do-i-calculate-a-point-on-a-circle-s-circumference
-	*/
-	if(direction == "n"){
-		ctx.beginPath();
-		ctx.lineWidth = 3;
-		ctx.strokeStyle = "#FF0000";
-		ctx.moveTo(from.x + width/2, from.y + (height/2) - (height/2.5));
-		ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
-		ctx.stroke();
-		//draw arrowhead
-		var size = 4;
-		ctx.beginPath();
-		ctx.moveTo(to.x + width/2, to.y + height/2 + (height/5));
-		ctx.lineTo(to.x + width/2 - size/2, to.y + height/2 + (height/5) + size/2);
-		ctx.lineTo(to.x + width/2 + size/2, to.y + height/2 + (height/5) + size/2);
-		ctx.lineTo(to.x + width/2, to.y + height/2 + (height/5));
-		ctx.fill();
-		ctx.stroke();
-	}
-	if(direction == "s"){
-		ctx.beginPath();
-		ctx.lineWidth = 3;
-		ctx.strokeStyle = "#FF0000";
-		ctx.moveTo(from.x + width/2, from.y + (height/2) + (height/5));
-		ctx.lineTo(to.x + width/2, to.y + height/10);
-		ctx.stroke();
-		//draw arrowhead
-		var size = 4;
-		ctx.beginPath();
-		ctx.moveTo(to.x + width/2, to.y + height/10);
-		ctx.lineTo(to.x + width/2 - size/2, to.y + height/10 - size/2);
-		ctx.lineTo(to.x + width/2 + size/2, to.y + height/10 - size/2);
-		ctx.lineTo(to.x + width/2, to.y + height/10);
-		ctx.fill();
-		ctx.stroke();
-	}
-	if(direction == "ne"){
-		ctx.beginPath();
-		ctx.lineWidth = 5;
-		ctx.strokeStyle = "#FF0000";
-		ctx.moveTo(from.x + width/2 + width/4, from.y + (height/2) + (height/5) - (height/3));
-		ctx.lineTo(to.x + width/2 - width/4, to.y + height/2);
-		ctx.stroke();
-	}
-	
 }
 
 function getDirection(x1, x2, y1, y2, z1, z2){
@@ -451,4 +394,20 @@ function compareMap (map){
 
 function updateLog (msg){
 	map.log.push(msg);
+}
+function updateLogDisp(hexagonGrid){
+	//Calc player list length to determine start point of msg log
+	var x0 = hexagonGrid.width*(map.dataProp.cols)+hexagonGrid.canvasOriginX;
+	var y0 = 25 + ((hexagonGrid.height/1.5)*map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
+	var style = {left: x0, top: y0, position: "absolute", 'font-size': '75%'};
+	
+	$("#log").css(style);
+	
+    var msg = document.getElementById('log').innerHTML;
+	for(var i = 0; i<map.log.length; i++){
+		msg = msg + "\n" + map.log[i]
+	}
+    document.getElementById('log').innerHTML = msg;	
+	var msgSc = document.getElementById('log');
+    msgSc.scrollTop = msgSc.scrollHeight;
 }

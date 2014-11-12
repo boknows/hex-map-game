@@ -50,7 +50,7 @@ map.getData(function(map_data){
 	*/
 	console.log(map.dataProp);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
-    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 160, 10, true);
+    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
 	if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
 		$('#unitButtons').show();	
 		$('#attack').hide();
@@ -65,7 +65,7 @@ map.getData(function(map_data){
 	//UI Buttons
 	var singleAttackButton = document.getElementById('singleAttack');
 	singleAttackButton.addEventListener('click', function (e) {
-		singleAttack();
+		singleAttack(hexagonGrid);
 		hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 		hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
@@ -74,13 +74,13 @@ map.getData(function(map_data){
 		var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 		if(map.data[map.attack.attX][map.attack.attY].units == 1){
 			$('#attack').hide();
+			$('#endTurn').show();
 		}else{
 			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 		} 
 		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
 		updateMap(data, "updateAll");
-		updateLogDisp();
 	}, false);
 	
 	var contAttackButton = document.getElementById('continuousAttack');
@@ -94,20 +94,25 @@ map.getData(function(map_data){
 			map.dataProp.turn = 0;
 		}else{
 			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
-		}  
+		}
+		updateLog("Turn ended.");
+		updateLog("--------------------");  
+		updateLog("It is " + map.dataProp.users[map.dataProp.turn] + "'s turn.");  
 		updateLog("It is now the unitPlacement phase.");
 		map.dataProp.fortifiesUsed = 0;
 		map.dataProp.turnPhase = "unitPlacement";
 		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
 		updateMap(data, "updateAll");
 		$('#panel').hide();
+		ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		showPlayers();
-        updateLogDisp();
+        updateLogDisp(hexagonGrid);
 	}, false);
 	
 	var fortifyButton = document.getElementById('fortifyButton');
 	fortifyButton.addEventListener('click', function (e) {
 		map.dataProp.turnPhase = "fortify";
+		updateLog("--------------------"); 
 		updateLog("It is now the fortify phase.");
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
@@ -116,7 +121,7 @@ map.getData(function(map_data){
 		ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        updateLog();
+        updateLogDisp(hexagonGrid);
         showPlayers();
 	}, false);	
 	
@@ -197,6 +202,7 @@ map.getData(function(map_data){
 	compPlc.addEventListener('click', function (e) {
         compareMap(map.data);
         map.dataProp.turnPhase = "attack";
+        updateLog("--------------------"); 
         updateLog("It is now the attack phase.");
 		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
 		updateMap(data, "updateAll");
@@ -206,7 +212,7 @@ map.getData(function(map_data){
 		$('#unitButtons').hide();
         $('#panel').show();
 		$('#attack').hide();
-		updateLogDisp();
+		updateLogDisp(hexagonGrid);
 		showPlayers();
 	}, false);
     
@@ -324,48 +330,7 @@ map.getData(function(map_data){
 		}
 	}
 	showPlayers();
-    function updateLogDisp(){
-    	//Calc player list length to determine start point of msg log
-    	var x0 = hexagonGrid.width*(map.dataProp.cols)+hexagonGrid.canvasOriginX;
-		var y0 = 25 + ((hexagonGrid.height/1.5)*map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
-		var style = {left: x0, top: y0, position: "absolute", 'font-size': '75%'};
-		
-    	$("#log").css(style);
-    	
-        var msg = document.getElementById('log').innerHTML;
-        
-        //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
-        if(map.dataProp.owners[map.dataProp.turn] == map.email){
-            if(map.dataProp.turnPhase == "attack"){
-                msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to attack with.";
-            }else if(map.dataProp.turnPhase == "fortify"){
-                msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to move units from.";
-            }
-            if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-                var msg = document.getElementById('log').innerHTML;
-                var units = calcUnits(map.email);
-                msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
-                document.getElementById('log').innerHTML = msg;
-            }
-            if(map.dataProp.turnPhase == "fortify" && map.dataProp.owners[map.dataProp.turn] == map.email){
-                var msg = document.getElementById('log').innerHTML;
-                msg = msg + "<br>" + map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
-                document.getElementById('log').innerHTML = msg;
-            }
-	        for(var i = 0; i<map.log.length; i++){
-	    		msg = msg + "\n" + map.log[i]
-	    	}
-            document.getElementById('log').innerHTML = msg;	
-
-        }else if(map.dataProp.owners[map.dataProp.turn] != map.email){
-			var msg = document.getElementById('log').innerHTML;
-			msg = msg + "<br>It is " + map.dataProp.owners[map.dataProp.turn] + "'s turn.";
-            document.getElementById('log').innerHTML = msg;
-		}
-		var msgSc = document.getElementById('log');
-        msgSc.scrollTop = msgSc.scrollHeight;
-    }
-    updateLogDisp();
+    updateLogDisp(hexagonGrid);
     
     
 });
