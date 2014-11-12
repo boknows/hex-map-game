@@ -21,14 +21,14 @@
 	<div class="row-fluid">
 		<div class="col-md-4">
 			<h3>Your Games</h3>    
-			<table class="table table-striped" id="game_table" style="width: auto;">
+			<table class="table table-striped" id="game_table" style="width: 100%;">
 			</table>
 			<input type="hidden" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
 			<input type="hidden" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
 		</div>
 		<div class="col-md-4">
 			<h3>Public Games to Join</h3>
-			<table class="table table-striped" id="publicGames" style="width: auto;"></table>
+			<table class="table table-striped" id="publicGames" style="width: 100%;"></table>
 			<p id="noPub"></p>
 		</div>
 	</div>
