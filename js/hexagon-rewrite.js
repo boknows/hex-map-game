@@ -313,11 +313,16 @@ map.getData(function(map_data){
 			ctxUI.fillStyle = "";
 			
 			y0 = y0 + hexagonGrid.height/1.5;	
-			
 		}
 	}
 	showPlayers();
     function updateMsg(){
+    	//Calc player list length to determine start point of msg log
+    	var x0 = hexagonGrid.width*(map.dataProp.cols)+hexagonGrid.canvasOriginX;
+		var y0 = 25 + ((hexagonGrid.height/1.5)*map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
+		var style = {left: x0, top: y0, position: "absolute"};
+    	$("#msg").css(style);
+
         var msg = document.getElementById('msg').innerHTML;
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
         if(map.dataProp.owners[map.dataProp.turn] == map.email){
@@ -343,6 +348,7 @@ map.getData(function(map_data){
 			msg = msg + "<br>It is " + map.dataProp.owners[map.dataProp.turn] + "'s turn.";
             document.getElementById('msg').innerHTML = msg;
 		}
+		
     }
     updateMsg();
     

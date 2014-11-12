@@ -190,7 +190,7 @@
             </div>
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
-        <p style="text-align: right;" id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</p>
+        <div id="msg">Welcome <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?>!</div>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php
