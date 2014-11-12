@@ -45,14 +45,12 @@ function singleAttack(hexagonGrid) {
 };
 function contAttack(hexagonGrid) {
 	while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0){
-        console.log("Defender:", map.data[map.attack.defX][map.attack.defY].units);
-        console.log("Attacker:", map.data[map.attack.attX][map.attack.attY].units);
 		if(map.data[map.attack.attX][map.attack.attY].units > 1){
 			var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
 			map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
 			map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 			
-			if(map.data[map.attack.defX][map.attack.defY].units == 0){
+			if(map.data[map.attack.defX][map.attack.defY].units == 0){ //if =0, defender was defeated
 				$('#attack').hide();
 				map.data[map.attack.defX][map.attack.defY].units++;
 				map.data[map.attack.attX][map.attack.attY].units--;
@@ -64,8 +62,8 @@ function contAttack(hexagonGrid) {
 				}	
 				document.getElementById('attackMoveDrop').innerHTML = options;	
 				
-				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
-				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
+				map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner; //switch owners of defending hex to show takeover
+				map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color; //switch color of defending hex to show takeover
 				var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
 				var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 				var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
@@ -75,18 +73,19 @@ function contAttack(hexagonGrid) {
 				hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 				hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 				$('#controls').hide();
-				var data = { data: JSON.stringify(map.data) };
-				updateMap(data, "updateMap");
+				var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
+				updateMap(data, "updateAll");
 				break;
 			}else{
 				hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
 				hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 			}
-			var data = { data: JSON.stringify(map.data) };
-			updateMap(data, "updateMap");
+			var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
+			updateMap(data, "updateAll");
 			var chk = calcEndState(map.email);
 			if(chk == true){
 				map.dataProp.turnPhase = "ended";
+				updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.")
 				var data = { data: JSON.stringify(map.dataProp) };
 				updateMap(data, "updateMapProperties");
 				data.param = "update";
@@ -98,6 +97,8 @@ function contAttack(hexagonGrid) {
 					type: "POST",
 					dataType: 'JSON'
 				});
+				var data = { data: JSON.stringify(map.log) };
+				updateMap(data, "updateMapLog");
 			}
 		}else{
 			console.log("Can't attack. Not enough units.");
@@ -305,9 +306,7 @@ function battle(att, def, attTer, defTer, hexagonGrid){
 	updateLog(resultString);
 	updateLogDisp(hexagonGrid);
 	var losses = { att: attLoses, def: defLoses };
-	console.log(attString);
-	console.log(defString);
-	console.log(resultString);
+
 	return losses;
 }
 

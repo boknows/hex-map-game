@@ -40,6 +40,7 @@
 	}
 	#attackMove {
 		position: absolute;
+        width: 250px;
 	}
 	#fortify {
 		position: absolute;
@@ -136,11 +137,16 @@
 			<br><button type="button" id ="continuousAttack" class="btn btn-danger">Continuous Attack</button>
 		</div>
 		<div class="controls" id="attackMove" style="display:none">
-			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button><select id="attackMoveDrop"></select> Units to defeated hexagon.
-			<br><button type="button" id="attackMoveAllBtn" class="btn btn-danger">Move All</button> 
+            <div class="input-group col-md-9">
+            <span class='input-group-addon'><b>Move</b></span><select class='form-control' id="attackMoveDrop"></select>
+            </div>
+            Units to defeated hexagon.<br>
+			<button type="button" id="attackMoveBtn" class="btn btn-danger">Move</button>
+			<button type="button" id="attackMoveAllBtn" class="btn btn-warning">Move All</button> 
 		</div>
         </div>
 		<div class="controls" id="unitButtons" style="display:none">
+            <p id="units"></p>
 			<button type="button" id="undoLast" class="btn btn-danger">Undo Last</button><br>
 			<button type="button" id ="undoAll" class="btn btn-danger">Undo All</button><br>
             <button type="button" id ="compPlc" class="btn btn-success">Complete Placement</button>

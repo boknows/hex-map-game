@@ -53,7 +53,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
         if(typeof(map.clicks) != "undefined"){
             var clickTotal = map.clicks.length - 1;
         }
-        console.log(map.clicks);
         //populate hex data to form for map editing
         /*
         $('#type').val(map.data[tile.row][tile.column].type);
@@ -100,10 +99,10 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     map.attack.attX = map.selected.selRow;
 
                     //Update Text on Unit Placement HTML
-                    map.unitCnt++;
-                    var msg = document.getElementById('msg').innerHTML;
-                    msg = map.unitCnt + " / " + units + " units placed.";
-                    document.getElementById('msg').innerHTML = msg;
+                    map.unitCnt++; 
+                    var unitsDisp = document.getElementById('units').innerHTML;
+                    unitsDisp = map.unitCnt + "/" + units + " units placed.";
+                    document.getElementById('units').innerHTML = unitsDisp;
                 }
             }
             if(map.dataProp.turnPhase == "attack"){
