@@ -115,8 +115,8 @@
 		<div id="panel">
 		<h2><u>Actions</u></h2>
 		<div class="controls" id="endTurn">
-			<button type="button" id="fortifyButton" class="btn btn-primary">Fortification Phase</button>
-			<button type="button" id="endTurnButton" class="btn btn-primary">End Turn</button>
+			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
+			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
 		</div>
         <div class="controls" id="unitPlacement" style="display:none">
             <p>Select number of units, then click a hexagon.</p> 

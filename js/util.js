@@ -463,7 +463,8 @@ function compareMap(map) {
 }
 
 function updateLog(msg) {
-    map.log.push(msg);
+	var time = new Date().getTime();
+    map.log.push({time: time, msg: msg});
 }
 
 function updateLogDisp(hexagonGrid) {
@@ -481,7 +482,8 @@ function updateLogDisp(hexagonGrid) {
 
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {
-        msg = msg + "\n" + map.log[i]
+		var date = new Date(map.log[i].time);
+        msg = msg + "\n[" + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + map.log[i].msg;
     }
     document.getElementById('log').innerHTML = msg;
     var msgSc = document.getElementById('log');

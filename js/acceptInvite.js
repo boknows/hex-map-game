@@ -149,9 +149,10 @@ function startGame(gameID, mapArray, mapProperties) {
     for (var i = 0; i < countries.length; i++) { //add 1 unit to each country for claiming purposes
         countries[i].units++;
     }
+    var time = new Date().getTime();
     for (var i = 0; i < countries.length; i++) {
         cntSplt[turn].push(countries[i]); //Add a claimed country to a specific players country array. 
-        mapLog.push(mapProperties.users[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added.");
+        mapLog.push({time: time, msg: mapProperties.users[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added."});
         if (turn == (mapProperties.owners.length - 1)) {
             turn = 0;
             cycle++;
