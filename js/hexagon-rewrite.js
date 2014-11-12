@@ -38,6 +38,8 @@ map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
     map.log = JSON.parse(map_data.mapLog);
+    var uiCanvas = document.getElementById("UICanvas");
+	var ctxUI = uiCanvas.getContext("2d");
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
                 map.data[i][j].units = 0;
@@ -76,8 +78,9 @@ map.getData(function(map_data){
 			hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 			hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 		} 
-		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "updateMap");
+		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
+		updateMap(data, "updateAll");
+		updateLogDisp();
 	}, false);
 	
 	var contAttackButton = document.getElementById('continuousAttack');
@@ -87,31 +90,34 @@ map.getData(function(map_data){
 	
 	var endTurnButton = document.getElementById('endTurnButton');
 	endTurnButton.addEventListener('click', function (e) {
-		//turned off for testing
 		if(map.dataProp.turn == map.dataProp.owners.length-1){
 			map.dataProp.turn = 0;
 		}else{
 			map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
 		}  
+		updateLog("It is now the unitPlacement phase.");
 		map.dataProp.fortifiesUsed = 0;
 		map.dataProp.turnPhase = "unitPlacement";
-		var data = { data: JSON.stringify(map.dataProp) };
-		updateMap(data, "updateMapProperties");
-		var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "updateMap");
+		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
+		updateMap(data, "updateAll");
 		$('#panel').hide();
 		showPlayers();
-        updateMsg();
+        updateLogDisp();
 	}, false);
 	
 	var fortifyButton = document.getElementById('fortifyButton');
 	fortifyButton.addEventListener('click', function (e) {
 		map.dataProp.turnPhase = "fortify";
+		updateLog("It is now the fortify phase.");
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
+		var data = { data: JSON.stringify(map.log) };
+		updateMap(data, "updateMapLog");
+		ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        updateMsg();
+        updateLog();
+        showPlayers();
 	}, false);	
 	
 	var transferMaxButton = document.getElementById('transferMaxButton');
@@ -129,9 +135,9 @@ map.getData(function(map_data){
 		updateMap(data, "updateMapProperties");
 		$('#fortify').hide();
 		//Update Text on Unit Placement HTML
-		var msg = document.getElementById('msg').innerHTML;
+		var msg = document.getElementById('log').innerHTML;
 		msg = map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
-		document.getElementById('msg').innerHTML = msg;
+		document.getElementById('log').innerHTML = msg;
 
 	}, false);
 	
@@ -153,18 +159,18 @@ map.getData(function(map_data){
 		var data = { data: JSON.stringify(map.dataProp) };
 		updateMap(data, "updateMapProperties");
 		//Update Text on Unit Placement HTML
-		var msg = document.getElementById('msg').innerHTML;
+		var msg = document.getElementById('log').innerHTML;
 		msg = map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
-		document.getElementById('msg').innerHTML = msg;
+		document.getElementById('log').innerHTML = msg;
 	}, false);
     
     var undoAll = document.getElementById('undoAll');
 	undoAll.addEventListener('click', function (e) {
         map.unitCnt = 0;
-        var msg = document.getElementById('msg').innerHTML;
+        var msg = document.getElementById('log').innerHTML;
 		var units = calcUnits(map.email);
 		msg = map.unitCnt + " / " + units + " units placed.";
-		document.getElementById('msg').innerHTML = msg;
+		document.getElementById('log').innerHTML = msg;
 		for(i=0;i<map.unitPlacement.length;i++){
 			map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].units--;
 		}	
@@ -179,10 +185,10 @@ map.getData(function(map_data){
 		map.data[map.unitPlacement[map.unitPlacement.length-1].row][map.unitPlacement[map.unitPlacement.length-1].col].units--;
 		map.unitPlacement.pop();
 		map.unitCnt--;
-		var msg = document.getElementById('msg').innerHTML;
+		var msg = document.getElementById('log').innerHTML;
 		var units = calcUnits(map.email);
 		msg = map.unitCnt + " / " + units + " units placed.";
-		document.getElementById('msg').innerHTML = msg;
+		document.getElementById('log').innerHTML = msg;
 		map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 	}, false);
@@ -191,17 +197,17 @@ map.getData(function(map_data){
 	compPlc.addEventListener('click', function (e) {
         compareMap(map.data);
         map.dataProp.turnPhase = "attack";
-		var data = { data: JSON.stringify(map.dataProp) };
-		updateMap(data, "updateMapProperties");
-        var data = { data: JSON.stringify(map.data) };
-		updateMap(data, "updateMap");
+        updateLog("It is now the attack phase.");
+		var data = {mapProperties: JSON.stringify(map.dataProp), mapArray: JSON.stringify(map.data), mapLog: JSON.stringify(map.log)};
+		updateMap(data, "updateAll");
+        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
 		hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 		$('#unitButtons').hide();
         $('#panel').show();
 		$('#attack').hide();
-        
-        updateMsg();
+		updateLogDisp();
+		showPlayers();
 	}, false);
     
     var updateMapBtn = document.getElementById('updateMap');
@@ -282,8 +288,6 @@ map.getData(function(map_data){
 	
 	//UI - Players List
 	function showPlayers(){
-		var uiCanvas = document.getElementById("UICanvas");
-		var ctxUI = uiCanvas.getContext("2d");
 		var x0 = hexagonGrid.width*(map.dataProp.cols);
 		var y0 = 25;
 		for(var i =0;i<map.dataProp.colors.length;i++){
@@ -309,21 +313,27 @@ map.getData(function(map_data){
 				ctxUI.font = '13pt Arial';
 			}
 			ctxUI.fillStyle = "#000000";
-			ctxUI.fillText(map.dataProp.users[i], x0 + hexagonGrid.width/1.2, y0 + (hexagonGrid.height/1.75) );
+			if(map.dataProp.users[map.dataProp.turn] == map.dataProp.users[i]){
+				ctxUI.fillText(map.dataProp.users[i] + " [" + map.dataProp.turnPhase + " phase]", x0 + hexagonGrid.width/1.2, y0 + (hexagonGrid.height/1.75) );
+			}else{
+				ctxUI.fillText(map.dataProp.users[i], x0 + hexagonGrid.width/1.2, y0 + (hexagonGrid.height/1.75) );
+			}
 			ctxUI.fillStyle = "";
 			
 			y0 = y0 + hexagonGrid.height/1.5;	
 		}
 	}
 	showPlayers();
-    function updateMsg(){
+    function updateLogDisp(){
     	//Calc player list length to determine start point of msg log
     	var x0 = hexagonGrid.width*(map.dataProp.cols)+hexagonGrid.canvasOriginX;
 		var y0 = 25 + ((hexagonGrid.height/1.5)*map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
-		var style = {left: x0, top: y0, position: "absolute"};
-    	$("#msg").css(style);
-
-        var msg = document.getElementById('msg').innerHTML;
+		var style = {left: x0, top: y0, position: "absolute", 'font-size': '75%'};
+		
+    	$("#log").css(style);
+    	
+        var msg = document.getElementById('log').innerHTML;
+        
         //msg = "It's the " + map.dataProp.turnPhase + " stage. ";
         if(map.dataProp.owners[map.dataProp.turn] == map.email){
             if(map.dataProp.turnPhase == "attack"){
@@ -332,25 +342,31 @@ map.getData(function(map_data){
                 msg = "It's the " + map.dataProp.turnPhase + " stage.<br>Please click on a country to move units from.";
             }
             if(map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email){
-                var msg = document.getElementById('msg').innerHTML;
+                var msg = document.getElementById('log').innerHTML;
                 var units = calcUnits(map.email);
                 msg = msg + "<br>" + map.unitCnt + " / " + units + " units placed.";
-                document.getElementById('msg').innerHTML = msg;
+                document.getElementById('log').innerHTML = msg;
             }
             if(map.dataProp.turnPhase == "fortify" && map.dataProp.owners[map.dataProp.turn] == map.email){
-                var msg = document.getElementById('msg').innerHTML;
+                var msg = document.getElementById('log').innerHTML;
                 msg = msg + "<br>" + map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.";
-                document.getElementById('msg').innerHTML = msg;
+                document.getElementById('log').innerHTML = msg;
             }
-            document.getElementById('msg').innerHTML = msg;	
+	        for(var i = 0; i<map.log.length; i++){
+	    		msg = msg + "\n" + map.log[i]
+	    	}
+            document.getElementById('log').innerHTML = msg;	
+
         }else if(map.dataProp.owners[map.dataProp.turn] != map.email){
-			var msg = document.getElementById('msg').innerHTML;
+			var msg = document.getElementById('log').innerHTML;
 			msg = msg + "<br>It is " + map.dataProp.owners[map.dataProp.turn] + "'s turn.";
-            document.getElementById('msg').innerHTML = msg;
+            document.getElementById('log').innerHTML = msg;
 		}
-		
+		var msgSc = document.getElementById('log');
+        msgSc.scrollTop = msgSc.scrollHeight;
     }
-    updateMsg();
+    updateLogDisp();
+    
     
 });
 

@@ -1,5 +1,4 @@
 HexagonGrid.prototype.clickEvent = function (e) {
-	console.log(map.dataProp.owners[map.dataProp.turn], map.email);
     if(map.dataProp.owners[map.dataProp.turn] == map.email){
         var mouseX = e.pageX;
         var mouseY = e.pageY;
@@ -227,6 +226,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.clickState = null;
                 map.selected = null;
                 $('#attack').hide();
+                $('#endTurn').show();
             }
             if(map.clickState == "nSelect"){
                 for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
@@ -244,7 +244,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
                 var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
-
+                $('#endTurn').hide();
                 $('#attack').show();
             }
             if(map.clickState == "nSelectClear"){
@@ -259,6 +259,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.clickState = null;
                 map.selected = null;
                 $('#attack').hide();
+                $('#endTurn').show();
             }
         }
         if(map.dataProp.turnPhase == "fortify"){

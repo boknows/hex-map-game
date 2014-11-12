@@ -24,7 +24,6 @@ function singleAttack() {
 		var data = { data: JSON.stringify(map.data) };
 		updateMap(data, "updateMap");
 		var chk = calcEndState(map.email);
-		console.log("EndState:", chk);
 		if(chk == true){
 			map.dataProp.turnPhase = "ended";
 			var data = { data: JSON.stringify(map.dataProp) };
@@ -77,7 +76,7 @@ function contAttack(hexagonGrid) {
 				var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
 				var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
 				hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-				hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+				hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 				hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
 				hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
 				$('#controls').hide();
@@ -86,7 +85,7 @@ function contAttack(hexagonGrid) {
 				break;
 			}else{
 				hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-				hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, 10, 10, true);
+				hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 			}
 			var data = { data: JSON.stringify(map.data) };
 			updateMap(data, "updateMap");
@@ -303,13 +302,17 @@ function battle(att, def, attTer, defTer){
 	for(i=0;i<defArr.length;i++){
 		defString = defString + defArr[i] + ",";
 	}
-	attString = attString.slice(0,attString.length-1);
-	defString = defString.slice(0,defString.length-1);
-	
+	var attString = "Attacker rolls: [" + attString.slice(0,attString.length-1) + "]";
+	var defString = "Defender rolls: [" + defString.slice(0,defString.length-1) + "]";
+	var resultString = "Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.";
+	updateLog(attString);
+	updateLog(defString);
+	updateLog(resultString);
+
 	var losses = { att: attLoses, def: defLoses };
-	console.log("Attacker rolls: [" + attString + "]");
-	console.log("Defender rolls: [" + defString + "]");
-	console.log("Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.");
+	console.log(attString);
+	console.log(defString);
+	console.log(resultString);
 	return losses;
 }
 
@@ -436,7 +439,6 @@ function compareMap (map){
         var cmpArr = [];
         for(var i=0;i<map.length;i++){
             for(var j=0;j<map[i].length;j++){
-                console.log(map[i][j].units, preMap.data[i][j].units);
                 if(map[i][j].units != preMap.data[i][j].units){
                     var unitChgNum = map[i][j].units - preMap.data[i][j].units;
                     cmpArr.push({col: j, row: i, unitChg: unitChgNum});
@@ -445,4 +447,8 @@ function compareMap (map){
         }
         console.log(cmpArr); 
     });
+}
+
+function updateLog (msg){
+	map.log.push(msg);
 }
