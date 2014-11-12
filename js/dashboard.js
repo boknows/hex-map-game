@@ -71,7 +71,6 @@ var GamesPublic = function(){
 
 var gamesPublic = new GamesPublic();
 gamesPublic.getData(function(data){
-	console.log(data);
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
 	if(data != "None"){
 		for(i=0, len=data.length; i<len; i++){
@@ -79,8 +78,11 @@ gamesPublic.getData(function(data){
 		}
 	}
 	
-	txt = txt + "</tbody></table>";
-	
+	if(data == "None"){
+		txt = txt + "<tr><td><b>[: No Public Games Available :]</b></td><td></td><td></td></tr>";
+	}
+	txt = txt + "</tbody>";
+	console.log(txt);
 	$('#publicGames').html(txt);
 	
 });

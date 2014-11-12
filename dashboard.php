@@ -28,8 +28,8 @@
 		</div>
 		<div class="col-md-4">
 			<h3>Public Games to Join</h3>
-			<table class="table table-striped" id="publicGames" style="width: auto;">
-			</table>
+			<table class="table table-striped" id="publicGames" style="width: auto;"></table>
+			<p id="noPub"></p>
 		</div>
 	</div>
 </div>
