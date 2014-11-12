@@ -277,7 +277,7 @@ map.getData(function(map_data){
 	
     var attackMoveAll = document.getElementById('attackMoveAllBtn');
 	attackMoveAll.addEventListener('click', function (e) {
-		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
+		map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units);
 		map.data[map.attack.attX][map.attack.attY].units = 1;
 		map.clickState = null;
 		map.selected = null;

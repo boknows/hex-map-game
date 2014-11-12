@@ -305,6 +305,8 @@ function battle(att, def, attTer, defTer, hexagonGrid){
 	updateLog(defString);
 	updateLog(resultString);
 	updateLogDisp(hexagonGrid);
+
+	console.log(resultString);
 	var losses = { att: attLoses, def: defLoses };
 
 	return losses;
