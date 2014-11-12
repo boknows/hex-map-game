@@ -35,6 +35,24 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 		}
 		offsetColumn = !offsetColumn;
 	}
+
+	var offsetColumn = false;
+	for (var col = 0; col < cols; col++) { //Draw borders separately so they don't get overlapped by other graphics. 
+		for (var row = 0; row < rows; row++) {
+			if (!offsetColumn) {
+				currentHexX = (col * this.side) + originX;
+				currentHexY = (row * this.height) + originY;
+			} else {
+				currentHexX = col * this.side + originX;
+				currentHexY = (row * this.height) + originY + (this.height * 0.5);
+			}
+			if(map.data[row][col].type=="land"){ 
+				this.drawHexBorders(currentHexX, currentHexY);
+			}
+		}
+		offsetColumn = !offsetColumn;
+	}
+
 	if(map.dataProp.turnPhase == "unitPlacement"){
 		for(var i=0, len=map.unitPlacement.length; i<len; i++){
 			var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
