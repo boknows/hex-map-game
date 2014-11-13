@@ -222,6 +222,7 @@
 			
         }     
     ?>
+        <p><table class="table" id="inviteText" style="width: 35%;"></table></p>
         Choose your color:
         <div class="form-group">
             <div class="col-sm-6">

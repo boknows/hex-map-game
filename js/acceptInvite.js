@@ -1,14 +1,50 @@
-function updateMap(data, param) {
-    console.log(data);
-    data.param = param;
-    data.gameID = $('#game_id').val();
-    $.ajax({
-        url: "getMap.php",
-        data: data,
-        type: "POST",
-        dataType: 'JSON'
-    });
-};
+//Setup Accept Game Table info
+var data = {gameID: $('#game_id').val(), param: "getAll"};   
+$.ajax({
+    url: "getMap.php",
+    data: data,
+    type: "POST",
+    dataType: 'JSON',
+    success: function(resp){
+        var dataProp = JSON.parse(resp.mapProperties);
+        var data = JSON.parse(resp.mapArray);
+        var inviteText = "<tr><td>GameID:</td><td>" + $('#game_id').val() + "</td></tr><tr><td>Game Name:</td><td>"  + resp.game_name + "</td></tr>";
+        inviteText = inviteText + "<tr><td><u><b>Players</b></u></td><td></td></tr>";
+        var users = {users: dataProp.users};
+        $.ajax({
+            url: "getUserData.php",
+            data: users,
+            type: "POST",
+            dataType: 'JSON',
+            success: function (e){
+                console.log(e);
+            },
+        });
+
+        for(var i=0;i<dataProp.users.length;i++){
+            inviteText = inviteText + "<tr><td>" + dataProp.users[i] + "</td><td>";
+            if(dataProp.creator==dataProp.owners[i]){
+                inviteText = inviteText + "<b>Creator</b></td><tr>";
+            }else{
+                inviteText = inviteText + "<b>Invited</b></td><tr>";
+            }
+        }
+        $('#inviteText').html(inviteText);
+    }
+});
+
+var data = {param: "active"};
+$.ajax({
+    url: "getGames.php",
+    data: data,
+    type: "POST",
+    dataType: 'JSON',
+    success: function (e){
+        
+    },
+});
+
+
 
 function shuffle(array) {
     var currentIndex = array.length,

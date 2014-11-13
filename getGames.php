@@ -110,7 +110,6 @@ if($_POST['param'] == "public"){
 		echo JSON_encode("None");
 	}
 		
-	
 }
 
 ?>

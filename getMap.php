@@ -22,6 +22,8 @@ if($_POST['param']=="getAll"){
 		$data['mapArray'] = $row['mapArray'];	
 		$data['mapProperties'] = $row['mapProperties'];
 		$data['mapLog'] = $row['mapLog'];
+		$data['game_name'] = $row['game_name'];
+		$data['minPlayers'] = $row['minPlayers'];
 	}
 	echo JSON_encode($data);
 }
