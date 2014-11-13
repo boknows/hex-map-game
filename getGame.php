@@ -8,16 +8,22 @@ if(empty($_SESSION['user']))
 
 $username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 ##accept invite
+$accept = array();
 $stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
 $stmt->execute(array(':email' => $username));
 foreach ($stmt as $row) {	
 	$accept['email'] = $row['email'];
 	$accept['gameQueue'] = json_decode($row['gameQueue'], true);
 }
+$public = true;
 for($i=0;$i<count($accept['gameQueue']);$i++){
 	if($accept['gameQueue'][$i]['gameID']==$_POST['gameID']){
 		$accept['gameQueue'][$i]['status']="accepted";
+		$public = false;
 	}
+}
+if($public == true){
+	$accept['gameQueue'][] = array('gameID' => $_POST['gameID'], 'status' => 'accepted');
 }
 $stmt = $db->prepare('UPDATE users SET gameQueue = :gameQueue WHERE email = :email');
 $stmt->execute(array(':gameQueue' => json_encode($accept['gameQueue']), ':email' => $username));

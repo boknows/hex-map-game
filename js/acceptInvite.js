@@ -53,6 +53,7 @@ function acceptInvite() {
             }
             if (email == 0) { //If player isn't in owners list, they are joining a public game without being invited
                 mapProperties.owners.push($('#email').val());
+                mapProperties.users.push($('#username').val());
                 mapProperties.colors.push($('#colorpicker').val());
                 public = true;
             } else {
