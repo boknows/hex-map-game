@@ -107,7 +107,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
             }
             if(map.dataProp.turnPhase == "attack"){
                 console.log("Click State Before:" , map.clickState);
-                if(map.clickState == null && map.data[tile.row][tile.column].owner == map.email){
+                if(map.clickState == null && map.data[tile.row][tile.column].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1){
                     map.clickState = "select";
                     map.selected = {col: tile.column, row: tile.row};
                 }else if(map.clickState == "select"){
