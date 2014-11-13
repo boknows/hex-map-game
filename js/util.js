@@ -49,6 +49,7 @@ function singleAttack(hexagonGrid) {
 };
 
 function contAttack(hexagonGrid) {
+    var defeated = false;
     while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
         if (map.data[map.attack.attX][map.attack.attY].units > 1) {
             var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
@@ -56,11 +57,11 @@ function contAttack(hexagonGrid) {
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
+                defeated = true;
                 $('#attack').hide();
                 map.data[map.attack.defX][map.attack.defY].units++;
                 map.data[map.attack.attX][map.attack.attY].units--;
                 $('#attackMove').show();
-                $('#endTurn').hide();
                 var options = "";
                 for (i = 1; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
@@ -77,7 +78,6 @@ function contAttack(hexagonGrid) {
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
                 hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
-                $('#controls').hide();
                 var data = {
                     mapProperties: JSON.stringify(map.dataProp),
                     mapArray: JSON.stringify(map.data),
@@ -119,7 +119,6 @@ function contAttack(hexagonGrid) {
             }
         } else {
             console.log("Can't attack. Not enough units.");
-            $('#controls').hide();
         }
     }
     var data = {

@@ -89,138 +89,6 @@ map.getData(function(map_data){
     }
 	
 	//UI Buttons
-    var singleAttackButton = document.getElementById('singleAttack');
-    singleAttackButton.addEventListener('click', function(e) {
-        singleAttack(hexagonGrid);
-        hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
-        hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
-        var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-        var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
-        var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-        if (map.data[map.attack.attX][map.attack.attY].units == 1) {
-            $('#attack').hide();
-            $('#endTurn').show();
-        } else {
-            hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
-            hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
-        }
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-    }, false);
-	
-    var contAttackButton = document.getElementById('continuousAttack');
-    contAttackButton.addEventListener('click', function(e) {
-        contAttack(hexagonGrid);
-        $('#attack').hide();
-    }, false);
-	
-    var endTurnButton = document.getElementById('endTurnButton');
-    endTurnButton.addEventListener('click', function(e) {
-        if (map.dataProp.turn == map.dataProp.owners.length - 1) {
-            map.dataProp.turn = 0;
-        } else {
-            map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
-        }
-        var units = calcUnits(map.dataProp.owners[map.dataProp.turn]);
-        updateLog("--------------------");
-        updateLog("Turn ended.");
-        updateLog("--------------------");
-        updateLog("It is " + map.dataProp.users[map.dataProp.turn] + "'s turn.");
-        updateLog("It is now the unitPlacement phase.");
-        updateLog(map.dataProp.users[map.dataProp.turn] + " receives " + units + " units.");
-        map.dataProp.fortifiesUsed = 0;
-        map.dataProp.turnPhase = "unitPlacement";
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        $('#panel').hide();
-        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        showPlayers();
-        updateLogDisp(hexagonGrid);
-    }, false);
-
-    var fortifyButton = document.getElementById('fortifyButton');
-    fortifyButton.addEventListener('click', function(e) {
-    	$('#fortifyButton').css('display','none');
-        map.dataProp.turnPhase = "fortify";
-        updateLog("--------------------");
-        updateLog("It is now the fortify phase.");
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        updateLogDisp(hexagonGrid);
-        showPlayers();
-
-        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
-        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-    }, false);
-	
-    var transferMaxButton = document.getElementById('transferMaxButton');
-    transferMaxButton.addEventListener('click', function(e) {
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
-        map.data[map.attack.attX][map.attack.attY].units = 1;
-        map.dataProp.fortifiesUsed++;
-        map.selected = null;
-        map.clickState = null;
-        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
-        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-        updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
-        updateLogDisp(hexagonGrid);
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        $('#fortify').hide();
-
-    }, false);
-	
-    var transferButton = document.getElementById('transferButton');
-    transferButton.addEventListener('click', function(e) {
-        var num = $('#transfer').val();
-        num = parseInt(num);
-        var tmp = parseInt(map.data[map.attack.attX][map.attack.attY].units);
-        map.dataProp.fortifiesUsed++;
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
-        map.data[map.attack.attX][map.attack.attY].units = tmp - num;
-        updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
-        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
-        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-
-        updateLogDisp(hexagonGrid);
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        map.selected = null;
-        map.clickState = null;
-        $('#fortify').hide();
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-    }, false);
-    
     var undoAll = document.getElementById('undoAll');
     undoAll.addEventListener('click', function(e) {
         map.unitCnt = 0;
@@ -236,7 +104,7 @@ map.getData(function(map_data){
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
     }, false);
-	
+    
     var undoLast = document.getElementById('undoLast');
     undoLast.addEventListener('click', function(e) {
         map.data[map.unitPlacement[map.unitPlacement.length - 1].row][map.unitPlacement[map.unitPlacement.length - 1].col].units--;
@@ -271,9 +139,192 @@ map.getData(function(map_data){
         updateLogDisp(hexagonGrid);
         showPlayers();
     }, false);
+
+    var singleAttackButton = document.getElementById('singleAttack');
+    singleAttackButton.addEventListener('click', function(e) {
+        singleAttack(hexagonGrid);
+        hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
+        hexagonGrid.drawHexGrid(hexagonGrid.rows, hexagonGrid.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+        var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+        var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+        var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+        if (map.data[map.attack.attX][map.attack.attY].units == 1) {
+            $('#attack').hide();
+            $('#endTurn').show();
+        } else {
+            hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
+            hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
+        }
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+    }, false);
+	
+    var contAttackButton = document.getElementById('continuousAttack');
+    contAttackButton.addEventListener('click', function(e) {
+        contAttack(hexagonGrid);
+        $('#attack').hide();
+        if($('#attackMove').css('display')=="none"){
+            $('#endTurn').show();
+        }
+    }, false);
+
+    var attackMove = document.getElementById('attackMoveBtn');
+    attackMove.addEventListener('click', function(e) {
+        var move = $('#attackMoveDrop').val();
+        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
+        map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
+        map.clickState = null;
+        map.selected = null;
+        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + parseInt(move) + " units to the defeated hex.")
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        $('#panel').show();
+        $('#attackMove').hide();
+        $('#endTurn').show();
+        updateLogDisp(hexagonGrid);
+    }, false);
     
-    var updateMapBtn = document.getElementById('updateMap');
-    updateMapBtn.addEventListener('click', function(e) {
+    var attackMoveAll = document.getElementById('attackMoveAllBtn');
+    attackMoveAll.addEventListener('click', function(e) {
+        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units);
+        map.data[map.attack.attX][map.attack.attY].units = 1;
+        map.clickState = null;
+        map.selected = null;
+        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + (map.data[map.attack.defX][map.attack.defY].units) + " units to the defeated hex.")
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        $('#panel').show();
+        $('#attackMove').hide();
+        $('#endTurn').show();
+        updateLogDisp(hexagonGrid);
+    }, false);
+	
+    var fortifyButton = document.getElementById('fortifyButton');
+    fortifyButton.addEventListener('click', function(e) {
+        $('#fortifyButton').css('display','none');
+        map.dataProp.turnPhase = "fortify";
+        updateLog("--------------------");
+        updateLog("It is now the fortify phase.");
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        updateLogDisp(hexagonGrid);
+        showPlayers();
+
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
+    }, false);
+
+    var transferMaxButton = document.getElementById('transferMaxButton');
+    transferMaxButton.addEventListener('click', function(e) {
+        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
+        map.data[map.attack.attX][map.attack.attY].units = 1;
+        map.dataProp.fortifiesUsed++;
+        map.selected = null;
+        map.clickState = null;
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
+        updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
+        updateLogDisp(hexagonGrid);
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+        $('#fortify').hide();
+
+    }, false);
+    
+    var transferButton = document.getElementById('transferButton');
+    transferButton.addEventListener('click', function(e) {
+        var num = $('#transfer').val();
+        num = parseInt(num);
+        var tmp = parseInt(map.data[map.attack.attX][map.attack.attY].units);
+        map.dataProp.fortifiesUsed++;
+        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
+        map.data[map.attack.attX][map.attack.attY].units = tmp - num;
+        updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
+
+        updateLogDisp(hexagonGrid);
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        map.selected = null;
+        map.clickState = null;
+        $('#fortify').hide();
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+    }, false);
+
+    var endTurnButton = document.getElementById('endTurnButton');
+    endTurnButton.addEventListener('click', function(e) {
+        var notYourTurn = document.getElementById('notYourTurn').innerHTML;
+        notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
+        console.log("Not Your Turn:",notYourTurn);
+        $('#notYourTurn').html(notYourTurn);
+        if (map.dataProp.turn == map.dataProp.owners.length - 1) {
+            map.dataProp.turn = 0;
+        } else {
+            map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
+        }
+        var units = calcUnits(map.dataProp.owners[map.dataProp.turn]);
+        updateLog("--------------------");
+        updateLog("Turn ended.");
+        updateLog("--------------------");
+        updateLog("It is " + map.dataProp.users[map.dataProp.turn] + "'s turn.");
+        updateLog("It is now the unitPlacement phase.");
+        updateLog(map.dataProp.users[map.dataProp.turn] + " receives " + units + " units.");
+        map.dataProp.fortifiesUsed = 0;
+        map.dataProp.turnPhase = "unitPlacement";
+        var data = {
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
+        };
+        updateMap(data, "updateAll");
+        $('#panel').hide();
+        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        showPlayers();
+        updateLogDisp(hexagonGrid);
+
+    }, false);
+    
+    /*var updateMapBtn = document.getElementById('updateMap');
+    updateMapBtn.addEventListener('click', function(e) { //For the map editor
         var cube = toCubeCoord(map.selected.selCol, map.selected.selRow);
         map.data[map.selected.selRow][map.selected.selCol].type = $('#type').val();
         map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
@@ -318,49 +369,7 @@ map.getData(function(map_data){
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
     }, false);
-	
-    var attackMove = document.getElementById('attackMoveBtn');
-    attackMove.addEventListener('click', function(e) {
-        var move = $('#attackMoveDrop').val();
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
-        map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
-        map.clickState = null;
-        map.selected = null;
-        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + parseInt(move) + " units to the defeated hex.")
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        $('#panel').show();
-        $('#attackMove').hide();
-        $('#endTurn').show();
-        updateLogDisp(hexagonGrid);
-    }, false);
-	
-    var attackMoveAll = document.getElementById('attackMoveAllBtn');
-    attackMoveAll.addEventListener('click', function(e) {
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units);
-        map.data[map.attack.attX][map.attack.attY].units = 1;
-        map.clickState = null;
-        map.selected = null;
-        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + (map.data[map.attack.defX][map.attack.defY].units) + " units to the defeated hex.")
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        $('#panel').show();
-        $('#attackMove').hide();
-        $('#endTurn').show();
-        updateLogDisp(hexagonGrid);
-    }, false);
+    */
 	
 	//UI - Players List
     function showPlayers() {

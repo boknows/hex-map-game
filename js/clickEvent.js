@@ -99,7 +99,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     map.attack.attX = map.selected.selRow;
 
                     //Update Text on Unit Placement HTML
-                    //map.unitCnt++; 
+                    map.unitCnt++; 
                     var unitsDisp = document.getElementById('units').innerHTML;
                     unitsDisp = map.unitCnt + "/" + units + " units placed.";
                     document.getElementById('units').innerHTML = unitsDisp;
