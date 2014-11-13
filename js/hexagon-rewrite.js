@@ -140,6 +140,8 @@ map.getData(function(map_data){
         $('#unitButtons').hide();
         $('#panel').show();
         $('#attack').hide();
+        $('#endTurn').show();
+        $('#fortifyButton').show();
         updateLogDisp(hexagonGrid);
         showPlayers();
     }, false);

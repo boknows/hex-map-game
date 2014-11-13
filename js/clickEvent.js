@@ -177,6 +177,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
                 var drawx = (map.selected.col * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.row][map.selected.col].owner); //clear selected hex
+                var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+                var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
+                this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.nRow][map.selected.nCol].owner); //clear selected hex
                 for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
                     var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
                     if(typeof map.clicks[clickTotal].row != "undefined" && map.data[tile.row][tile.column].owner != map.data[offset.r][offset.q].owner){
@@ -190,6 +193,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.clickState = null;
                 map.selected = null;
                 $('#attack').hide();
+                $('#endTurn').show();
             }
             if(map.clickState == "select" && map.data[tile.row][tile.column].type != "water"){
                 var cube = toCubeCoord(tile.column, tile.row);
