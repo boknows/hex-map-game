@@ -36,6 +36,7 @@ if($_POST['param'] == "active"){
 			$games['game_name'][] = $row['game_name'];
 			$games['created'][] = $row['created'];
 			$games['mapProperties'][] = json_decode($row['mapProperties']);
+			$games['status'][] = $row['status'];
 		}
 
 		for ($i=0; $i<count($games['created']); $i++){
@@ -45,6 +46,8 @@ if($_POST['param'] == "active"){
 		}
 
 		echo JSON_encode($games);
+	}else{
+		echo JSON_encode("None");
 	}
 
 }

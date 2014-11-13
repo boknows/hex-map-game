@@ -1,17 +1,26 @@
 $(document).ready(function() { 
+	function getSel(){
+		var selected = [];
+		for(var i=1;i<8;i++){
+			if($("#player"+i).select2("data") != null){
+				selected.push($("#player"+i).select2('data').text);
+			}
+		}
+		var str = selected.join();
+		return str;
+	}
 	$('#player1').select2({
 		placeholder: "Select an opponent",
 		allowClear: false,
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
-				};
+					sel: getSel()				};
 			},
-			results: function (data, page) {
+			results: function (data) {
 				return {results: data};
 			},
 			
@@ -26,10 +35,10 @@ $(document).ready(function() {
 			data: function (term) {
 				return {
 					q: term, // search term
+					sel: getSel()
 				};
 			},
 			results: function (data) {
-				console.log(data);
 				return {results: data};
 			},
 			
@@ -42,14 +51,13 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
+					sel: getSel()
 				};
 			},
-			results: function (data, page) {
-				console.log(data);
+			results: function (data) {
 				return {results: data};
 			},
 			
@@ -61,14 +69,13 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
+					sel: getSel()
 				};
 			},
-			results: function (data, page) {
-				console.log(data);
+			results: function (data) {
 				return {results: data};
 			},
 			
@@ -80,14 +87,12 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
 				};
 			},
-			results: function (data, page) {
-				console.log(data);
+			results: function (data) {
 				return {results: data};
 			},
 			
@@ -99,14 +104,12 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
 				};
 			},
-			results: function (data, page) {
-				console.log(data);
+			results: function (data) {
 				return {results: data};
 			},
 			
@@ -118,21 +121,34 @@ $(document).ready(function() {
 		ajax: {
 			dataType: "json",
 			url: "getUsers.php",
-			data: function (term, page) {
+			data: function (term) {
 				return {
 					q: term, // search term
-					page: page
 				};
 			},
-			results: function (data, page) {
-				console.log(data);
+			results: function (data) {
 				return {results: data};
 			},
-			
 		}
-	});  
+	}); 
 });
 
+
+function createGameVal() { //Validation Rules for Create Game form
+	var errors = [];
+	if($('#name').val().length < 2){
+		errors.push("Please provide a Game Name of 2 characters or more.");
+	}
+	if(errors.length == 0){
+		createGame();
+	}else{
+		var errorString = "";
+		for(var i=0;i<errors.length;i++){
+			errorString = errorString + errors[i];
+		}
+		alert(errorString);
+	}
+}
 
 function createGame() {
 	var users = [];

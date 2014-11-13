@@ -42,16 +42,21 @@ var Games = function(){
 var games = new Games();
 games.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
-	for(i=0, len=data.gameID.length; i<len; i++){
-		txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
-		if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#email').val() && data.mapProperties[i].turnPhase != "invites"){
-			txt = txt + "<td>Your turn!</td><tr>";
-		}else if(data.mapProperties[i].turnPhase == "invites"){
-			txt = txt + "<td>Invite Phase</td><tr>";
-		}else{
-			txt = txt + "<td></td><tr>";
+	if(data != "None"){
+		for(i=0, len=data.gameID.length; i<len; i++){
+			txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
+			if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#email').val() && data.mapProperties[i].turnPhase != "invites"){
+				txt = txt + "<td>Your turn!</td><tr>";
+			}else if(data.status[i] == "invites"){
+				txt = txt + "<td>Invite Phase</td><tr>";
+			}else{
+				txt = txt + "<td></td><tr>";
+			}
 		}
+	}else{
+		txt = txt + "<tr><td><b>[: No Active Games :]</b></td><td></td><td></td><td></td></tr>";
 	}
+	
 	txt = txt + "</tbody></table>";
 	$('#game_table').html(txt);
 	
@@ -72,15 +77,15 @@ var GamesPublic = function(){
 var gamesPublic = new GamesPublic();
 gamesPublic.getData(function(data){
 	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
-	if(data != "None"){
+	console.log("public:",data);
+	if(data == "None" || data.length==0){
+		txt = txt + "<tr><td><b>[: No Public Games Available :]</b></td><td></td><td></td></tr>";
+	}else{
 		for(i=0, len=data.length; i<len; i++){
 			txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
 		}
 	}
-	
-	if(data == "None"){
-		txt = txt + "<tr><td><b>[: No Public Games Available :]</b></td><td></td><td></td></tr>";
-	}
+
 	txt = txt + "</tbody>";
 	console.log(txt);
 	$('#publicGames').html(txt);

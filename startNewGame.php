@@ -85,7 +85,7 @@
 		<span class='input-group-addon'><b>Maximum Fortifies:</b></span><input type='text' name='maxFortifies' class='form-control' id='maxFortifies' value="1">
 		</div>
 		<div class='input-group'>
-		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGame() data-loading-text="Creating...">Create Game</button>
+		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGameVal() data-loading-text="Creating...">Create Game</button>
 		</div>
 	</div>
 </div>
