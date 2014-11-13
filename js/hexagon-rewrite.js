@@ -80,12 +80,16 @@ map.getData(function(map_data){
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         $('#fortifyButton').css('display','none');
+        $('#endTurnButton').show();
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
     	var notYourTurn = document.getElementById('notYourTurn').innerHTML;
         notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
         document.getElementById('notYourTurn').innerHTML = notYourTurn;
         $('#panel').hide();
+    }
+    if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
+        $('#endTurnButton').hide();
     }
 	
 	//UI Buttons

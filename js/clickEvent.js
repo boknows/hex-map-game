@@ -243,6 +243,11 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
                 var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
+                if(map.data[map.selected.row][map.selected.col].units<5){
+                    $('#continuousAttack').hide();
+                }else{
+                    $('#continuousAttack').show();
+                }
                 $('#endTurn').hide();
                 $('#attack').show();
             }
