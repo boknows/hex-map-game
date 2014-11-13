@@ -237,10 +237,11 @@ map.getData(function(map_data){
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
         updateLogDisp(hexagonGrid);
         showPlayers();
-
+        
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
+        $('#endTurnButton').show();
     }, false);
 
     var transferMaxButton = document.getElementById('transferMaxButton');
