@@ -18,10 +18,10 @@ if($_GET['sel']){
 	foreach ($selQ as $k => $id){
 		$stmt->bindValue(($k+1), $id);
 	}
-	$qStr = "%" . $_GET['q'] . "%";
-	$stmt->bindValue($k+2, $_SESSION['user']['username']);
-	$stmt->bindValue($k+3, $qStr);
-	$stmt->execute();
+	$qStr = "%" . $_GET['q'] . "%"; 
+	$stmt->bindValue($k+2, $_SESSION['user']['username']); 
+	$stmt->bindValue($k+3, $qStr); 
+	$stmt->execute(); 
 	foreach ($stmt as $row) {	
 		$data[] = array("id" => $row['email'], "text" => $row['username']);
 	}
