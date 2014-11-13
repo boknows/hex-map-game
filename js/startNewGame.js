@@ -148,6 +148,7 @@ function createGameVal() { //Validation Rules for Create Game form
 		}
 		alert(errorString);
 	}
+	console.log(errors,errorString);
 }
 
 function createGame() {

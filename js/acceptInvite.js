@@ -40,58 +40,87 @@ function acceptInvite() {
         url: "getMap.php",
         type: "POST",
         dataType: 'JSON',
-        data: data,
+        data: {
+            param: "getAll",
+            gameID: $('#game_id').val(),
+            email: $('#email').val()
+        },
         success: function(resp) {
-            var mapProperties = JSON.parse(resp.mapProperties);
-            var mapArray = JSON.parse(resp.mapArray);
-            var email = 0;
-            var public = false;
-            for (var i = 0; i < mapProperties.owners.length; i++) {
-                if (mapProperties.owners[i] == $('#email').val()) {
-                    email = i;
+            var dataProp = JSON.parse(resp.mapProperties);
+            var errors = [];
+            for (var i = 0; i < dataProp.colors.length; i++) {
+                if (dataProp.colors[i] == $('#colorpicker').val()) {
+                    errors.push("That color is already chosen. Please choose another.");
                 }
             }
-            if (email == 0) { //If player isn't in owners list, they are joining a public game without being invited
-                mapProperties.owners.push($('#email').val());
-                mapProperties.users.push($('#username').val());
-                mapProperties.colors.push($('#colorpicker').val());
-                public = true;
+            if (errors.length > 0) {
+                var errorString = "";
+                for (var i = 0; i < errors.length; i++) {
+                    errorString = errorString + errors[i];
+                }
+                alert(errorString);
             } else {
-                mapProperties.colors[email] = $('#colorpicker').val();
-            }
-            var mapPropertiesString = JSON.stringify(mapProperties);
-            var data = {
-                param: "updateMapProperties",
-                gameID: $('#game_id').val(),
-                data: mapPropertiesString,
-                pubPriv: public
-            };
-            $.ajax({
-                url: "getMap.php",
-                type: "POST",
-                dataType: 'JSON',
-                data: data,
-            });
+                $.ajax({
+                    url: "getMap.php",
+                    type: "POST",
+                    dataType: 'JSON',
+                    data: data,
+                    success: function(resp) {
+                        var mapProperties = JSON.parse(resp.mapProperties);
+                        var mapArray = JSON.parse(resp.mapArray);
+                        var email = 0;
+                        var public = false;
+                        for (var i = 0; i < mapProperties.owners.length; i++) {
+                            if (mapProperties.owners[i] == $('#email').val()) {
+                                email = i;
+                            }
+                        }
+                        if (email == 0) { //If player isn't in owners list, they are joining a public game without being invited
+                            mapProperties.owners.push($('#email').val());
+                            mapProperties.users.push($('#username').val());
+                            mapProperties.colors.push($('#colorpicker').val());
+                            public = true;
+                        } else {
+                            mapProperties.colors[email] = $('#colorpicker').val();
+                        }
+                        var mapPropertiesString = JSON.stringify(mapProperties);
+                        var data = {
+                            param: "updateMapProperties",
+                            gameID: $('#game_id').val(),
+                            data: mapPropertiesString,
+                            pubPriv: public
+                        };
+                        $.ajax({
+                            url: "getMap.php",
+                            type: "POST",
+                            dataType: 'JSON',
+                            data: data,
+                        });
 
-            var data = {
-                gameID: $('#game_id').val(),
-                pubPriv: public
-            };
-            $.ajax({
-                url: "getGame.php",
-                type: "POST",
-                dataType: 'JSON',
-                data: data,
-                success: function(resp) {
-                    if (resp == "started") {
-                        startGame($('#game_id').val(), mapArray, mapProperties);
-                    } else if (resp == "accepted") {
-                        window.location.reload(true);
-                    }
-                },
-            });
-        },
-    });
+                        var data = {
+                            gameID: $('#game_id').val(),
+                            pubPriv: public
+                        };
+                        $.ajax({
+                            url: "getGame.php",
+                            type: "POST",
+                            dataType: 'JSON',
+                            data: data,
+                            success: function(resp) {
+                                if (resp == "started") {
+                                    startGame($('#game_id').val(), mapArray, mapProperties);
+                                } else if (resp == "accepted") {
+                                    window.location.reload(true);
+                                }
+                            },
+                        });
+                    },
+                });
+            }
+        }
+    })
+
+
 
 }
 
@@ -153,7 +182,10 @@ function startGame(gameID, mapArray, mapProperties) {
     var time = new Date().getTime();
     for (var i = 0; i < countries.length; i++) {
         cntSplt[turn].push(countries[i]); //Add a claimed country to a specific players country array. 
-        mapLog.push({time: time, msg: mapProperties.users[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added."});
+        mapLog.push({
+            time: time,
+            msg: mapProperties.users[turn] + " claims Row: " + countries[i].width + " Col: " + countries[i].length + ". 1 unit added."
+        });
         if (turn == (mapProperties.owners.length - 1)) {
             turn = 0;
             cycle++;
