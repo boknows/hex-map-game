@@ -141,6 +141,7 @@ function createGameVal() { //Validation Rules for Create Game form
 	}
 	if(errors.length == 0){
 		createGame();
+		console.log("Creating Game!");
 	}else{
 		var errorString = "";
 		for(var i=0;i<errors.length;i++){
@@ -152,6 +153,7 @@ function createGameVal() { //Validation Rules for Create Game form
 }
 
 function createGame() {
+	console.log("Definitely creating game!");
 	var users = [];
 	users.push($('#username').val());
 	for(var i = 1;i<8;i++){

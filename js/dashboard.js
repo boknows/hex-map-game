@@ -1,3 +1,18 @@
+//Test for card system
+var cards = [];
+var type = ['hexagon','square','triangle'];
+var cardID = 0;
+for(var i=0;i<14;i++){
+	for(var j=0;j<type.length;j++){
+		cards.push({id: cardID, cardType: type[j]});
+		cardID++;
+	}
+}
+for(var i=0;i<4;i++){
+	cards.push({id: cardID, cardType: "wild"});
+	cardID++;
+}
+console.log(cards);
 
 //Print Hexagon graphic for greeting.
 var welcome = document.getElementById("welcomeCanvas"); 

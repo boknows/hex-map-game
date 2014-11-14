@@ -258,6 +258,26 @@ function startGame(gameID, mapArray, mapProperties) {
         }
     }
 
+    //Create Card Deck
+	var cards = [];
+	var type = ['hexagon','square','triangle'];
+	var cardID = 0;
+	for(var i=0;i<14;i++){
+		for(var j=0;j<type.length;j++){
+			cards.push({id: cardID, cardType: type[j]});
+			cardID++;
+		}
+	}
+	for(var i=0;i<4;i++){
+		cards.push({id: cardID, cardType: "wild"});
+		cardID++;
+	}
+	shuffle(cards);
+	mapProperties.cardDeck = cards;
+	mapProperties.cardsHeld = [];
+	mapProperties.cardsUsed = [];
+	mapProperties.cardBonuses = [4,6,8,10,12,15];
+	mapProperties.winCard = false;
     mapProperties.turnPhase = "unitPlacement";
     var mapString = JSON.stringify(mapArray);
     var mapPropertiesString = JSON.stringify(mapProperties);
