@@ -11,7 +11,7 @@ function singleAttack(hexagonGrid) {
             if (map.data[map.attack.attX][map.attack.attY].units > 1) {
                 $('#attackMove').show();
                 var options = "";
-                for (i = 1; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
+                for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
