@@ -308,6 +308,7 @@ map.getData(function(map_data){
         } else {
             map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
         }
+        map.dataProp.winCard = false;
         var units = calcUnits(map.dataProp.owners[map.dataProp.turn]);
         updateLog("--------------------");
         updateLog("Turn ended.");
@@ -415,7 +416,12 @@ map.getData(function(map_data){
             }
             ctxUI.fillStyle = "";
 
-            y0 = y0 + hexagonGrid.height / 1.5;
+            //Show card icon if player has cards
+            if(map.dataProp.cardsHeld[i].length>0){
+                console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
+            }
+
+            y0 = y0 + hexagonGrid.height / 1.5; //add to Y coordinate for next player
         }
     }
 	showPlayers();

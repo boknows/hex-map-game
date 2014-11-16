@@ -323,10 +323,15 @@ function startGame(gameID, mapArray, mapProperties) {
 	shuffle(cards);
 
 	//assign variables to mapProperties
+    mapProperties.cardsHeld = [];
+    mapProperties.cardsUsed = [];
+    for(var i=0;i<mapProperties.owners.length;i++){
+        mapProperties.cardsHeld[i] = [];
+        mapProperties.cardsUsed[i] = [];
+    }
 	mapProperties.cardDeck = cards;
-	mapProperties.cardsHeld = [];
-	mapProperties.cardsUsed = [];
 	mapProperties.winCard = false;
+    
     mapProperties.turnPhase = "unitPlacement";
     var mapString = JSON.stringify(mapArray);
     var mapPropertiesString = JSON.stringify(mapProperties);

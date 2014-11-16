@@ -5,6 +5,8 @@ function singleAttack(hexagonGrid) {
         map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 
         if (map.data[map.attack.defX][map.attack.defY].units == 0) {
+            map.dataProp.winCard = true;
+            drawCard(map.data[map.attack.attX][map.attack.attY].owner);
             map.data[map.attack.defX][map.attack.defY].units++;
             map.data[map.attack.attX][map.attack.attY].units--;
             $('#attack').hide();
@@ -49,15 +51,13 @@ function singleAttack(hexagonGrid) {
 };
 
 function contAttack(hexagonGrid) {
-    var defeated = false;
     while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
         if (map.data[map.attack.attX][map.attack.attY].units > 1) {
             var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
             map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
-
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
-                defeated = true;
+                map.dataProp.winCard = true;
                 $('#attack').hide();
                 map.data[map.attack.defX][map.attack.defY].units++;
                 map.data[map.attack.attX][map.attack.attY].units--;
@@ -487,4 +487,14 @@ function updateLogDisp(hexagonGrid) {
     document.getElementById('log').innerHTML = msg;
     var msgSc = document.getElementById('log');
     msgSc.scrollTop = msgSc.scrollHeight;
+}
+
+function drawCard (player){
+    for(var i=0;i<map.dataProp.owners.length;i++){
+        if(player==map.dataProp.owners[i]){
+            map.dataProp.cardsHeld[i].push(map.dataProp.cardDeck[0]);
+            map.dataProp.cardDeck.shift();
+        }
+    }
+    console.log(map.dataProp);
 }
