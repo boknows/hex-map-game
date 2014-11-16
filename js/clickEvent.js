@@ -101,7 +101,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     //Update Text on Unit Placement HTML
                     map.unitCnt++; 
                     var unitsDisp = document.getElementById('units').innerHTML;
-                    unitsDisp = map.unitCnt + "/" + units + " units placed.";
+                    unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
                     document.getElementById('units').innerHTML = unitsDisp;
                 }
             }

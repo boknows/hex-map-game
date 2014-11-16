@@ -70,10 +70,15 @@ map.getData(function(map_data){
         $('#endTurn').hide();
         var units = calcUnits(map.email);
         var unitsDisp = document.getElementById('units').innerHTML;
-        unitsDisp = map.unitCnt + "/" + units + " units placed.";
+        unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
     } else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         $('#attack').hide();
+    }
+    if(map.dataProp.turnPhase == "attack"){
+        var msg = document.getElementById('msg').innerHTML;
+        msg = "Choose a territory to attack with, then click on an enemy to attack.";
+        document.getElementById('msg').innerHTML = msg;
     }
     if(map.dataProp.turnPhase == "fortify"){
     	var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
@@ -103,7 +108,7 @@ map.getData(function(map_data){
         map.unitPlacement = null;
         map.unitPlacement = [];
         var unitsDisp = document.getElementById('units').innerHTML;
-        unitsDisp = map.unitCnt + "/" + units + " units placed.";
+        unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
@@ -116,7 +121,7 @@ map.getData(function(map_data){
         map.unitCnt--;
         var units = calcUnits(map.email);
         var unitsDisp = document.getElementById('units').innerHTML;
-        unitsDisp = map.unitCnt + "/" + units + " units placed.";
+        unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
@@ -302,6 +307,9 @@ map.getData(function(map_data){
         var notYourTurn = document.getElementById('notYourTurn').innerHTML;
         notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
         console.log("Not Your Turn:",notYourTurn);
+        if(map.dataProp.winCard == true){
+            drawCard(map.dataProp.owners[map.dataProp.turn]);
+        }
         $('#notYourTurn').html(notYourTurn);
         if (map.dataProp.turn == map.dataProp.owners.length - 1) {
             map.dataProp.turn = 0;
@@ -419,6 +427,7 @@ map.getData(function(map_data){
             //Show card icon if player has cards
             if(map.dataProp.cardsHeld[i].length>0){
                 console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
+                roundRect(ctxUI, (x0-hexagonGrid.width/6), y0+(hexagonGrid.height/3), 15, 20, 5, "" , map.dataProp.colors[i]);
             }
 
             y0 = y0 + hexagonGrid.height / 1.5; //add to Y coordinate for next player
