@@ -13,6 +13,7 @@
     <title>Hex</title>
 	<script src='http://code.jquery.com/jquery-1.10.2.min.js' language='Javascript' type='text/javascript'></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.onoff.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/onoffswitch.css" rel="stylesheet">
 </head>
@@ -20,13 +21,6 @@
 <canvas id="welcomeCanvas" width="300" height="60"></canvas>	
 <div class="container-fluid">
 	<div class="row-fluid">	
-		<div class="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
-		    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-		    <label class="onoffswitch-label" for="myonoffswitch">
-		        <span class="onoffswitch-inner"></span>
-		        <span class="onoffswitch-switch"></span>
-		    </label>
-		</div>
 		<div class="col-md-4">
 			<h3>Your Games</h3>    
 			<table class="table table-striped" id="game_table" style="width: 100%;">
@@ -48,6 +42,21 @@
 		</div>
 	</div>
 </div>
+<div class="onoffdiv">
+	<div class="col-md-4">
+		<div class="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
+		   	<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+		    <label class="onoffswitch-label" for="myonoffswitch">
+		        <span class="onoffswitch-inner"></span>
+		        <span class="onoffswitch-switch"></span>
+		    </label>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<span>Dashboard auto-refresh</span>
+	</div>
+</div>
+
 
 <script type="text/javascript" src="js/dashboard.js"></script>
 </body>

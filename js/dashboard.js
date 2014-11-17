@@ -38,58 +38,72 @@ var Games = function(){
     };
 };
 
-var games = new Games();
-games.getData(function(data){
-	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
-	if(data != "None"){
-		for(i=0, len=data.gameID.length; i<len; i++){
-			txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
-			if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#email').val() && data.gameStatus[i] == "started"){
-				txt = txt + "<td>Your turn!</td></tr>";
-			}else if(data.gameStatus[i] == "invites" && data.playerStatus[i] == "accepted"){
-				txt = txt + "<td>Accepted Invite</td></tr>";
-			}else if(data.gameStatus[i] == "invites" && data.playerStatus[i] == "invited"){
-				txt = txt + "<td>You're invited!</td></tr>";
-			}else if(data.gameStatus[i] == "started" && data.mapProperties[i].owners[data.mapProperties[i].turn] != $('#email').val()){
-				txt = txt + "<td>" + data.mapProperties[i].users[data.mapProperties[i].turn] + "'s turn</td></tr>"
-			}else{
-				txt = txt + "<td></td></tr>";
+function updateDashboard(){
+	var games = new Games();
+	games.getData(function(data){
+		var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th><th>Status</th></tr></thead><tbody>";
+		if(data != "None"){
+			for(i=0, len=data.gameID.length; i<len; i++){
+				txt = txt + "<tr><td>" + data.gameID[i] + "</td><td>" + data.created[i] + "</td><td><a href='hexagon.php?id=" + data.gameID[i] + "'>" + data.game_name[i] +  "</a></td>";
+				if(data.mapProperties[i].owners[data.mapProperties[i].turn] == $('#email').val() && data.gameStatus[i] == "started"){
+					txt = txt + "<td>Your turn!</td></tr>";
+				}else if(data.gameStatus[i] == "invites" && data.playerStatus[i] == "accepted"){
+					txt = txt + "<td>Accepted Invite</td></tr>";
+				}else if(data.gameStatus[i] == "invites" && data.playerStatus[i] == "invited"){
+					txt = txt + "<td>You're invited!</td></tr>";
+				}else if(data.gameStatus[i] == "started" && data.mapProperties[i].owners[data.mapProperties[i].turn] != $('#email').val()){
+					txt = txt + "<td>" + data.mapProperties[i].users[data.mapProperties[i].turn] + "'s turn</td></tr>"
+				}else{
+					txt = txt + "<td></td></tr>";
+				}
+			}
+		}else{
+			txt = txt + "<tr><td><b>[: No Active Games :]</b></td><td></td><td></td><td></td></tr>";
+		}
+		
+		txt = txt + "</tbody></table>";
+		$('#game_table').html(txt);
+	});
+
+
+	var GamesPublic = function(){
+	    this.getData = function(callback){
+	        $.ajax({
+	            url: "getGames.php",
+	            type: "POST",
+				data: {param: 'public'},
+	            dataType: 'JSON'
+	        }).success(callback);
+	    };
+	};
+
+	var gamesPublic = new GamesPublic();
+	gamesPublic.getData(function(data){
+		var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
+		if(data == "None" || data.length==0){
+			txt = txt + "<tr><td><b>[: No Public Games Available :]</b></td><td></td><td></td></tr>";
+		}else{
+			for(i=0, len=data.length; i<len; i++){
+				txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
 			}
 		}
-	}else{
-		txt = txt + "<tr><td><b>[: No Active Games :]</b></td><td></td><td></td><td></td></tr>";
-	}
-	
-	txt = txt + "</tbody></table>";
-	$('#game_table').html(txt);
-});
 
+		txt = txt + "</tbody>";
+		console.log(txt);
+		$('#publicGames').html(txt);
+		
+	});
+	console.log("Updated Dashboard");
+}
+updateDashboard();
 
-var GamesPublic = function(){
-    this.getData = function(callback){
-        $.ajax({
-            url: "getGames.php",
-            type: "POST",
-			data: {param: 'public'},
-            dataType: 'JSON'
-        }).success(callback);
-    };
-};
-
-var gamesPublic = new GamesPublic();
-gamesPublic.getData(function(data){
-	var txt = "<thead><tr><th>GameID</th><th>Created</th><th>Name</th></tr></thead><tbody>";
-	if(data == "None" || data.length==0){
-		txt = txt + "<tr><td><b>[: No Public Games Available :]</b></td><td></td><td></td></tr>";
-	}else{
-		for(i=0, len=data.length; i<len; i++){
-			txt = txt + "<tr><td>" + data[i].gameID + "</td><td>" + data[i].created + "</td><td><a href='hexagon.php?id=" + data[i].gameID + "'>" + data[i].game_name +  "</a></td></tr>";
-		}
-	}
-
-	txt = txt + "</tbody>";
-	console.log(txt);
-	$('#publicGames').html(txt);
-	
-});
-
+//initialize onoff checkbox
+var intervalSwitch;
+$('#myonoffswitch').change(function () {
+    if($('#myonoffswitch').prop('checked')==true){
+    	intervalSwitch = setInterval(updateDashboard, 10000);
+    }else if($('#myonoffswitch').prop('checked')==false){
+    	clearInterval(intervalSwitch);
+    	console.log("False");
+    }
+ });

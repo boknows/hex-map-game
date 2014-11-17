@@ -1,5 +1,5 @@
 .onoffswitch {
-    position: relative; width: 90px;
+    position: relative; width: 170px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {
@@ -20,12 +20,12 @@
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "ON";
+    content: "Auto-refresh ON";
     padding-left: 10px;
     background-color: #00FF00; color: #000000;
 }
 .onoffswitch-inner:after {
-    content: "OFF";
+    content: "Auto-refresh OFF";
     padding-right: 10px;
     background-color: #FF0000; color: #000000;
     text-align: right;
@@ -34,7 +34,7 @@
     display: block; width: 18px; margin: 6px;
     background: #FFFFFF;
     border: 2px solid #999999; border-radius: 15px;
-    position: absolute; top: 0; bottom: 0; right: 56px;
+    position: absolute; top: 0; bottom: 0; right: 140px;
     -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
 }
@@ -43,4 +43,17 @@
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
+}
+
+.onoffswitch{
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.onoffdiv{
+    padding-left: 30px;
+}
+.onoffdiv > span{
+    vertical-align: middle;
+    display: inline-block;
 }
