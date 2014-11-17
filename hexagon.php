@@ -19,12 +19,11 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
+    <link href="css/onoffswitch.css" rel="stylesheet">
 
 	<style>
 	canvas {
 		position: absolute;
-		width: 100%;
-		height: 100%;
 		left: 130px;
 		width: 1200px;
 		height: 900px;
@@ -116,7 +115,7 @@
 		<div id="panel">
     		<h2><u>Actions</u></h2>
             <p id='msg' style='width:200px'></p>
-    		<div class="controls" id="endTurn">
+    		<div class="controls" id="endTurn" style="display:none">
                 <p id="fortUnits"></p>
     			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
     			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
@@ -135,7 +134,7 @@
     			<button type="button" class="btn btn-success" id="transferButton">Transfer</button>
     			<br><button type="button" class="btn btn-warning" id="transferMaxButton">Transfer(max)</button>			
     		</div>
-    		<div class="controls" id="attack">
+    		<div class="controls" id="attack" style="display:none">
     			<button type="button" id="singleAttack" class="btn btn-danger">Single Attack</button>
     			<br><button type="button" id ="continuousAttack" class="btn btn-danger">Continuous Attack</button>
     		</div>
@@ -200,6 +199,13 @@
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
+        <div class="onoffswitch" id="onoffswitch" style="display:none"> <!-- On/off switch for auto-refreshing page -->
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php

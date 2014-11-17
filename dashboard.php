@@ -52,9 +52,6 @@
 		    </label>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<span>Dashboard auto-refresh</span>
-	</div>
 </div>
 
 

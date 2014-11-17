@@ -63,7 +63,7 @@ function contAttack(hexagonGrid) {
                 map.data[map.attack.attX][map.attack.attY].units--;
                 $('#attackMove').show();
                 var options = "";
-                for (i = 1; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
+                for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
@@ -476,8 +476,17 @@ function updateLogDisp(hexagonGrid) {
         position: "absolute",
         'font-size': '75%'
     };
-
     $("#log").css(style);
+
+    if(map.dataProp.owners[map.dataProp.turn]!=map.email){
+        var styleRef = {
+            left: x0,
+            top: y0+225,
+            position: "absolute",
+            display: "inline"
+        };
+       $("#onoffswitch").css(styleRef);
+    }
 
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {

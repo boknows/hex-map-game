@@ -6,7 +6,9 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
     this.context.lineCap='round';
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-
+	if(tile.row<3){
+		//console.log(tile.row, tile.column, x0, this.width, this.side, y0)
+	}
 	var numberOfSides = 6,
 	size = this.radius,
 	Xcenter = x0 + (this.width / 2),
@@ -123,13 +125,14 @@ HexagonGrid.prototype.drawHexBorders = function (x0, y0) {
 HexagonGrid.prototype.getRelativeCanvasOffset = function() {
 	var x = 0, y = 0;
 	var layoutElement = this.canvas;
+	var bound = layoutElement.getBoundingClientRect();
 	if (layoutElement.offsetParent) {
 		do {
 			x += layoutElement.offsetLeft;
 			y += layoutElement.offsetTop;
 		} while (layoutElement = layoutElement.offsetParent);
 		
-		return { x: x, y: y };
+		return { x: bound.left, y: bound.top };
 	}
 }
 

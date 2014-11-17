@@ -64,6 +64,7 @@ map.getData(function(map_data){
     console.log(map.dataProp);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
+
     if (map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         $('#unitButtons').show();
         $('#attack').hide();
@@ -89,6 +90,7 @@ map.getData(function(map_data){
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         $('#fortifyButton').css('display','none');
         $('#endTurnButton').show();
+        $('#endTurn').show();
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
     	var notYourTurn = document.getElementById('notYourTurn').innerHTML;
@@ -99,8 +101,39 @@ map.getData(function(map_data){
     if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
         $('#endTurnButton').hide();
     }
-	
-	//UI Buttons
+
+    //initialize onoff checkbox
+    var intervalSwitch;
+    $('#myonoffswitch').change(function() {
+        if ($('#myonoffswitch').prop('checked') == true) {
+            intervalSwitch = setInterval(function(){
+                $.ajax({
+                    url: "getMap.php",
+                    type: "POST",
+                    dataType: 'JSON',
+                    data: {
+                        param: "getAll",
+                        gameID: $('#game_id').val(),
+                        email: $('#email').val()
+                    },
+                    success: function(resp){
+                        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                        map.canvas.style.top = 0;
+                        map.data = [];
+                        map.dataProp = [];
+                        map.data = JSON.parse(resp.mapArray);
+                        map.dataProp = JSON.parse(resp.mapProperties);
+                        map.log = JSON.parse(resp.mapLog);
+                        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
+                    }
+                });
+            }, 3000);
+        } else if ($('#myonoffswitch').prop('checked') == false) {
+            clearInterval(intervalSwitch);
+        }
+    });
+    
+    //UI Buttons
     var undoAll = document.getElementById('undoAll');
     undoAll.addEventListener('click', function(e) {
         map.unitCnt = 0;
@@ -176,6 +209,7 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
+        console.log(map.dataProp.rows, map.dataProp.cols);
     }, false);
 	
     var contAttackButton = document.getElementById('continuousAttack');
@@ -206,6 +240,7 @@ map.getData(function(map_data){
         $('#panel').show();
         $('#attackMove').hide();
         $('#endTurn').show();
+        $('#fortifyButton').show();
         updateLogDisp(hexagonGrid);
     }, false);
     
@@ -227,6 +262,7 @@ map.getData(function(map_data){
         $('#panel').show();
         $('#attackMove').hide();
         $('#endTurn').show();
+        $('#fortifyButton').show();
         updateLogDisp(hexagonGrid);
     }, false);
 	
@@ -438,7 +474,6 @@ map.getData(function(map_data){
     }
 	showPlayers();
     updateLogDisp(hexagonGrid);
-    
     
 });
 
