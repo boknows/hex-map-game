@@ -76,9 +76,12 @@ map.getData(function(map_data){
         $('#attack').hide();
     }
     if(map.dataProp.turnPhase == "attack"){
-        var msg = document.getElementById('msg').innerHTML;
-        msg = "Choose a territory to attack with, then click on an enemy to attack.";
-        document.getElementById('msg').innerHTML = msg;
+        if(typeof(document.getElementById('msg').innerHTML) != null){
+            var msg = document.getElementById('msg').innerHTML;
+            msg = "Choose a territory to attack with, then click on an enemy to attack.";
+            document.getElementById('msg').innerHTML = msg;
+        }
+        
     }
     if(map.dataProp.turnPhase == "fortify"){
     	var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;

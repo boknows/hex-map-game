@@ -197,6 +197,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.selected = null;
                 $('#attack').hide();
                 $('#endTurn').show();
+                $('#fortifyButton').show();
             }
             if(map.clickState == "select" && map.data[tile.row][tile.column].type != "water"){
                 var cube = toCubeCoord(tile.column, tile.row);
@@ -214,6 +215,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[offset.r][offset.q].owner); //highlight neighbor hexes
                     }						
                 }
+                $('#fortifyButton').hide();
             }
             if(map.clickState == "selectClear"){
                 console.log(map.selected);
@@ -233,6 +235,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.selected = null;
                 $('#attack').hide();
                 $('#endTurn').show();
+                $('#fortifyButton').show();
             }
             if(map.clickState == "nSelect"){
                 for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
@@ -271,6 +274,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 map.selected = null;
                 $('#attack').hide();
                 $('#endTurn').show();
+                $('#fortifyButton').show();
             }
         }
         if(map.dataProp.turnPhase == "fortify"){

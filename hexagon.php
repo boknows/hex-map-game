@@ -115,6 +115,7 @@
 		<div id="notYourTurn"></div>
 		<div id="panel">
     		<h2><u>Actions</u></h2>
+            <p id='msg' style='width:200px'></p>
     		<div class="controls" id="endTurn">
                 <p id="fortUnits"></p>
     			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
