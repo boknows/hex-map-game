@@ -111,7 +111,16 @@
     ?>
 		<canvas id="UICanvas" width="1200" height="900"></canvas>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		<div id="notYourTurn"></div>
+		<div id="notYourTurn" style="display:none;">
+            <p id="notYourTurnText"><h2><u>Actions</u></h2><p>It is no longer your turn.</p></p>
+            <div class="onoffswitch" id="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                <label class="onoffswitch-label" for="myonoffswitch">
+                    <span class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                </label>
+            </div>
+        </div>
 		<div id="panel">
     		<h2><u>Actions</u></h2>
             <p id='msg' style='width:200px'></p>
@@ -199,13 +208,6 @@
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
-        <div class="onoffswitch" id="onoffswitch" style="display:none"> <!-- On/off switch for auto-refreshing page -->
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-            <label class="onoffswitch-label" for="myonoffswitch">
-                <span class="onoffswitch-inner"></span>
-                <span class="onoffswitch-switch"></span>
-            </label>
-        </div>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php

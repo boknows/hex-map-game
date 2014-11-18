@@ -57,3 +57,8 @@
     vertical-align: middle;
     display: inline-block;
 }
+
+body
+{
+    overflow: hidden;
+}

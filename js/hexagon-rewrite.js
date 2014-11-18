@@ -94,10 +94,7 @@ map.getData(function(map_data){
         showHide(arr,"Fortify phase. Initial Load.");
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
-    	var notYourTurn = document.getElementById('notYourTurn').innerHTML;
-        notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
-        document.getElementById('notYourTurn').innerHTML = notYourTurn;
-        var arr = [{"id":"#panel","action":"hide"}];
+        var arr = [{"id":"#panel","action":"hide"},{"id":"#notYourTurn","action":"show"},{"id":"#onoffswitch","action":"show"}];
         showHide(arr,"Not your turn. Initial Load.");
     }
     if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
@@ -128,6 +125,19 @@ map.getData(function(map_data){
                         map.dataProp = JSON.parse(resp.mapProperties);
                         map.log = JSON.parse(resp.mapLog);
                         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
+                        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                        showPlayers();
+                        updateLogDisp(hexagonGrid);
+                        if(map.dataProp.owners[map.dataProp.turn] == map.email){
+                            $('#myonoffswitch').attr('checked', false);
+                            clearInterval(intervalSwitch);
+                            var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"},{"id":"#notYourTurn","action":"hide"}];
+                            showHide(arr,"unitPlacement phase. Initial Load. Inside autorefresh function.");
+                            var units = calcUnits(map.email);
+                            var unitsDisp = document.getElementById('units').innerHTML;
+                            unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
+                            document.getElementById('units').innerHTML = unitsDisp;
+                        }
                     }
                 });
             }, 3000);
@@ -344,13 +354,10 @@ map.getData(function(map_data){
 
     var endTurnButton = document.getElementById('endTurnButton');
     endTurnButton.addEventListener('click', function(e) {
-        var notYourTurn = document.getElementById('notYourTurn').innerHTML;
-        notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
-        console.log("Not Your Turn:",notYourTurn);
         if(map.dataProp.winCard == true){
             drawCard(map.dataProp.owners[map.dataProp.turn]);
         }
-        $('#notYourTurn').html(notYourTurn);
+        $('#notYourTurnText').html(notYourTurnText);
         if (map.dataProp.turn == map.dataProp.owners.length - 1) {
             map.dataProp.turn = 0;
         } else {
@@ -375,7 +382,7 @@ map.getData(function(map_data){
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         showPlayers();
         updateLogDisp(hexagonGrid);
-        var arr = [{"id":"#panel","action":"hide"}];
+        var arr = [{"id":"#panel","action":"hide"},{"id":"#notYourTurn","action":"show"}];
         showHide(arr,"End turn button pressed.");
     }, false);
     

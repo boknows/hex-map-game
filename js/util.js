@@ -499,16 +499,6 @@ function updateLogDisp(hexagonGrid) {
     };
     $("#log").css(style);
 
-    if(map.dataProp.owners[map.dataProp.turn]!=map.email){
-        var styleRef = {
-            left: x0,
-            top: y0+225,
-            position: "absolute",
-            display: "inline"
-        };
-       $("#onoffswitch").css(styleRef);
-    }
-
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {
 		var date = new Date(map.log[i].time);
