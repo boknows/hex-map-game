@@ -9,16 +9,16 @@ function singleAttack(hexagonGrid) {
             drawCard(map.data[map.attack.attX][map.attack.attY].owner);
             map.data[map.attack.defX][map.attack.defY].units++;
             map.data[map.attack.attX][map.attack.attY].units--;
-            $('#attack').hide();
+            var arr = [{"id":"#attack","action":"hide"}];
             if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-                $('#attackMove').show();
+                arr.push({"id":"#attackMove","action":"show"});
                 var options = "";
                 for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
             }
-
+            showHide(arr,"SingleAttack function.");
             map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
             map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
             //$('#endTurn').hide();
@@ -46,7 +46,8 @@ function singleAttack(hexagonGrid) {
         }
     } else {
         console.log("Can't attack. Not enough units.");
-        $('#attack').hide();
+        var arr = [{"id":"#attack","action":"hide"}];
+        showHide(arr,"SingleAttack function.");
     }
 };
 
@@ -58,10 +59,12 @@ function contAttack(hexagonGrid) {
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
                 map.dataProp.winCard = true;
-                $('#attack').hide();
                 map.data[map.attack.defX][map.attack.defY].units++;
                 map.data[map.attack.attX][map.attack.attY].units--;
-                $('#attackMove').show();
+                var arr = [{"id":"#attack","action":"hide"},{"id":"#attackMove","action":"show"}];
+                showHide(arr,"contAttack function.");
+
+                //update dropdown for move troops screen
                 var options = "";
                 for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
@@ -121,6 +124,8 @@ function contAttack(hexagonGrid) {
             console.log("Can't attack. Not enough units.");
         }
     }
+    var arr = [{"id":"#attack","action":"hide"},{"id":"#fortifyButton","action":"show"}];
+    showHide(arr,"contAttack function.");
     var data = {
         data: JSON.stringify(map.data)
     };
@@ -548,4 +553,19 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (fill) {
     ctx.fill();
   }        
+}
+
+function showHide(arr, from){
+    /**  Function to show or hide divs for various reasons
+     * @param {array} arr - array of objects, {id: DOM id to change, action: show/hide}
+     * @param {Text} from - description of what function triggered this change
+     */
+     console.log(from, " triggered these events", arr);
+     for(var i=0;i<arr.length;i++){
+        if(arr[i].action=="show"){
+            $(arr[i].id).show();   
+        }else if(arr[i].action=="hide"){
+             $(arr[i].id).hide();   
+        }
+     }
 }

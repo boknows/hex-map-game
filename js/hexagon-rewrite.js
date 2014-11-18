@@ -66,23 +66,23 @@ map.getData(function(map_data){
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
 
     if (map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
-        $('#unitButtons').show();
-        $('#attack').hide();
-        $('#endTurn').hide();
+        var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"}];
+        showHide(arr,"unitPlacement phase. Initial Load.");
         var units = calcUnits(map.email);
         var unitsDisp = document.getElementById('units').innerHTML;
         unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
     } else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
-        $('#attack').hide();
+        var arr = [{"id":"#attack","action":"hide"}];
+        showHide(arr,"Not unitPlacement phase, but your turn. Initial Load.");
     }
     if(map.dataProp.turnPhase == "attack" && map.dataProp.owners[map.dataProp.turn] == map.email){
         if(typeof(document.getElementById('msg').innerHTML) != null){
             var msg = document.getElementById('msg').innerHTML;
             msg = "Choose a territory to attack with, then click on an enemy to attack.";
             document.getElementById('msg').innerHTML = msg;
-            $('#fortifyButton').show();
-            $('#endTurn').show();
+            var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+            showHide(arr,"Attack phase. Initial Load.");
         }
         
     }
@@ -90,18 +90,19 @@ map.getData(function(map_data){
     	var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-        $('#fortifyButton').css('display','none');
-        $('#endTurnButton').show();
-        $('#endTurn').show();
+        var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        showHide(arr,"Fortify phase. Initial Load.");
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
     	var notYourTurn = document.getElementById('notYourTurn').innerHTML;
         notYourTurn = "<h2><u>Actions</u></h2><p>It is no longer your turn.</p>";
         document.getElementById('notYourTurn').innerHTML = notYourTurn;
-        $('#panel').hide();
+        var arr = [{"id":"#panel","action":"hide"}];
+        showHide(arr,"Not your turn. Initial Load.");
     }
     if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
-        $('#endTurnButton').hide();
+        var arr = [{"id":"#endTurnButton","action":"hide"}];
+        showHide(arr,"Not Fortify phase, but your turn. Initial Load.");
     }
 
     //initialize onoff checkbox
@@ -180,11 +181,8 @@ map.getData(function(map_data){
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        $('#unitButtons').hide();
-        $('#panel').show();
-        $('#attack').hide();
-        $('#endTurn').show();
-        $('#fortifyButton').show();
+        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+        showHide(arr,"compPlc button pressed.");
         updateLogDisp(hexagonGrid);
         showPlayers();
         var msg = document.getElementById('msg').innerHTML;
@@ -202,8 +200,8 @@ map.getData(function(map_data){
         var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
         var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
         if (map.data[map.attack.attX][map.attack.attY].units == 1) {
-            $('#attack').hide();
-            $('#endTurn').show();
+            var arr = [{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+            showHide(arr,"SingleAttack button pressed.");
         } else {
             hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
             hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
@@ -220,10 +218,11 @@ map.getData(function(map_data){
     var contAttackButton = document.getElementById('continuousAttack');
     contAttackButton.addEventListener('click', function(e) {
         contAttack(hexagonGrid);
-        $('#attack').hide();
+        var arr = [{"id":"#attack","action":"hide"}];
         if($('#attackMove').css('display')=="none"){
-            $('#endTurn').show();
+            arr.push({"id":"#endTurn","action":"show"});
         }
+        showHide(arr,"ContAttack button pressed.");
     }, false);
 
     var attackMove = document.getElementById('attackMoveBtn');
@@ -242,10 +241,8 @@ map.getData(function(map_data){
         updateMap(data, "updateAll");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        $('#panel').show();
-        $('#attackMove').hide();
-        $('#endTurn').show();
-        $('#fortifyButton').show();
+        var arr = [{"id":"#panel","action":"show"},{"id":"#attackMove","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+        showHide(arr,"Move button pressed.");
         updateLogDisp(hexagonGrid);
     }, false);
     
@@ -264,16 +261,13 @@ map.getData(function(map_data){
         updateMap(data, "updateAll");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        $('#panel').show();
-        $('#attackMove').hide();
-        $('#endTurn').show();
-        $('#fortifyButton').show();
+        var arr = [{"id":"#panel","action":"show"},{"id":"#attackMove","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+        showHide(arr,"MoveAll button pressed.");
         updateLogDisp(hexagonGrid);
     }, false);
 	
     var fortifyButton = document.getElementById('fortifyButton');
     fortifyButton.addEventListener('click', function(e) {
-        $('#fortifyButton').css('display','none');
         map.dataProp.turnPhase = "fortify";
         updateLog("--------------------");
         updateLog("It is now the fortify phase.");
@@ -292,7 +286,8 @@ map.getData(function(map_data){
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-        $('#endTurnButton').show();
+        var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        showHide(arr,"Fortify Phase button pressed.");
     }, false);
 
     var transferMaxButton = document.getElementById('transferMaxButton');
@@ -315,8 +310,8 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        $('#fortify').hide();
-
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        showHide(arr,"Fortify Phase, transferMax button pressed.");
     }, false);
     
     var transferButton = document.getElementById('transferButton');
@@ -337,13 +332,14 @@ map.getData(function(map_data){
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
         map.selected = null;
         map.clickState = null;
-        $('#fortify').hide();
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        showHide(arr,"Fortify Phase, transfer button pressed.");
     }, false);
 
     var endTurnButton = document.getElementById('endTurnButton');
@@ -376,11 +372,11 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        $('#panel').hide();
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         showPlayers();
         updateLogDisp(hexagonGrid);
-
+        var arr = [{"id":"#panel","action":"hide"}];
+        showHide(arr,"End turn button pressed.");
     }, false);
     
     /*var updateMapBtn = document.getElementById('updateMap');

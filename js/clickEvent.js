@@ -134,7 +134,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
             }
             if(map.dataProp.turnPhase == "fortify"){
                 console.log("Click State Before:" , map.clickState);
-
                 if(map.clickState == null && map.data[tile.row][tile.column].owner == map.email && map.data[map.clicks[clickTotal].row][map.clicks[clickTotal].col].units > 1 && map.dataProp.fortifiesUsed < map.dataProp.fortifies){
                     map.clickState = "select";
                     map.selected = {col: tile.column, row: tile.row};
@@ -158,7 +157,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                                         tran = tran + tran2;
                                     }
                                     document.getElementById('transfer').innerHTML = tran;
-                                    $('#fortify').show();
+                                    var arr = [{"id":"#fortify","action":"show"},{"id":"#endTurnButton","action":"hide"}];
+                                    showHide(arr,"Fortify phase. Showing clicked neighbor.");
                                 }
                             }
                         }
@@ -195,9 +195,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 }
                 map.clickState = null;
                 map.selected = {};
-                $('#attack').hide();
-                $('#endTurn').show();
-                $('#fortifyButton').show();
+                var arr = [{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+                showHide(arr,"Attack phase. clickState=attackClear.");
             }
             if(map.clickState == "select" && map.data[tile.row][tile.column].type != "water"){
                 var cube = toCubeCoord(tile.column, tile.row);
@@ -215,7 +214,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[offset.r][offset.q].owner); //highlight neighbor hexes
                     }						
                 }
-                $('#fortifyButton').hide();
+                var arr = [{"id":"#fortifyButton","action":"hide"}];
+                showHide(arr,"Attack phase. clickState=select.");
             }
             if(map.clickState == "selectClear"){
                 console.log(map.selected);
@@ -233,9 +233,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 }
                 map.clickState = null;
                 map.selected = {};
-                $('#attack').hide();
-                $('#endTurn').show();
-                $('#fortifyButton').show();
+                var arr = [{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+                showHide(arr,"Attack phase. clickState=selectClear.");
             }
             if(map.clickState == "nSelect"){
                 for(var i=0;i<map.neighbors.length;i++){ //clear neighbor hexes
@@ -253,16 +252,13 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
                 var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
-                $('#endTurn').hide();
-                $('#attack').css('display','inline');
-                console.log("Attack Show!");
-                $('#singleAttack').show();
                 if(map.data[map.selected.row][map.selected.col].units<5){
                     $('#continuousAttack').hide();
+                    var arr = [{"id":"#attack","action":"show"},{"id":"#endTurn","action":"hide"},{"id":"#singleAttack","action":"show"},{"id":"#continuousAttack","action":"hide"}];
                 }else{
-                    $('#continuousAttack').show();
+                    var arr = [{"id":"#attack","action":"show"},{"id":"#endTurn","action":"hide"},{"id":"#singleAttack","action":"show"},{"id":"#continuousAttack","action":"show"}];
                 }
-                
+                showHide(arr,"Attack phase. clickState=nSelect.");
             }
             if(map.clickState == "nSelectClear"){
                 var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -275,9 +271,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
                 map.clickState = null;
                 map.selected = {};
-                $('#attack').hide();
-                $('#endTurn').show();
-                $('#fortifyButton').show();
+                var arr = [{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
+                showHide(arr,"Attack phase. clickState=nSelectClear.");
             }
         }
         if(map.dataProp.turnPhase == "fortify"){
@@ -296,7 +291,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 }
                 map.clickState = null;
                 map.selected = {};
-                $('#fortify').hide();
+                var arr = [{"id":"#fortify","action":"hide"}];
+                showHide(arr,"Fortify phase. clickState=fortifyClear.");
             }
             if(map.clickState == "selectClear"){
                 console.log(map.neighbors, clickTotal);
@@ -314,7 +310,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 }
                 map.clickState = null;
                 map.selected = {};
-                $('#fortify').hide();
+                var arr = [{"id":"#fortify","action":"hide"}];
+                showHide(arr,"Fortify phase. clickState=selectClear.");
             }
             if(map.clickState == "select"){
                 var cube = toCubeCoord(tile.column, tile.row);
@@ -348,6 +345,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawy = map.selected.nCol % 2 == 0 ? (map.selected.nRow * this.height) + this.canvasOriginY + 6 : (map.selected.nRow *this.height) + this.canvasOriginY + 6 + (this.height / 2);
                 var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
+                var arr = [{"id":"#fortify","action":"show"}];
+                showHide(arr,"Fortify phase. clickState=nSelect.");
             }
             if(map.clickState == "nSelectClear"){
                 var drawy = map.selected.col % 2 == 0 ? (map.selected.row * this.height) + this.canvasOriginY + 6 : (map.selected.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
@@ -360,7 +359,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
                 map.clickState = null;
                 map.selected = {};
-                $('#fortify').hide();
+                var arr = [{"id":"#fortify","action":"hide"}];
+                showHide(arr,"Fortify phase. clickState=nSelectClear.");
             }
         }
     }

@@ -14,17 +14,4 @@ function HexagonGrid(canvasId, radius) {
 
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 
-    //setup unit placement select box
-    /*
-	if(mapProperties.turnPhase == "unitPlacement"){
-		$("#unitPlacement").show();
-		$("#endTurn").hide();
-		var units = calcUnits(map, username);
-		var unitMenu = document.getElementById('place').innerHTML;
-		for(i=1;i<units+1;i++){
-			unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   
-		}
-		document.getElementById('place').innerHTML = unitMenu;	
-	}
-	*/
 };
