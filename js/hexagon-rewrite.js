@@ -450,6 +450,16 @@ map.getData(function(map_data){
         var arr = [{"id":"#cardTrade","action":"hide"},{"id":"#cardTradeClose","action":"hide"},{"id":"#cardDisp","action":"hide"},{"id":"#log","action":"show"}];
         showHide(arr,"Card Trade Close button pressed.");
     }, false);  
+
+    var cardTrade = document.getElementById('cardTrade');
+    cardTrade.addEventListener('click', function(e) {
+        var checkedValues = $('.cards:checked').map(function() {
+            return this.value;
+        }).get();
+        tradeInCard(checkedValues);
+    }, false);
+
+    
     
     /*
     var updateMapBtn = document.getElementById('updateMap');
