@@ -383,15 +383,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
                 var cardHTML = "";
                 for(var j=0;j<map.dataProp.cardsHeld[i].length;j++){
-                    /*<div class="col-lg-6">
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            <input type="checkbox">
-                          </span>
-                          <input type="text" class="form-control">
-                        </div><!-- /input-group -->
-                      </div>*/
-                    cardHTML = cardHTML + "<p>" + map.dataProp.cardsHeld[i][j].id + "</p>";
+                    cardHTML = cardHTML + "<tr><td><input type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "''></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
                 }
                 $('#cardDisp').html(cardHTML);
             }

@@ -99,7 +99,7 @@ map.getData(function(map_data){
         showHide(arr,"Fortify phase. Initial Load.");
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
-        var arr = [{"id":"#panel","action":"show"},{"id":"#notYourTurn","action":"show"},{"id":"#onoffswitch","action":"show"}];
+        var arr = [{"id":"#panel","action":"show"},{"id":"#notYourTurn","action":"show"},{"id":"#onoffswitch","action":"show"},{"id":"#endTurnButton","action":"hide"}];
         showHide(arr,"Not your turn. Initial Load.");
     }
     if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
@@ -316,7 +316,7 @@ map.getData(function(map_data){
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"}];
+        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
         showHide(arr,"compPlc button pressed.");
         updateLogDisp(hexagonGrid);
         showPlayers();
@@ -441,7 +441,7 @@ map.getData(function(map_data){
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
         showPlayers();
         updateLogDisp(hexagonGrid);
-        var arr = [{"id":"#notYourTurn","action":"show"},{"id":"#notYourTurnText","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#msg","action":"hide"},{"id":"#fortify","action":"hide"},{"id":"#endTurn","action":"hide"}];
+        var arr = [{"id":"#notYourTurn","action":"show"},{"id":"#notYourTurnText","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#msg","action":"hide"},{"id":"#fortify","action":"hide"},{"id":"#endTurn","action":"hide"},{"id":"#backToAttack","action":"hide"}];
         showHide(arr,"End turn button pressed.");
     }, false);
     
