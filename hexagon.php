@@ -111,18 +111,19 @@
     ?>
 		<canvas id="UICanvas" width="1200" height="900"></canvas>
 		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		<div id="notYourTurn" style="display:none;">
-            <p id="notYourTurnText"><h2><u>Actions</u></h2><p>It is no longer your turn.</p></p>
-            <div class="onoffswitch" id="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                <label class="onoffswitch-label" for="myonoffswitch">
-                    <span class="onoffswitch-inner"></span>
-                    <span class="onoffswitch-switch"></span>
-                </label>
-            </div>
-        </div>
+		
 		<div id="panel">
-    		<h2><u>Actions</u></h2>
+            <h2><u>Actions</u></h2>
+            <div id="notYourTurn" style="display:none;">
+                <p id="notYourTurnText">It is no longer your turn.</p>
+                <div class="onoffswitch" id="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+            </div>
             <p id='msg' style='width:200px'></p>
     		<div class="controls" id="endTurn" style="display:none">
                 <p id="fortUnits"></p>

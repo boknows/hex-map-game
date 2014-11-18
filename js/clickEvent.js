@@ -214,7 +214,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         this.drawHex(drawx2, drawy2 - 6, "", "", true, "#FF0000", map.data[offset.r][offset.q].owner); //highlight neighbor hexes
                     }						
                 }
-                var arr = [{"id":"#fortifyButton","action":"hide"}];
+                var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"hide"}];
                 showHide(arr,"Attack phase. clickState=select.");
             }
             if(map.clickState == "selectClear"){
