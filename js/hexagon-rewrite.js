@@ -445,6 +445,11 @@ map.getData(function(map_data){
         showHide(arr,"End turn button pressed.");
     }, false);
     
+    var cardTradeClose = document.getElementById('cardTradeClose');
+    cardTradeClose.addEventListener('click', function(e) {
+        var arr = [{"id":"#cardTrade","action":"hide"},{"id":"#cardTradeClose","action":"hide"},{"id":"#cardDisp","action":"hide"},{"id":"#log","action":"show"}];
+        showHide(arr,"Card Trade Close button pressed.");
+    }, false);  
     /*var updateMapBtn = document.getElementById('updateMap');
     updateMapBtn.addEventListener('click', function(e) { //For the map editor
         var cube = toCubeCoord(map.selected.selCol, map.selected.selRow);

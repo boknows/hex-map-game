@@ -386,7 +386,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     cardHTML = cardHTML + "<tr><td><input type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "''></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
                 }
                 $('#cardDisp').html(cardHTML);
-                var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"}];
+                var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"},{"id":"#cardTradeClose","action":"show"}];
                 showHide(arr,"Clicked a card.");
             }
         }

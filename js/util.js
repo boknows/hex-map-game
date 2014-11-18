@@ -518,6 +518,13 @@ function updateLogDisp(hexagonGrid) {
     $("#log").css(style);
     $("#cardTrade").css(style);
     var style = {
+        left: x0+130,
+        top: y0,
+        position: "absolute",
+        'font-size': '75%'
+    };
+    $("#cardTradeClose").css(style);
+    var style = {
         left: x0,
         top: y0+40,
         position: "absolute",
