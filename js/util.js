@@ -1,6 +1,6 @@
 function singleAttack(hexagonGrid) {
     if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
+        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner, "", "", hexagonGrid);
         map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
         map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 
@@ -54,7 +54,7 @@ function singleAttack(hexagonGrid) {
 function contAttack(hexagonGrid) {
     while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
         if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
+            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units,  map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner,"", "", hexagonGrid);
             map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
@@ -305,7 +305,7 @@ function rollDice() {
     return rand;
 }
 
-function battle(att, def, attTer, defTer, hexagonGrid) {
+function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
     /**  Function to simulate battle between two armies. 
      * @param {Number} att - number of attacking armies
      * @param {Number} def - number of defending armies
@@ -371,8 +371,8 @@ function battle(att, def, attTer, defTer, hexagonGrid) {
     for (i = 0; i < defArr.length; i++) {
         defString = defString + defArr[i] + ",";
     }
-    var attString = "Attacker rolls: [" + attString.slice(0, attString.length - 1) + "]";
-    var defString = "Defender rolls: [" + defString.slice(0, defString.length - 1) + "]";
+    var attString = "Attacker (" + attOwner + ") rolls: [" + attString.slice(0, attString.length - 1) + "]";
+    var defString = "Defender (" + defOwner + ") rolls: [" + defString.slice(0, defString.length - 1) + "]";
     var resultString = "Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.";
     console.log(attString, defString, resultString);
     updateLog("--------------------");
