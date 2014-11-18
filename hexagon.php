@@ -223,7 +223,8 @@
             <script src='js/drawHex.js'></script>
             <script src='js/getSelectedTile.js'></script>
             <script src='js/clickEvent.js'></script>
-            <script src='js/util.js'></script>";
+            <script src='js/util.js'></script>
+            <script src='js/tradeInCards.js'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){
             echo "<div class='inviteForm' style='display:none;' id='inviteForm'>";

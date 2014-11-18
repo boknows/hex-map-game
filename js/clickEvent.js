@@ -77,12 +77,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
             var cube = toCubeCoord(tile.column, tile.row);
             console.log(map.data[tile.row][tile.column].owner, map.username);
             if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.username && map.dataProp.owners[map.dataProp.turn]==map.email){
+                var units = map.unitsToBePlaced;
                 var unitMenu = document.getElementById('place').innerHTML;
                 for(var i=1;i<units+1;i++){
                     unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   
                 }
-                document.getElementById('place').innerHTML = unitMenu;	
-                var units = calcUnits(map.username);
+                document.getElementById('place').innerHTML = unitMenu;  
                 if(map.unitCnt < units){
                     var tmp = {row: tile.row, col: tile.column};
                     map.unitPlacement.push(tmp);

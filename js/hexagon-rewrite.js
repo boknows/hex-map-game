@@ -20,6 +20,7 @@ var Map = function() {
     this.username = $('#username').val();
     this.email = $('#email').val();
     this.unitCnt = 0;
+    this.unitsToBePlaced = 0;
     this.ctx = null;
     this.canvas = null;
     this.getData = function(callback) {
@@ -69,8 +70,9 @@ map.getData(function(map_data){
         var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"}];
         showHide(arr,"unitPlacement phase. Initial Load.");
         var units = calcUnits(map.username);
+        map.unitsToBePlaced = units;
         var unitsDisp = document.getElementById('units').innerHTML;
-        unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
+        unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + map.unitsToBePlaced + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
     } else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         var arr = [{"id":"#attack","action":"hide"}];
