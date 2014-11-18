@@ -377,7 +377,14 @@ HexagonGrid.prototype.clickEvent = function (e) {
             var boundingBox = (x0-this.width/6) + " " + ((x0-this.width/6)+width2) + " " + (y0+(this.height/3)+height2) + " " + (y0+(this.height/3));
             console.log("box:", boundingBox);
             if(localX>(x0-this.width/6) && localX<((x0-this.width/6)+width2) && localY<(y0+(this.height/3)+height2) && localY>(y0+(this.height/3))){
-                alert("card clicked!");
+                var arr = [{"id":"#log","action":"hide"},{"id":"#cardDisp","action":"show"},];
+                showHide(arr, "Card clicking logic.")
+
+                var cardHTML = "";
+                for(var j=0;j<map.dataProp.cardsHeld[i].length;j++){
+                    cardHTML = cardHTML + "<p>" + map.dataProp.cardsHeld[i][j].id + "</p>";
+                }
+                $('#cardDisp').html(cardHTML);
             }
         }
         y0 = y0 + this.height / 1.5; //add to Y coordinate for next player

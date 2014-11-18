@@ -498,7 +498,7 @@ function updateLogDisp(hexagonGrid) {
         'font-size': '75%'
     };
     $("#log").css(style);
-
+    $("#cardDisp").css(style);
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {
 		var date = new Date(map.log[i].time);

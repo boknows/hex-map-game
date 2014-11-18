@@ -209,6 +209,7 @@
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
+        <div id="cardDisp" style="display:none"></div>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php
