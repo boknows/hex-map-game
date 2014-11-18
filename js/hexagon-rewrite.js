@@ -450,42 +450,45 @@ map.getData(function(map_data){
         var arr = [{"id":"#cardTrade","action":"hide"},{"id":"#cardTradeClose","action":"hide"},{"id":"#cardDisp","action":"hide"},{"id":"#log","action":"show"}];
         showHide(arr,"Card Trade Close button pressed.");
     }, false);  
-    /*var updateMapBtn = document.getElementById('updateMap');
+    
+    /*
+    var updateMapBtn = document.getElementById('updateMap');
     updateMapBtn.addEventListener('click', function(e) { //For the map editor
-        var cube = toCubeCoord(map.selected.selCol, map.selected.selRow);
-        map.data[map.selected.selRow][map.selected.selCol].type = $('#type').val();
-        map.data[map.selected.selRow][map.selected.selCol].owner = $('#owner').val();
-        map.data[map.selected.selRow][map.selected.selCol].units = $('#units').val();
-        map.data[map.selected.selRow][map.selected.selCol].color = $('#color').val();
-        map.data[map.selected.selRow][map.selected.selCol].group = $('#group').val();
-        map.data[map.selected.selRow][map.selected.selCol].connect = JSON.parse($('#connect').val());
+        console.log(map.unitPlacement[0].row);
+        var cube = toCubeCoord(map.unitPlacement[0].col, map.unitPlacement[0].row);
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].type = $('#type').val();
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].owner = $('#owner').val();
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].units = $('#unitsEdit').val();
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].color = $('#color').val();
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].group = $('#group').val();
+        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].connect = JSON.parse($('#connect').val());
         if ($('#n').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].n = $('#n').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].n = $('#n').val();
             var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
             map.data[offset.r][offset.q].s = $('#n').val();
         }
         if ($('#ne').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].ne = $('#ne').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].ne = $('#ne').val();
             var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
             map.data[offset.r][offset.q].sw = $('#ne').val();
         }
         if ($('#se').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].se = $('#se').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].se = $('#se').val();
             var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
             map.data[offset.r][offset.q].nw = $('#se').val();
         }
         if ($('#s').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].s = $('#s').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].s = $('#s').val();
             var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
             map.data[offset.r][offset.q].n = $('#s').val();
         }
         if ($('#sw').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].sw = $('#sw').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].sw = $('#sw').val();
             var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
             map.data[offset.r][offset.q].ne = $('#sw').val();
         }
         if ($('#nw').val() != "") {
-            map.data[map.selected.selRow][map.selected.selCol].nw = $('#nw').val();
+            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].nw = $('#nw').val();
             var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
             map.data[offset.r][offset.q].se = $('#nw').val();
         }

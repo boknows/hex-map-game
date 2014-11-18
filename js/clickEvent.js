@@ -57,7 +57,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
         /*
         $('#type').val(map.data[tile.row][tile.column].type);
         $('#owner').val(map.data[tile.row][tile.column].owner);
-        $('#units').val(map.data[tile.row][tile.column].units);
+        $('#unitsEdit').val(map.data[tile.row][tile.column].units);
         $('#color').val(map.data[tile.row][tile.column].color);
         $('#n').val(map.data[tile.row][tile.column].n);
         $('#ne').val(map.data[tile.row][tile.column].ne);

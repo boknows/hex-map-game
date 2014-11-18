@@ -54,7 +54,7 @@
 	
     .Game > #editMap {
 		position: absolute;
-		bottom: 650px;
+		bottom: 450px;
         left: 800px;
 		height: 40px;
 	}
@@ -175,7 +175,7 @@
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>Units:</b></span><input type='text' name='units' class='form-control' id='units' value=''>
+            <span class='input-group-addon'><b>Units:</b></span><input type='text' name='units' class='form-control' id='unitsEdit' value=''>
             </div>
             <div class="input-group">
             <span class='input-group-addon'><b>Owner:</b></span><input type='text' name='owner' class='form-control' id='owner' value=''>
