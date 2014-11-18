@@ -479,7 +479,7 @@ map.getData(function(map_data){
             //Show card icon if player has cards
             if(map.dataProp.cardsHeld[i].length>0){
                 console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
-                roundRect(ctxUI, (x0-hexagonGrid.width/6), y0+(hexagonGrid.height/3), 15, 20, 5, "" , map.dataProp.colors[i]);
+                roundRect(ctxUI, (x0-hexagonGrid.width/6), y0+(hexagonGrid.height/3), 15, 20, 1, "" , map.dataProp.colors[i]);
             }
 
             y0 = y0 + hexagonGrid.height / 1.5; //add to Y coordinate for next player

@@ -364,6 +364,25 @@ HexagonGrid.prototype.clickEvent = function (e) {
             }
         }
     }
+    var mouseX = e.pageX;
+    var mouseY = e.pageY;
+    var localX = mouseX - this.canvasOriginX;
+    var localY = mouseY;
+    var x0 = this.width * (map.dataProp.cols);
+    var y0 = 25;
+    console.log(localX,localY,this.canvasOriginX,this.canvasOriginY)
+    for (var i = 0; i < map.dataProp.users.length; i++) {
+        if(map.dataProp.cardsHeld[i].length>0){
+            var width2 = 15, height2 = 20;
+            var boundingBox = (x0-this.width/6) + " " + ((x0-this.width/6)+width2) + " " + (y0+(this.height/3)+height2) + " " + (y0+(this.height/3));
+            console.log("box:", boundingBox);
+            if(localX>(x0-this.width/6) && localX<((x0-this.width/6)+width2) && localY<(y0+(this.height/3)+height2) && localY>(y0+(this.height/3))){
+                alert("card clicked!");
+            }
+        }
+        y0 = y0 + this.height / 1.5; //add to Y coordinate for next player
+    }
+
 };
 
 
