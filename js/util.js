@@ -1,6 +1,6 @@
 function singleAttack(hexagonGrid) {
     if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-        var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
+        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
         map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
         map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 
@@ -53,7 +53,7 @@ function singleAttack(hexagonGrid) {
 function contAttack(hexagonGrid) {
     while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
         if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-            var losses = battle(map.data[map.attack.attX][map.attack.attY].units, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
+            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, "", "", hexagonGrid);
             map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
@@ -319,8 +319,10 @@ function battle(att, def, attTer, defTer, hexagonGrid) {
     if (att > 3) { //Attacker can roll max 3 dice
         att = 3;
     } else if (att == 3) {
+        att = 3;
+    } else if (att == 2) {
         att = 2;
-    } else if (att < 3) {
+    }else if (att == 1){
         att = 1;
     }
     for (i = 0; i < att; i++) {
@@ -335,10 +337,23 @@ function battle(att, def, attTer, defTer, hexagonGrid) {
     defArr.sort(function(a, b) {
         return b - a
     });
+    var least = 0;
+    if(defArr.length < attArr.length){
+        if(defArr.length == 1){
+            least = 1;
+        }else if(defArr.length == 2){
+            least = 2;
+        }
+    }else if(attArr.length < defArr.length){
+        least = 1;
+    }else if(attArr.length == defArr.length){
+        least = defArr.length;
+    }
+
     for (i = 0; i < defArr.length; i++) {
-        if (defArr[i] >= attArr[i]) {
+        if (defArr[i] >= attArr[i] && (attLoses+defLoses) < least) {
             attLoses++;
-        } else {
+        } else if((attLoses+defLoses) < least){
             defLoses++;
         }
     }
@@ -354,6 +369,7 @@ function battle(att, def, attTer, defTer, hexagonGrid) {
     var attString = "Attacker rolls: [" + attString.slice(0, attString.length - 1) + "]";
     var defString = "Defender rolls: [" + defString.slice(0, defString.length - 1) + "]";
     var resultString = "Attacker loses " + attLoses + " units. Defender loses " + defLoses + " units.";
+    console.log(attString, defString, resultString);
     updateLog("--------------------");
     updateLog(attString);
     updateLog(defString);

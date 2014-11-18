@@ -219,9 +219,8 @@
             <script src='js/util.js'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){
-			if($accepted == true){
-				echo "<div class='inviteForm' style='display:none;'>";
-			}else if ($accepted == false){
+            echo "<div class='inviteForm' style='display:none;' id='inviteForm'>";
+			if ($accepted == false){
 				echo "<div class='inviteForm'>";
 				echo "<script src='js/util.js'></script>
 			<script src='js/acceptInvite.js'></script>";

@@ -38,6 +38,7 @@ $.ajax({
                     }
                 }
                 $('#inviteText').html(inviteText);
+                $('#inviteForm').show();
             },
         });
 

@@ -76,11 +76,13 @@ map.getData(function(map_data){
     } else if (map.dataProp.turnPhase != "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         $('#attack').hide();
     }
-    if(map.dataProp.turnPhase == "attack"){
+    if(map.dataProp.turnPhase == "attack" && map.dataProp.owners[map.dataProp.turn] == map.email){
         if(typeof(document.getElementById('msg').innerHTML) != null){
             var msg = document.getElementById('msg').innerHTML;
             msg = "Choose a territory to attack with, then click on an enemy to attack.";
             document.getElementById('msg').innerHTML = msg;
+            $('#fortifyButton').show();
+            $('#endTurn').show();
         }
         
     }
@@ -185,6 +187,9 @@ map.getData(function(map_data){
         $('#fortifyButton').show();
         updateLogDisp(hexagonGrid);
         showPlayers();
+        var msg = document.getElementById('msg').innerHTML;
+        msg = "Choose a territory to attack with, then click on an enemy to attack.";
+        document.getElementById('msg').innerHTML = msg;
     }, false);
 
     var singleAttackButton = document.getElementById('singleAttack');

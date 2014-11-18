@@ -194,7 +194,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }						
                 }
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#attack').hide();
                 $('#endTurn').show();
                 $('#fortifyButton').show();
@@ -232,7 +232,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }						
                 }
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#attack').hide();
                 $('#endTurn').show();
                 $('#fortifyButton').show();
@@ -271,7 +271,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.nRow][map.selected.nCol].owner); //clear nSelected hex
 
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#attack').hide();
                 $('#endTurn').show();
                 $('#fortifyButton').show();
@@ -292,7 +292,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }						
                 }
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#fortify').hide();
             }
             if(map.clickState == "selectClear"){
@@ -310,7 +310,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     }						
                 }
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#fortify').hide();
             }
             if(map.clickState == "select"){
@@ -356,7 +356,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 this.drawHex(drawx, drawy - 6, "#99CC66", "", false, "", map.data[map.selected.nRow][map.selected.nCol].owner); //clear nSelected hex
 
                 map.clickState = null;
-                map.selected = null;
+                map.selected = {};
                 $('#fortify').hide();
             }
         }
