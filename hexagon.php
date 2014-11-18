@@ -211,6 +211,7 @@
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
         <table class="table table-striped" id="cardDisp" style="width: 400px;"></table>
+        <button type="button" id="cardTrade" class="btn btn-success" style="display:none">Trade in Bonus</button>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php

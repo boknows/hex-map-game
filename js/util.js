@@ -516,7 +516,16 @@ function updateLogDisp(hexagonGrid) {
         'font-size': '75%'
     };
     $("#log").css(style);
+    $("#cardTrade").css(style);
+    var style = {
+        left: x0,
+        top: y0+40,
+        position: "absolute",
+        'font-size': '75%'
+    };
     $("#cardDisp").css(style);
+
+    
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {
 		var date = new Date(map.log[i].time);

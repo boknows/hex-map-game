@@ -386,6 +386,8 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     cardHTML = cardHTML + "<tr><td><input type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "''></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
                 }
                 $('#cardDisp').html(cardHTML);
+                var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"}];
+                showHide(arr,"Clicked a card.");
             }
         }
         y0 = y0 + this.height / 1.5; //add to Y coordinate for next player
