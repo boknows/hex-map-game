@@ -127,6 +127,7 @@
             <p id='msg' style='width:200px'></p>
     		<div class="controls" id="endTurn" style="display:none">
                 <p id="fortUnits"></p>
+                <button type="button" id="backToAttack" class="btn btn-primary" style="display:none">Go Back to Attack Phase</button>
     			<button type="button" id="fortifyButton" class="btn btn-primary">Begin Fortification Phase</button>
     			<button type="button" id="endTurnButton" class="btn btn-danger">End Turn</button>
     		</div>
@@ -209,7 +210,7 @@
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
-        <div id="cardDisp" style="display:none"></div>
+        <div id="cardDisp" style="display:none" class="row"></div>
 	</div>
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php

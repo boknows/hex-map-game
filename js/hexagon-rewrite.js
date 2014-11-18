@@ -68,7 +68,7 @@ map.getData(function(map_data){
     if (map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"}];
         showHide(arr,"unitPlacement phase. Initial Load.");
-        var units = calcUnits(map.email);
+        var units = calcUnits(map.username);
         var unitsDisp = document.getElementById('units').innerHTML;
         unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
@@ -91,6 +91,11 @@ map.getData(function(map_data){
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        if(map.dataProp.fortifiesUsed>0){
+            arr.push({"id":"#backToAttack","action":"hide"});
+        }else{
+            arr.push({"id":"#backToAttack","action":"show"})
+        }
         showHide(arr,"Fortify phase. Initial Load.");
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
@@ -138,7 +143,7 @@ map.getData(function(map_data){
                             clearInterval(intervalSwitch);
                             var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"},{"id":"#notYourTurn","action":"hide"}];
                             showHide(arr,"unitPlacement phase. Initial Load. Inside autorefresh function.");
-                            var units = calcUnits(map.email);
+                            var units = calcUnits(map.username);
                             var unitsDisp = document.getElementById('units').innerHTML;
                             unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
                             document.getElementById('units').innerHTML = unitsDisp;
@@ -155,7 +160,7 @@ map.getData(function(map_data){
     var undoAll = document.getElementById('undoAll');
     undoAll.addEventListener('click', function(e) {
         map.unitCnt = 0;
-        var units = calcUnits(map.email);
+        var units = calcUnits(map.username);
         for (i = 0; i < map.unitPlacement.length; i++) {
             map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].units--;
         }
@@ -173,7 +178,7 @@ map.getData(function(map_data){
         map.data[map.unitPlacement[map.unitPlacement.length - 1].row][map.unitPlacement[map.unitPlacement.length - 1].col].units--;
         map.unitPlacement.pop();
         map.unitCnt--;
-        var units = calcUnits(map.email);
+        var units = calcUnits(map.username);
         var unitsDisp = document.getElementById('units').innerHTML;
         unitsDisp = "Choose a territory to add troops to.<br><b>" + map.unitCnt + "/" + units + " units placed.</b>";
         document.getElementById('units').innerHTML = unitsDisp;
@@ -301,8 +306,23 @@ map.getData(function(map_data){
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-        var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"show"}];
         showHide(arr,"Fortify Phase button pressed.");
+    }, false);
+
+    var backToAttackButton = document.getElementById('backToAttack');
+    backToAttackButton.addEventListener('click', function(e) {
+        map.dataProp.turnPhase = "attack";
+        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"}];
+        showHide(arr,"compPlc button pressed.");
+        updateLogDisp(hexagonGrid);
+        showPlayers();
+        var msg = document.getElementById('msg').innerHTML;
+        msg = "Choose a territory to attack with, then click on an enemy to attack.";
+        document.getElementById('msg').innerHTML = msg;
     }, false);
 
     var transferMaxButton = document.getElementById('transferMaxButton');
@@ -325,7 +345,7 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
         showHide(arr,"Fortify Phase, transferMax button pressed.");
     }, false);
     
@@ -353,23 +373,57 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
         showHide(arr,"Fortify Phase, transfer button pressed.");
     }, false);
 
     var endTurnButton = document.getElementById('endTurnButton');
     endTurnButton.addEventListener('click', function(e) {
+        map.attack = {
+            attX: null,
+            attY: null,
+            defX: null,
+            defY: null
+        };
+        map.selected = {
+            col: null,
+            row: null,
+            nCol: null,
+            nRow: null
+        };
+        map.unitPlacement = [];
+        map.clickState = null;
+        map.neighbors = [];
+        map.unitCnt = 0;
         if(map.dataProp.winCard == true){
             drawCard(map.dataProp.owners[map.dataProp.turn]);
         }
         $('#notYourTurnText').html(notYourTurnText);
+
         if (map.dataProp.turn == map.dataProp.owners.length - 1) {
             map.dataProp.turn = 0;
         } else {
             map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
+            for(var i =0;i<map.dataProp.eliminated;i++){
+                if(map.dataProp.users[map.dataProp.turn] == map.dataProp.eliminated[i]){
+                    if (map.dataProp.turn == map.dataProp.owners.length - 1) {
+                        map.dataProp.turn = 0;
+                    } else {
+                        map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
+                    }
+                }
+            }
         }
         map.dataProp.winCard = false;
-        var units = calcUnits(map.dataProp.owners[map.dataProp.turn]);
+        var units = calcUnits(map.dataProp.users[map.dataProp.turn]);
+        if(units == 0){
+            map.dataProp.eliminated.push(map.dataProp.users[map.dataProp.turn]);
+            if (map.dataProp.turn == map.dataProp.owners.length - 1) {
+                map.dataProp.turn = 0;
+            } else {
+                map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
+            }
+        }
         updateLog("--------------------");
         updateLog("Turn ended.");
         updateLog("--------------------");

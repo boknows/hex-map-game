@@ -14,7 +14,7 @@ if(map.dataProp.turnPhase == "fortify"){
                 for(i=0;i<map.neighborsPrev.length;i++){
                     if(cube.x == map.neighborsPrev[i].x && cube.y == map.neighborsPrev[i].y && cube.z == map.neighborsPrev[i].z){
                         var offset = toOffsetCoord(map.neighborsPrev[i].x,map.neighborsPrev[i].y,map.neighborsPrev[i].z);
-                        if(map.data[offset.r][offset.q].owner == map.email){
+                        if(map.data[offset.r][offset.q].owner == map.username){
                             map.selected.trigger2 = true;  
                             map.attack.attX = map.selected.selRowPrev;
                             map.attack.attY = map.selected.selColPrev;
@@ -35,7 +35,7 @@ if(map.dataProp.turnPhase == "fortify"){
                     $('#fortify').show();
                 }
             }else if(map.selected.trigger1 == false && map.selected.trigger2 == false && map.data[map.selected.selRowPrev][map.selected.selColPrev].units > 1){
-                if(map.data[map.selected.selRow][map.selected.selCol].owner == map.email){
+                if(map.data[map.selected.selRow][map.selected.selCol].owner == map.username){
                     map.selected.trigger1 = true;
                     var drawy3 = map.selected.selCol % 2 == 0 ? (map.selected.selRow * this.height) + this.canvasOriginY + 6 : (map.selected.selRow * this.height) + this.canvasOriginY + 6 + (this.height / 2);
                     var drawx3 = (map.selected.selCol * this.side) + this.canvasOriginX;

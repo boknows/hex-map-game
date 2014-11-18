@@ -6,6 +6,12 @@ function singleAttack(hexagonGrid) {
 
         if (map.data[map.attack.defX][map.attack.defY].units == 0) {
             map.dataProp.winCard = true;
+            var units = calcUnits(map.data[map.attack.defX][map.attack.defY].owner);
+            if(units == 0){
+                updateLog("--------------------");
+                updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
+                map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
+            }
             drawCard(map.data[map.attack.attX][map.attack.attY].owner);
             map.data[map.attack.defX][map.attack.defY].units++;
             map.data[map.attack.attX][map.attack.attY].units--;
@@ -24,9 +30,11 @@ function singleAttack(hexagonGrid) {
             //$('#endTurn').hide();
         }
         var data = {
-            data: JSON.stringify(map.data)
+            mapProperties: JSON.stringify(map.dataProp),
+            mapArray: JSON.stringify(map.data),
+            mapLog: JSON.stringify(map.log)
         };
-        updateMap(data, "updateMap");
+        updateMap(data, "updateAll");
         var chk = calcEndState(map.email);
         if (chk == true) {
             map.dataProp.turnPhase = "ended";
@@ -59,6 +67,12 @@ function contAttack(hexagonGrid) {
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
                 map.dataProp.winCard = true;
+                var units = calcUnits(map.data[map.attack.defX][map.attack.defY].owner);
+                if(units == 0){
+                    updateLog("--------------------");
+                    updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
+                    map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
+                }
                 map.data[map.attack.defX][map.attack.defY].units++;
                 map.data[map.attack.attX][map.attack.attY].units--;
                 var arr = [{"id":"#attack","action":"hide"},{"id":"#attackMove","action":"show"}];
@@ -142,6 +156,10 @@ function calcUnits(username) {
             }
         }
     }
+    if(units==0){
+        return 0;
+    }
+
     units = Math.floor(units / 3);
 
     //Calculate Bonuses - Make it more dynamic in the future

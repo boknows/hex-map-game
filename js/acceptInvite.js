@@ -194,6 +194,7 @@ function startGame(gameID, mapArray, mapProperties) {
     mapProperties.users = users;
     mapProperties.owners = order;
     mapProperties.colors = colors;
+    mapProperties.eliminated = [];
 
     //Scan Map, Count number of Land pieces
     var countries = [];
@@ -262,7 +263,7 @@ function startGame(gameID, mapArray, mapProperties) {
         for (var j = 0; j < cntSplt[i].length; j++) {
             var l = cntSplt[i][j].length;
             var w = cntSplt[i][j].width;
-            mapArray[w][l].owner = mapProperties.owners[i];
+            mapArray[w][l].owner = mapProperties.users[i];
             mapArray[w][l].units = cntSplt[i][j].units;
             mapArray[w][l].color = mapProperties.colors[i];
         }
