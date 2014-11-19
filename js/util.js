@@ -531,6 +531,17 @@ function updateLogDisp(hexagonGrid) {
         'font-size': '75%'
     };
     $("#cardDisp").css(style);
+    if(map.username=="bo_knows"){
+        var style = {
+            left: 0,
+            top: y0*2,
+            position: "absolute",
+            width: "200px",
+            'font-size': '75%'
+        };
+        $("#editMap").css(style);
+        $("#editMap").show();
+    }
 
     
     var msg = document.getElementById('log').innerHTML;

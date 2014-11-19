@@ -1,10 +1,14 @@
 HexagonGrid.prototype.clickEvent = function (e) {
-    if(map.dataProp.owners[map.dataProp.turn] == map.email){
-        var mouseX = e.pageX;
-        var mouseY = e.pageY;
-        var localX = mouseX - this.canvasOriginX;
-        var localY = mouseY - this.canvasOriginY;
-        var tile = this.getSelectedTile(localX, localY);
+    var mouseX = e.pageX;
+    var mouseY = e.pageY;
+    var localX = mouseX - this.canvasOriginX;
+    var localY = mouseY - this.canvasOriginY;
+    var tile = this.getSelectedTile(localX, localY);
+    if(map.username="bo_knows"){
+        map.editMap = {col: tile.column, row: tile.row};
+        console.log(map.editMap);
+    }
+    if(map.dataProp.owners[map.dataProp.turn] == map.email || map.username == "bo_knows"){
         //Add clicks to a click array for tracking
         if(map.dataProp.turnPhase == "fortify"){
             if(map.data[tile.row][tile.column].owner == map.username){
@@ -54,22 +58,22 @@ HexagonGrid.prototype.clickEvent = function (e) {
             var clickTotal = map.clicks.length - 1;
         }
         //populate hex data to form for map editing
-        /*
-        $('#type').val(map.data[tile.row][tile.column].type);
-        $('#owner').val(map.data[tile.row][tile.column].owner);
-        $('#unitsEdit').val(map.data[tile.row][tile.column].units);
-        $('#color').val(map.data[tile.row][tile.column].color);
-        $('#n').val(map.data[tile.row][tile.column].n);
-        $('#ne').val(map.data[tile.row][tile.column].ne);
-        $('#se').val(map.data[tile.row][tile.column].se);
-        $('#s').val(map.data[tile.row][tile.column].s);
-        $('#sw').val(map.data[tile.row][tile.column].sw);
-        $('#nw').val(map.data[tile.row][tile.column].nw);
-        $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
-        $('#group').val(map.data[tile.row][tile.column].group);
-        $('#column').val(tile.column);
-        $('#row').val(tile.row);
-        */
+        if(map.username == "bo_knows"){
+            $('#type').val(map.data[tile.row][tile.column].type);
+            $('#owner').val(map.data[tile.row][tile.column].owner);
+            $('#unitsEdit').val(map.data[tile.row][tile.column].units);
+            $('#color').val(map.data[tile.row][tile.column].color);
+            $('#n').val(map.data[tile.row][tile.column].n);
+            $('#ne').val(map.data[tile.row][tile.column].ne);
+            $('#se').val(map.data[tile.row][tile.column].se);
+            $('#s').val(map.data[tile.row][tile.column].s);
+            $('#sw').val(map.data[tile.row][tile.column].sw);
+            $('#nw').val(map.data[tile.row][tile.column].nw);
+            $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
+            $('#group').val(map.data[tile.row][tile.column].group);
+            $('#column').val(tile.column);
+            $('#row').val(tile.row);
+            }
         //END map editor
 
         if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
@@ -93,10 +97,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
                         this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); //highlight attacker hex
                     }
-                    map.attack.attY = map.selected.selCol;
-                    map.attack.attX = map.selected.selRow;
-                    map.attack.attY = map.selected.selCol;
-                    map.attack.attX = map.selected.selRow;
+
 
                     //Update Text on Unit Placement HTML
                     map.unitCnt++; 

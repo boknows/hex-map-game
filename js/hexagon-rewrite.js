@@ -14,6 +14,10 @@ var Map = function() {
         nCol: null,
         nRow: null
     };
+    this.editMap = {
+        col: null,
+        row: null,
+    };
     this.unitPlacement = [];
     this.clickState = null;
     this.neighbors = [];
@@ -190,26 +194,28 @@ map.getData(function(map_data){
     
     var compPlc = document.getElementById('compPlc');
     compPlc.addEventListener('click', function(e) {
-        compareMap(map.data);
-        map.dataProp.turnPhase = "attack";
-        updateLog("--------------------");
-        updateLog("It is now the attack phase.");
-        var data = {
-            mapProperties: JSON.stringify(map.dataProp),
-            mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
-        };
-        updateMap(data, "updateAll");
-        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"}];
-        showHide(arr,"compPlc button pressed.");
-        updateLogDisp(hexagonGrid);
-        showPlayers();
-        var msg = document.getElementById('msg').innerHTML;
-        msg = "Choose a territory to attack with, then click on an enemy to attack.";
-        document.getElementById('msg').innerHTML = msg;
+        if(map.dataProp.turnPhase == "unitPlacement"){
+            compareMap(map.data);
+            map.dataProp.turnPhase = "attack";
+            updateLog("--------------------");
+            updateLog("It is now the attack phase.");
+            var data = {
+                mapProperties: JSON.stringify(map.dataProp),
+                mapArray: JSON.stringify(map.data),
+                mapLog: JSON.stringify(map.log)
+            };
+            updateMap(data, "updateAll");
+            ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+            var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"}];
+            showHide(arr,"compPlc button pressed.");
+            updateLogDisp(hexagonGrid);
+            showPlayers();
+            var msg = document.getElementById('msg').innerHTML;
+            msg = "Choose a territory to attack with, then click on an enemy to attack.";
+            document.getElementById('msg').innerHTML = msg;
+        }
     }, false);
 
     var singleAttackButton = document.getElementById('singleAttack');
@@ -314,17 +320,19 @@ map.getData(function(map_data){
 
     var backToAttackButton = document.getElementById('backToAttack');
     backToAttackButton.addEventListener('click', function(e) {
-        map.dataProp.turnPhase = "attack";
-        ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
-        showHide(arr,"compPlc button pressed.");
-        updateLogDisp(hexagonGrid);
-        showPlayers();
-        var msg = document.getElementById('msg').innerHTML;
-        msg = "Choose a territory to attack with, then click on an enemy to attack.";
-        document.getElementById('msg').innerHTML = msg;
+        if(map.dataProp.fortifiesUsed==0){
+           map.dataProp.turnPhase = "attack";
+            ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+            var arr = [{"id":"#unitButtons","action":"hide"},{"id":"#panel","action":"show"},{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#endTurnButton","action":"hide"},{"id":"#fortifyButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
+            showHide(arr,"compPlc button pressed.");
+            updateLogDisp(hexagonGrid);
+            showPlayers();
+            var msg = document.getElementById('msg').innerHTML;
+            msg = "Choose a territory to attack with, then click on an enemy to attack.";
+            document.getElementById('msg').innerHTML = msg;
+        } 
     }, false);
 
     var transferMaxButton = document.getElementById('transferMaxButton');
@@ -461,57 +469,54 @@ map.getData(function(map_data){
         tradeInCard(checkedValues);
     }, false);
 
-    
-    
-    /*
-    var updateMapBtn = document.getElementById('updateMap');
-    updateMapBtn.addEventListener('click', function(e) { //For the map editor
-        console.log(map.unitPlacement[0].row);
-        var cube = toCubeCoord(map.unitPlacement[0].col, map.unitPlacement[0].row);
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].type = $('#type').val();
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].owner = $('#owner').val();
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].units = $('#unitsEdit').val();
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].color = $('#color').val();
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].group = $('#group').val();
-        map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].connect = JSON.parse($('#connect').val());
-        if ($('#n').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].n = $('#n').val();
-            var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-            map.data[offset.r][offset.q].s = $('#n').val();
-        }
-        if ($('#ne').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].ne = $('#ne').val();
-            var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-            map.data[offset.r][offset.q].sw = $('#ne').val();
-        }
-        if ($('#se').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].se = $('#se').val();
-            var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-            map.data[offset.r][offset.q].nw = $('#se').val();
-        }
-        if ($('#s').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].s = $('#s').val();
-            var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-            map.data[offset.r][offset.q].n = $('#s').val();
-        }
-        if ($('#sw').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].sw = $('#sw').val();
-            var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-            map.data[offset.r][offset.q].ne = $('#sw').val();
-        }
-        if ($('#nw').val() != "") {
-            map.data[map.unitPlacement[0].row][map.unitPlacement[0].col].nw = $('#nw').val();
-            var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-            map.data[offset.r][offset.q].se = $('#nw').val();
-        }
-        var data = {
-            data: JSON.stringify(map.data)
-        };
-        updateMap(data, "updateMap");
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-    }, false);
-    */
+    if(map.username == "bo_knows"){
+        var updateMapBtn = document.getElementById('updateMap');
+        updateMapBtn.addEventListener('click', function(e) { //For the map editor
+            var cube = toCubeCoord(map.editMap.col, map.editMap.row);
+            map.data[map.editMap.row][map.editMap.col].type = $('#type').val();
+            map.data[map.editMap.row][map.editMap.col].owner = $('#owner').val();
+            map.data[map.editMap.row][map.editMap.col].units = $('#unitsEdit').val();
+            map.data[map.editMap.row][map.editMap.col].color = $('#color').val();
+            map.data[map.editMap.row][map.editMap.col].group = $('#group').val();
+            map.data[map.editMap.row][map.editMap.col].connect = JSON.parse($('#connect').val());
+            if ($('#n').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
+                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+                map.data[offset.r][offset.q].s = $('#n').val();
+            }
+            if ($('#ne').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
+                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+                map.data[offset.r][offset.q].sw = $('#ne').val();
+            }
+            if ($('#se').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
+                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+                map.data[offset.r][offset.q].nw = $('#se').val();
+            }
+            if ($('#s').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
+                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+                map.data[offset.r][offset.q].n = $('#s').val();
+            }
+            if ($('#sw').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
+                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+                map.data[offset.r][offset.q].ne = $('#sw').val();
+            }
+            if ($('#nw').val() != "") {
+                map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
+                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+                map.data[offset.r][offset.q].se = $('#nw').val();
+            }
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }, false);
+    }
 	
 	//UI - Players List
     function showPlayers() {
