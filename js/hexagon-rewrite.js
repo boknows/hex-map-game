@@ -66,7 +66,7 @@ map.getData(function(map_data){
         }
     }
 	*/
-    console.log(map.dataProp);
+    console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 30);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
 
@@ -467,6 +467,8 @@ map.getData(function(map_data){
             return this.value;
         }).get();
         tradeInCard(checkedValues);
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
     }, false);
 
     if(map.username == "bo_knows"){
@@ -515,6 +517,7 @@ map.getData(function(map_data){
             updateMap(data, "updateMap");
             map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
             hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+            
         }, false);
     }
 	

@@ -4,11 +4,11 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var localX = mouseX - this.canvasOriginX;
     var localY = mouseY - this.canvasOriginY;
     var tile = this.getSelectedTile(localX, localY);
-    if(map.username="bo_knows"){
+    if(map.username=="bo_knows"){
         map.editMap = {col: tile.column, row: tile.row};
         console.log(map.editMap);
     }
-    if(map.dataProp.owners[map.dataProp.turn] == map.email || map.username == "bo_knows"){
+    if(map.dataProp.owners[map.dataProp.turn] == map.email){
         //Add clicks to a click array for tracking
         if(map.dataProp.turnPhase == "fortify"){
             if(map.data[tile.row][tile.column].owner == map.username){
@@ -381,7 +381,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
                 var cardHTML = "";
                 for(var j=0;j<map.dataProp.cardsHeld[i].length;j++){
-                    cardHTML = cardHTML + "<tr><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "''></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
+                    cardHTML = cardHTML + "<tr id='"+ map.dataProp.cardsHeld[i][j].id +"'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "' id='"+ map.dataProp.cardsHeld[i][j].id +"check'></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
                 }
                 $('#cardDisp').html(cardHTML);
                 var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"},{"id":"#cardTradeClose","action":"show"}];

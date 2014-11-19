@@ -19,11 +19,14 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	for (var i = 1; i <= numberOfSides;i += 1) {
 		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 	}
-	if (fillColor && highlight == false && map.data[tile.row][tile.column].type =="land") {
-		this.context.fillStyle = map.data[tile.row][tile.column].color;
-	}else{
-		this.context.fillStyle = fillColor;
+	if(typeof(map.data[tile.row][tile.column]) != "undefined"){
+		if (fillColor && highlight == false && map.data[tile.row][tile.column].type =="land") {
+			this.context.fillStyle = map.data[tile.row][tile.column].color;
+		}else{
+			this.context.fillStyle = fillColor;
+		}
 	}
+	
 
 	if (highlight == true){
 		this.context.fillStyle = highlightColor;
