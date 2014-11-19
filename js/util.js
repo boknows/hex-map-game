@@ -347,13 +347,36 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
     }else if (att == 1){
         att = 1;
     }
-    for (i = 0; i < att; i++) {
+    //Add in turn modifiers
+    if(map.dataProp.turnModifiers.length>0){
+        for(var i=0;i<map.dataProp.turnModifiers.length;i++){
+            if(map.dataProp.turnModifiers[i].length>0){
+                if(map.dataProp.turn==i){ //offensive modifiers
+                    for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
+                        if(map.dataProp.turnModifiers[i][j].type=="offensiveBoost"){
+                            att++;
+                        }
+                    }
+                }else{
+                    for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
+                        if(map.dataProp.turnModifiers[i][j].type=="defensiveBoost"){
+                            def++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    //roll dice
+    for (var i = 0; i < att; i++) {
         attArr.push(rollDice());
     }
     attArr.sort(function(a, b) {
         return b - a
     });
-    for (i = 0; i < def; i++) {
+    for (var i = 0; i < def; i++) {
         defArr.push(rollDice());
     }
     defArr.sort(function(a, b) {
@@ -372,7 +395,7 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
         least = defArr.length;
     }
 
-    for (i = 0; i < defArr.length; i++) {
+    for (var i = 0; i < defArr.length; i++) {
         if (defArr[i] >= attArr[i] && (attLoses+defLoses) < least) {
             attLoses++;
         } else if((attLoses+defLoses) < least){
@@ -381,11 +404,11 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
     }
 
     var attString = "";
-    for (i = 0; i < attArr.length; i++) {
+    for (var i = 0; i < attArr.length; i++) {
         attString = attString + attArr[i] + ",";
     }
     var defString = "";
-    for (i = 0; i < defArr.length; i++) {
+    for (var i = 0; i < defArr.length; i++) {
         defString = defString + defArr[i] + ",";
     }
     var attString = "Attacker (" + attOwner + ") rolls: [" + attString.slice(0, attString.length - 1) + "]";
@@ -412,8 +435,8 @@ function cloneArr(arr) {
     for (var i = 0; i < clone.length; i++) {
         clone[i] = new Array(20);
     }
-    for (i = 0, leni = arr.length; i < leni; i++) {
-        for (j = 0, lenj = arr[i].length; j < lenj; j++) {
+    for (var i = 0, leni = arr.length; i < leni; i++) {
+        for (var j = 0, lenj = arr[i].length; j < lenj; j++) {
             clone[i][j] = {
                 color: arr[i][j].color,
                 owner: arr[i][j].owner,
@@ -455,16 +478,16 @@ function getDirection(x1, x2, y1, y2, z1, z2) {
 
 function calcEndState(username) {
     var countries = 0;
-    for (i = 0; i < map.data.length; i++) {
-        for (j = 0; j < map.data[i].length; j++) {
+    for (var i = 0; i < map.data.length; i++) {
+        for (var j = 0; j < map.data[i].length; j++) {
             if (map.data[i][j].type != "water") {
                 countries++;
             }
         }
     }
     var occupied = 0;
-    for (i = 0; i < map.data.length; i++) {
-        for (j = 0; j < map.data[i].length; j++) {
+    for (var i = 0; i < map.data.length; i++) {
+        for (var j = 0; j < map.data[i].length; j++) {
             if (map.data[i][j].owner == username) {
                 occupied++;
             }

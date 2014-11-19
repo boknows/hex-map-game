@@ -19,13 +19,13 @@ function tradeInCard (cards){
 	        document.getElementById('units').innerHTML = unitsDisp;
 		}
 		if(cards[i]>=35 && cards[i]<=38){
-			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"defensiveBoost","turns":"2"});
+			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"defensiveBoost","turns":2,"startTurn":map.dataProp.turn});
 		}
 		if(cards[i]>=39 && cards[i]<=42){
-			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"offensiveBoost","turns":"1"});
+			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"offensiveBoost","turns":1});
 		}
 		if(cards[i]>=43 && cards[i]<=46){
-			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"increasedMovement","turns":"1"});
+			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"increasedMovement","turns":1});
 		}
 		if(cards[i]>=47 && cards[i]<=48){
 			//decreased movement
