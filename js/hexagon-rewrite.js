@@ -406,7 +406,11 @@ map.getData(function(map_data){
         map.neighbors = [];
         map.unitCnt = 0;
         if(map.dataProp.winCard == true){
-            drawCard(map.dataProp.owners[map.dataProp.turn]);
+            map.dataProp.cardTicker[map.dataProp.turn]++;
+        }
+        if(map.dataProp.cardTicker[map.dataProp.turn]==2){
+            map.dataProp.cardTicker[map.dataProp.turn] = 0;
+            drawCard(map.username);
         }
         $('#notYourTurnText').html(notYourTurnText);
 

@@ -327,7 +327,8 @@ function startGame(gameID, mapArray, mapProperties) {
 	//assign variables to mapProperties
     mapProperties.cardsHeld = [];
     mapProperties.cardsUsed = [];
-     mapProperties.turnModifiers = [];
+    mapProperties.turnModifiers = [];
+    mapProperties.cardTicker = 0;
     for(var i=0;i<mapProperties.owners.length;i++){
         mapProperties.cardsHeld[i] = [];
         mapProperties.cardsUsed[i] = [];

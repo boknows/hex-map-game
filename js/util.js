@@ -12,7 +12,6 @@ function singleAttack(hexagonGrid) {
                 updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
                 map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
             }
-            drawCard(map.data[map.attack.attX][map.attack.attY].owner);
             map.data[map.attack.defX][map.attack.defY].units++;
             map.data[map.attack.attX][map.attack.attY].units--;
             var arr = [{"id":"#attack","action":"hide"}];
@@ -556,7 +555,7 @@ function updateLogDisp(hexagonGrid) {
 
 function drawCard (player){
     for(var i=0;i<map.dataProp.owners.length;i++){
-        if(player==map.dataProp.owners[i]){
+        if(player==map.dataProp.users[i]){
             map.dataProp.cardsHeld[i].push(map.dataProp.cardDeck[0]);
             map.dataProp.cardDeck.shift();
         }
