@@ -35,9 +35,7 @@
 		position: absolute;
         width: 250px;
 	}
-	#attack {
-		position: absolute;
-	}
+
 	#attackMove {
 		position: absolute;
         width: 250px;

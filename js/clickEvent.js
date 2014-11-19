@@ -75,7 +75,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
         if (tile.column >= 0 && tile.row >= 0 && tile.column <= map.dataProp.cols-1 && tile.row <= map.dataProp.rows-1) {
             //Click Logic
             var cube = toCubeCoord(tile.column, tile.row);
-            console.log(map.data[tile.row][tile.column].owner, map.username);
             if(map.dataProp.turnPhase == "unitPlacement" && map.data[tile.row][tile.column].owner == map.username && map.dataProp.owners[map.dataProp.turn]==map.email){
                 var units = map.unitsToBePlaced;
                 var unitMenu = document.getElementById('place').innerHTML;
@@ -254,7 +253,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
                 var drawx = (map.selected.nCol * this.side) + this.canvasOriginX;
                 this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", map.data[map.selected.nRow][map.selected.nCol].owner); //highlight defender
                 if(map.data[map.selected.row][map.selected.col].units<5){
-                    $('#continuousAttack').hide();
                     var arr = [{"id":"#attack","action":"show"},{"id":"#endTurn","action":"hide"},{"id":"#singleAttack","action":"show"},{"id":"#continuousAttack","action":"hide"}];
                 }else{
                     var arr = [{"id":"#attack","action":"show"},{"id":"#endTurn","action":"hide"},{"id":"#singleAttack","action":"show"},{"id":"#continuousAttack","action":"show"}];
@@ -371,7 +369,6 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var localY = mouseY;
     var x0 = this.width * (map.dataProp.cols);
     var y0 = 25;
-    console.log(localX,localY,this.canvasOriginX,this.canvasOriginY)
     for (var i = 0; i < map.dataProp.users.length; i++) {
         if(map.dataProp.cardsHeld[i].length>0){
             var width2 = 15, height2 = 20;
