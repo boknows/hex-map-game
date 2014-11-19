@@ -28,7 +28,7 @@ function tradeInCard (cards){
 			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"increasedMovement","turns":1});
 		}
 		if(cards[i]>=47 && cards[i]<=48){
-			//decreased movement
+			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"decreasedMovement","turns":1,"startTurn":map.dataProp.turn});
 		}
 		if(cards[i]>=49 && cards[i]<=50){
 			randomTroopBolster(12, map.username);
@@ -77,7 +77,7 @@ function randomTroopBolster(troops, username){
 	}else{
 		trpInc = 3;
 	}
-	for(var i=0;i<(troops/trpInc);i++){
+	for(var i=0;i<parseInt(troops/trpInc);i++){
 		terr[i].units = parseInt(terr[i].units)+trpInc;
 		console.log("added "+trpInc+" to the map.");
 	}

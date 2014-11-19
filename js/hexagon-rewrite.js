@@ -446,6 +446,18 @@ map.getData(function(map_data){
         updateLog(map.dataProp.users[map.dataProp.turn] + " receives " + units + " units.");
         map.dataProp.fortifiesUsed = 0;
         map.dataProp.turnPhase = "unitPlacement";
+        //increment turnModifier bonuses
+        for(var i=0; i<map.dataProp.turnModifiers.length;i++){
+            for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
+                if(map.dataProp.turnModifiers[i][j].type=="offensiveBoost" || map.dataProp.turnModifiers[i][j].type=="increasedMovement"){
+                    map.dataProp.turnModifiers[i].splice(j, 1);
+                }
+                if(map.dataProp.turnModifiers[i][j].type=="defensiveBoost" && map.dataProp.turnModifiers[i][j].startTurn == map.dataProp.turn){
+                    map.dataProp.turnModifiers[i].splice(j, 1);
+                }
+            }
+        }
+
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
