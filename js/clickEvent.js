@@ -115,16 +115,21 @@ HexagonGrid.prototype.clickEvent = function (e) {
                         console.log("Erased!");
                         map.clickState = "selectClear";
                     }else{
+                        var trigger = false;
                         for(var i=0;i<map.neighbors.length;i++){
                             if(cube.x == map.neighbors[i].x && cube.y == map.neighbors[i].y && cube.z == map.neighbors[i].z){
                                 var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
                                 if(map.data[offset.r][offset.q].owner != map.username && map.data[offset.r][offset.q].type != "water"){
+                                    trigger = true;
                                     map.selected.nCol = tile.column;
                                     map.selected.nRow = tile.row;
                                     map.attack = {attX: map.selected.row, attY: map.selected.col, defX: map.selected.nRow, defY: map.selected.nCol};
                                     map.clickState = "nSelect";
                                 }
                             }
+                        }
+                        if(trigger == false){
+                            map.clickState = "selectClear";
                         }
                     }
                 }else if(map.clickState == "nSelect"){
@@ -142,10 +147,12 @@ HexagonGrid.prototype.clickEvent = function (e) {
                     if((map.selected.col == tile.column && map.selected.row == tile.row) || (map.data[tile.row][tile.column].owner != map.username)){
                         map.clickState = "selectClear";
                     }else{
+                        var trigger = false;
                         for(var i=0;i<map.neighbors.length;i++){
                             if(cube.x == map.neighbors[i].x && cube.y == map.neighbors[i].y && cube.z == map.neighbors[i].z){
                                 var offset = toOffsetCoord(map.neighbors[i].x,map.neighbors[i].y,map.neighbors[i].z);
                                 if(map.data[offset.r][offset.q].owner == map.username){
+                                    trigger = true;
                                     map.selected.nCol = tile.column;
                                     map.selected.nRow = tile.row;
                                     map.attack = {attX: map.selected.row, attY: map.selected.col, defX: map.selected.nRow, defY: map.selected.nCol};
@@ -161,6 +168,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
                                     showHide(arr,"Fortify phase. Showing clicked neighbor.");
                                 }
                             }
+                        }
+                        if(trigger == false){
+                           map.clickState = "selectClear";
                         }
                     }
                 }else if(map.clickState == "nSelect" && map.data[tile.row][tile.column].owner == map.username){
