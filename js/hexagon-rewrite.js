@@ -406,10 +406,10 @@ map.getData(function(map_data){
         map.neighbors = [];
         map.unitCnt = 0;
         if(map.dataProp.winCard == true){
-            map.dataProp.cardTicker[map.dataProp.turn]++;
+            map.dataProp.cardTicker[map.dataProp.turn].val++;
         }
-        if(map.dataProp.cardTicker[map.dataProp.turn]==2){
-            map.dataProp.cardTicker[map.dataProp.turn] = 0;
+        if(map.dataProp.cardTicker[map.dataProp.turn].val==2){
+            map.dataProp.cardTicker[map.dataProp.turn].val = 0;
             drawCard(map.username);
         }
         $('#notYourTurnText').html(notYourTurnText);

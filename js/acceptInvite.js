@@ -271,40 +271,40 @@ function startGame(gameID, mapArray, mapProperties) {
 
     //Create Card Deck
 	var cards = [
-		{id: 1, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-		{id: 2, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-		{id: 3, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-		{id: 4, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 5, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 6, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 7, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 8, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 9, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 10, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 11, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 12, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 13, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 14, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 15, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 16, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 17, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-        {id: 18, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
-		{id: 19, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-		{id: 20, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-		{id: 21, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-		{id: 22, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 23, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 24, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 25, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 26, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 27, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 28, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 29, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-        {id: 30, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
-		{id: 31, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
-		{id: 32, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
-        {id: 33, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
-        {id: 34, name: "Add Troops", desc: "Receive extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
+		{id: 1, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+		{id: 2, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+		{id: 3, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+		{id: 4, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 5, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 6, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 7, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 8, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 9, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 10, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 11, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 12, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 13, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 14, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 15, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 16, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 17, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+        {id: 18, name: "Add Troops", desc: "Receive 4 extra troops during the unit placement phase.", modifier: "addTroops", amount: "4"},
+		{id: 19, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+		{id: 20, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+		{id: 21, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+		{id: 22, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 23, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 24, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 25, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 26, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 27, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 28, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 29, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+        {id: 30, name: "Add Troops", desc: "Receive 6 extra troops during the unit placement phase.", modifier: "addTroops", amount: "6"},
+		{id: 31, name: "Add Troops", desc: "Receive 8 extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
+		{id: 32, name: "Add Troops", desc: "Receive 8 extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
+        {id: 33, name: "Add Troops", desc: "Receive 8 extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
+        {id: 34, name: "Add Troops", desc: "Receive 8 extra troops during the unit placement phase.", modifier: "addTroops", amount: "8"},
 		{id: 35, name: "Defensive Boost", desc: "All of your troops an extra defensive roll for 2 full turns.", modifier: "defense", amount: "2"},
 		{id: 36, name: "Defensive Boost", desc: "All of your troops an extra defensive roll for 2 full turns.", modifier: "defense", amount: "2"},
 		{id: 37, name: "Defensive Boost", desc: "All of your troops an extra defensive roll for 2 full turns.", modifier: "defense", amount: "2"},
@@ -328,11 +328,12 @@ function startGame(gameID, mapArray, mapProperties) {
     mapProperties.cardsHeld = [];
     mapProperties.cardsUsed = [];
     mapProperties.turnModifiers = [];
-    mapProperties.cardTicker = 0;
+    mapProperties.cardTicker = [];
     for(var i=0;i<mapProperties.owners.length;i++){
         mapProperties.cardsHeld[i] = [];
         mapProperties.cardsUsed[i] = [];
         mapProperties.turnModifiers[i] = [];
+        mapProperties.cardTicker[i] = {val: 0};
     }
 	mapProperties.cardDeck = cards;
 	mapProperties.winCard = false;

@@ -380,7 +380,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
                 var cardHTML = "";
                 for(var j=0;j<map.dataProp.cardsHeld[i].length;j++){
-                    cardHTML = cardHTML + "<tr id='"+ map.dataProp.cardsHeld[i][j].id +"'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "' id='"+ map.dataProp.cardsHeld[i][j].id +"check'></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td><td>" + map.dataProp.cardsHeld[i][j].amount + "</td></tr>";
+                    cardHTML = cardHTML + "<tr id='"+ map.dataProp.cardsHeld[i][j].id +"'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "' id='"+ map.dataProp.cardsHeld[i][j].id +"check'></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td></tr>";
                 }
                 $('#cardDisp').html(cardHTML);
                 var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"},{"id":"#cardTradeClose","action":"show"}];
