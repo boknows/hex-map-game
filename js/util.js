@@ -347,6 +347,7 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
     }else if (att == 1){
         att = 1;
     }
+
     //Add in turn modifiers
     if(map.dataProp.turnModifiers.length>0){
         for(var i=0;i<map.dataProp.turnModifiers.length;i++){
@@ -368,34 +369,58 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
         }
     }
 
-
-    //roll dice
-    for (var i = 0; i < att; i++) {
+    
+    for (var i = 0; i < att; i++) { //roll attacker dice
         attArr.push(rollDice());
     }
-    attArr.sort(function(a, b) {
+    attArr.sort(function(a, b) { //sort attacker dice highest to lowest
         return b - a
     });
-    for (var i = 0; i < def; i++) {
+    for (var i = 0; i < def; i++) { //roll defender dice
         defArr.push(rollDice());
     }
-    defArr.sort(function(a, b) {
+    defArr.sort(function(a, b) { //sort defender dice highest to lowest
         return b - a
     });
+
+    //determine the leasdt amount of dice being rolled, which determines how many losses occur
     var least = 0;
     if(defArr.length < attArr.length){
         if(defArr.length == 1){
             least = 1;
-        }else if(defArr.length == 2){
+        }else if(defArr.length > 1){
+            least = 2;
+        }
+    }else if(defArr.length > attArr.length){
+        if(defArr.length == 1){
+            least = 1;
+        }else if(defArr.length > 1){
+            least = 2;
+        }
+    }else if(defArr.length == attArr.length){
+        if(defArr.length < 3){
+            least = defArr.length;
+        }else{
+            least = 2;
+        }
+    }
+
+    /*
+    if(defArr.length < attArr.length){
+        if(defArr.length == 1){
+            least = 1;
+        }else if(defArr.length > 2){
             least = 2;
         }
     }else if(attArr.length < defArr.length){
-        least = 1;
+            least = 1;  
     }else if(attArr.length == defArr.length){
         least = defArr.length;
     }
+    */
 
     for (var i = 0; i < defArr.length; i++) {
+        console.log(defArr[i], attArr[i], least);
         if (defArr[i] >= attArr[i] && (attLoses+defLoses) < least) {
             attLoses++;
         } else if((attLoses+defLoses) < least){
