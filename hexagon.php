@@ -222,6 +222,7 @@
             <script src='js/getSelectedTile.js?v1'></script>
             <script src='js/clickEvent.js?v1'></script>
             <script src='js/util.js?v1'></script>
+             <script src='js/test.js?v1'></script>
             <script src='js/tradeInCards.js?v1'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){

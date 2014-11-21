@@ -93,10 +93,19 @@ map.getData(function(map_data){
         
     }
     if(map.dataProp.turnPhase == "fortify"){
-    	var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
+        //check for fortify turn modifiers
+        for(var i=0; i<map.dataProp.turnModifiers[map.dataProp.turn].length; i++){
+            if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="increasedMovement"){
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + (map.dataProp.fortifies*2) + " fortifications used.";
+            }else if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="decreasedMovement"){
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/0 fortifications used.";
+            }else{
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+            }
+        }
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
-        var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"}];
+        var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#fortUnits","action":"show"}];
         if(map.dataProp.fortifiesUsed>0){
             arr.push({"id":"#backToAttack","action":"hide"});
         }else{
@@ -312,7 +321,15 @@ map.getData(function(map_data){
         showPlayers();
         
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+        for(var i=0; i<map.dataProp.turnModifiers[map.dataProp.turn].length; i++){
+            if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="increasedMovement"){
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + (map.dataProp.fortifies*2) + " fortifications used.";
+            }else if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="decreasedMovement"){
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/0 fortifications used.";
+            }else{
+                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
+            }
+        }
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"show"}];
         showHide(arr,"Fortify Phase button pressed.");
@@ -408,7 +425,7 @@ map.getData(function(map_data){
         if(map.dataProp.winCard == true){
             map.dataProp.cardTicker[map.dataProp.turn].val++;
         }
-        if(map.dataProp.cardTicker[map.dataProp.turn].val==2){
+        if(map.dataProp.cardTicker[map.dataProp.turn].val==1){
             map.dataProp.cardTicker[map.dataProp.turn].val = 0;
             drawCard(map.username);
         }

@@ -26,9 +26,13 @@ function tradeInCard (cards){
 		}
 		if(cards[i]>=43 && cards[i]<=46){
 			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"increasedMovement","turns":1});
+			map.dataProp.fortifiesTemp = map.dataProp.fortifies;
+			map.dataProp.fortifies = map.dataProp.fortifies*2;
 		}
 		if(cards[i]>=47 && cards[i]<=48){
 			map.dataProp.turnModifiers[map.dataProp.turn].push({"type":"decreasedMovement","turns":1,"startTurn":map.dataProp.turn});
+			map.dataProp.fortifiesTemp = map.dataProp.fortifies;
+			map.dataProp.fortifies = 0;
 		}
 		if(cards[i]>=49 && cards[i]<=50){
 			randomTroopBolster(12, map.username);
