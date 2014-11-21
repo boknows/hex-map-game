@@ -75,7 +75,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 			size = this.radius-12,
 			Xcenter = x0 + (this.width / 2),
 			Ycenter = y0 + (this.height / 2);
-			this.context.strokeStyle = "#d3d3d3"
+			this.context.strokeStyle = "#929292"
 			this.context.beginPath();
 			this.context.lineWidth = 5;
 			this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          

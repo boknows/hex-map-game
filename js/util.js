@@ -71,6 +71,28 @@ function contAttack(hexagonGrid) {
                     updateLog("--------------------");
                     updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
                     map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
+                    var chk = calcEndState(map.email);
+                    if (chk == true) {
+                        map.dataProp.turnPhase = "ended";
+                        updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.")
+                        var data = {
+                            data: JSON.stringify(map.dataProp)
+                        };
+                        updateMap(data, "updateMapProperties");
+                        data.param = "update";
+                        data.gameID = $('#game_id').val();
+                        data.status = "ended";
+                        $.ajax({
+                            url: "changeStatus.php",
+                            data: data,
+                            type: "POST",
+                            dataType: 'JSON'
+                        });
+                        var data = {
+                            data: JSON.stringify(map.log)
+                        };
+                        updateMap(data, "updateMapLog");
+                    }
                 }
                 map.data[map.attack.defX][map.attack.defY].units++;
                 map.data[map.attack.attX][map.attack.attY].units--;

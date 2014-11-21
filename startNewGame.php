@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="js/bootstrap-select.min.js"></script> 
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script src="js/select2.min.js"></script>
-	<script type="text/javascript" src="js/startNewGame.js"></script>
+	<script type="text/javascript" src="js/startNewGame.js?v2"></script>
 
     <script src="js/jquery.simplecolorpicker.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet">

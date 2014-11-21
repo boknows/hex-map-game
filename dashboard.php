@@ -11,9 +11,9 @@
 <html>
 <head>
     <title>Hex</title>
-	<script src='http://code.jquery.com/jquery-1.10.2.min.js?v=1' language='Javascript' type='text/javascript'></script>
-	<script type="text/javascript" src="js/bootstrap.min.js?v=1"></script>
-	<script type="text/javascript" src="js/jquery.onoff.min.js?v=1"></script>
+	<script src='http://code.jquery.com/jquery-1.10.2.min.js' language='Javascript' type='text/javascript'></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.onoff.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/onoffswitch.css" rel="stylesheet">
 </head>
@@ -55,6 +55,6 @@
 </div>
 
 
-<script type="text/javascript" src="js/dashboard.js?v=1"></script>
+<script type="text/javascript" src="js/dashboard.js?v2"></script>
 </body>
 </html>

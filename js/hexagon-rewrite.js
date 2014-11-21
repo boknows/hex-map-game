@@ -355,7 +355,7 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"},{"id":"#endTurn","action":"show"}];
         showHide(arr,"Fortify Phase, transferMax button pressed.");
     }, false);
     
@@ -383,7 +383,7 @@ map.getData(function(map_data){
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"}];
+        var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"},{"id":"#endTurn","action":"show"}];
         showHide(arr,"Fortify Phase, transfer button pressed.");
     }, false);
 
