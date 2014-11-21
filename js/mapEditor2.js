@@ -81,7 +81,7 @@ function updateMap(data, param) {
         "cols":parseInt($('#cols').val()),
     };
     console.log(map.data);
-    var hexagonGrid = new HexagonGrid("HexCanvas", 30);
+    var hexagonGrid = new HexagonGrid("HexCanvas", 20);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 300, 10, true);
     
     //UI Buttons
@@ -172,6 +172,11 @@ function updateMap(data, param) {
         
     }, false);
 	
+    var saveMap = document.getElementById('saveMap');
+    saveMap.addEventListener('click', function(e) { //For the map editor
+        console.log(JSON.stringify(map.data));
+        console.log(JSON.stringify(map.dataProp));
+    }, false);
 	
     
 });
@@ -201,11 +206,15 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var localY = mouseY - this.canvasOriginY;
     var tile = this.getSelectedTile(localX, localY);
     map.editMap = { row: tile.row, col: tile.column};
+    if(map.data[tile.row][tile.column].type=="water"){
+        map.data[tile.row][tile.column].type = "land";
+        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+        this.drawHexGrid(map.dataProp.rows, map.dataProp.cols, this.canvasOriginX, this.canvasOriginY, true);
+    }
+   
     console.log(tile);
     //populate hex data to form for map editing
     $('#type').val(map.data[tile.row][tile.column].type);
-    $('#owner').val(map.data[tile.row][tile.column].owner);
-    $('#unitsEdit').val(map.data[tile.row][tile.column].units);
     $('#color').val(map.data[tile.row][tile.column].color);
     $('#n').val(map.data[tile.row][tile.column].n);
     $('#ne').val(map.data[tile.row][tile.column].ne);

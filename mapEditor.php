@@ -62,12 +62,6 @@
 			<div class="input-group">
             <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
             </div>
-            <div class="input-group">
-            <span class='input-group-addon'><b>Units:</b></span><input type='text' name='units' class='form-control' id='unitsEdit' value=''>
-            </div>
-            <div class="input-group">
-            <span class='input-group-addon'><b>Owner:</b></span><input type='text' name='owner' class='form-control' id='owner' value=''>
-            </div>
             <div class="input-group ">
             <span class='input-group-addon'><b>Color:</b></span><input type='text' name='color' class='form-control' id='color' value=''>
             </div>
@@ -97,7 +91,8 @@
             </div>
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
-	</div>
+	</div><br>
+    <button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
 </div>
 </body>
 <script src="js/mapEditor2.js"></script>
