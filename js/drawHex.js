@@ -171,10 +171,3 @@ HexagonGrid.prototype.getRelativeCanvasOffset = function() {
 	}
 }
 
-function getContrastYIQ(hexcolor){
-	var r = parseInt(hexcolor.substr(1,3),16);
-	var g = parseInt(hexcolor.substr(3,3),16);
-	var b = parseInt(hexcolor.substr(5,3),16);
-	var yiq = ((r*299)+(g*587)+(b*114))/1000;
-	return (yiq >= 128) ? '#000000' : '#FFFFFF';
-}

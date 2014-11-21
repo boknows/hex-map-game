@@ -1,3 +1,4 @@
+
 function HexagonGrid(canvasId, radius) {
     this.radius = radius;
     this.height = Math.sqrt(3) * radius;
@@ -15,3 +16,5 @@ function HexagonGrid(canvasId, radius) {
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 
 };
+
+
