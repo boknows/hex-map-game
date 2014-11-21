@@ -60,28 +60,25 @@
             <span class='input-group-addon'><b>Column:</b></span><input type='text' name='column' class='form-control' id='column' value=''>
             </div>
 			<div class="input-group">
-            <span class='input-group-addon'><b>Type:</b></span><input type='text' name='type' class='form-control' id='type' value=''>
-            </div>
-            <div class="input-group ">
-            <span class='input-group-addon'><b>Color:</b></span><input type='text' name='color' class='form-control' id='color' value=''>
+            <span class='input-group-addon'><b>Type:</b></span><select name='type' class='form-control' id='type'><option value='land'>Land</option><option value='water'>Water</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>N:</b></span><input type='text' name='n' class='form-control' id='n' value=''>
+            <span class='input-group-addon'><b>N:</b></span><select name='n' class='form-control' id='n'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>NE:</b></span><input type='text' name='ne' class='form-control' id='ne' value=''>
+            <span class='input-group-addon'><b>NE:</b></span><select name='ne' class='form-control' id='ne'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>SE:</b></span><input type='text' name='se' class='form-control' id='se' value=''>
+            <span class='input-group-addon'><b>SE:</b></span><select name='se' class='form-control' id='se'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>S:</b></span><input type='text' name='s' class='form-control' id='s' value=''>
+            <span class='input-group-addon'><b>S:</b></span><select name='s' class='form-control' id='s'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>SW:</b></span><input type='text' name='sw' class='form-control' id='sw' value=''>
+            <span class='input-group-addon'><b>SW:</b></span><select name='sw' class='form-control' id='sw'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>NW:</b></span><input type='text' name='nw' class='form-control' id='nw' value=''>
+            <span class='input-group-addon'><b>NW:</b></span><select name='nw' class='form-control' id='nw'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
 			<div class="input-group">
             <span class='input-group-addon'><b>Connect:</b></span><input type='text' name='connect' class='form-control' id='connect' value=''>

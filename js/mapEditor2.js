@@ -134,9 +134,16 @@ function updateMap(data, param) {
         map.data[map.editMap.row][map.editMap.col].group = $('#group').val();
         map.data[map.editMap.row][map.editMap.col].connect = JSON.parse($('#connect').val());
         if ($('#n').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
-            var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-            map.data[offset.r][offset.q].s = $('#n').val();
+            if($('#n').val()=="None"){
+                map.data[map.editMap.row][map.editMap.col].n = "";
+                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+                map.data[offset.r][offset.q].s = "";
+            }else{
+                map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
+                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+                map.data[offset.r][offset.q].s = $('#n').val();
+            }
+            
         }
         if ($('#ne').val() != "") {
             map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
@@ -215,8 +222,11 @@ HexagonGrid.prototype.clickEvent = function (e) {
     console.log(tile);
     //populate hex data to form for map editing
     $('#type').val(map.data[tile.row][tile.column].type);
-    $('#color').val(map.data[tile.row][tile.column].color);
-    $('#n').val(map.data[tile.row][tile.column].n);
+    if(map.data[tile.row][tile.column].n ==""){
+        $('#n').val("None");
+    }else{
+        $('#n').val(map.data[tile.row][tile.column].n);
+    }
     $('#ne').val(map.data[tile.row][tile.column].ne);
     $('#se').val(map.data[tile.row][tile.column].se);
     $('#s').val(map.data[tile.row][tile.column].s);
