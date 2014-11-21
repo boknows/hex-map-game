@@ -56,7 +56,39 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.fill();
 		this.context.closePath();
 		this.context.stroke();
+
+		//if defensive boost active, draw grey dotted hex inside of owners colored hex.
+		var index = 0;
+		for(var i=0;i<map.dataProp.users.length;i++){
+			if(map.dataProp.users[i]==map.data[tile.row][tile.column].owner){
+				index = i;
+			}
+		}
+		var defTrigger = false;
+		for(var i=0;i<map.dataProp.turnModifiers[index].length;i++){
+			if(map.dataProp.turnModifiers[index][i].type=="defensiveBoost"){
+				defTrigger = true;
+			}
+		}
+		if(defTrigger == true){
+			var numberOfSides = 6,
+			size = this.radius-12,
+			Xcenter = x0 + (this.width / 2),
+			Ycenter = y0 + (this.height / 2);
+			this.context.strokeStyle = "#d3d3d3"
+			this.context.beginPath();
+			this.context.lineWidth = 5;
+			this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+			for (var i = 1; i <= numberOfSides;i += 1) {
+				this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+			}
+			this.context.fill();
+			this.context.closePath();
+			this.context.stroke();
+		}
 		
+
+		//Print number of units
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
 		this.context.font = 'bold 13pt Arial';
