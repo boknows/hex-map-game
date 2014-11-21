@@ -94,16 +94,7 @@ map.getData(function(map_data){
     }
     if(map.dataProp.turnPhase == "fortify"){
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        //check for fortify turn modifiers
-        for(var i=0; i<map.dataProp.turnModifiers[map.dataProp.turn].length; i++){
-            if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="increasedMovement"){
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + (map.dataProp.fortifies*2) + " fortifications used.";
-            }else if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="decreasedMovement"){
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/0 fortifications used.";
-            }else{
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
-            }
-        }
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         var arr = [{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#fortUnits","action":"show"}];
         if(map.dataProp.fortifiesUsed>0){
@@ -321,15 +312,7 @@ map.getData(function(map_data){
         showPlayers();
         
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
-        for(var i=0; i<map.dataProp.turnModifiers[map.dataProp.turn].length; i++){
-            if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="increasedMovement"){
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + (map.dataProp.fortifies*2) + " fortifications used.";
-            }else if(map.dataProp.turnModifiers[map.dataProp.turn][i].type=="decreasedMovement"){
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/0 fortifications used.";
-            }else{
-                fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
-            }
-        }
+        fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
         document.getElementById('fortUnits').innerHTML = fortUnitsDisp;
         var arr = [{"id":"#fortifyButton","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"show"}];
         showHide(arr,"Fortify Phase button pressed.");
@@ -406,6 +389,10 @@ map.getData(function(map_data){
 
     var endTurnButton = document.getElementById('endTurnButton');
     endTurnButton.addEventListener('click', function(e) {
+        if(map.dataProp.fortifiesTemp != 0){ //Reset fortifies value if it was affected by a turnModifier
+            map.dataProp.fortifies = map.dataProp.fortifiesTemp;
+            map.dataProp.fortifiesTemp = 0;
+        }
         map.attack = {
             attX: null,
             attY: null,
@@ -425,7 +412,7 @@ map.getData(function(map_data){
         if(map.dataProp.winCard == true){
             map.dataProp.cardTicker[map.dataProp.turn].val++;
         }
-        if(map.dataProp.cardTicker[map.dataProp.turn].val==1){
+        if(map.dataProp.cardTicker[map.dataProp.turn].val==2){
             map.dataProp.cardTicker[map.dataProp.turn].val = 0;
             drawCard(map.username);
         }
@@ -468,9 +455,12 @@ map.getData(function(map_data){
             for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
                 if(map.dataProp.turnModifiers[i][j].type=="offensiveBoost" || map.dataProp.turnModifiers[i][j].type=="increasedMovement"){
                     map.dataProp.turnModifiers[i].splice(j, 1);
-                }
-                if(map.dataProp.turnModifiers[i][j].type=="defensiveBoost" && map.dataProp.turnModifiers[i][j].startTurn == map.dataProp.turn){
+                    console.log("removed OffensiveBoost or increasedMovement");
+                }else if((map.dataProp.turnModifiers[i][j].type=="defensiveBoost" || map.dataProp.turnModifiers[i][j].type=="decreasedMovement") && map.dataProp.turnModifiers[i][j].turnTicker == map.dataProp.turnModifiers[i][j].turns){
                     map.dataProp.turnModifiers[i].splice(j, 1);
+                    console.log("removed defensiveBoost or decreased Movement");
+                }else if((map.dataProp.turnModifiers[i][j].type=="defensiveBoost" || map.dataProp.turnModifiers[i][j].type=="decreasedMovement") && map.dataProp.turnModifiers[i][j].turnTicker < map.dataProp.turnModifiers[i][j].turns){
+                    map.dataProp.turnModifiers[i][j].turnTicker = map.dataProp.turnModifiers[i][j].turnTicker + 1;
                 }
             }
         }

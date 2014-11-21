@@ -329,6 +329,7 @@ function startGame(gameID, mapArray, mapProperties) {
     mapProperties.cardsUsed = [];
     mapProperties.turnModifiers = [];
     mapProperties.cardTicker = [];
+    mapProperties.fortifiesTemp = 0;
     for(var i=0;i<mapProperties.owners.length;i++){
         mapProperties.cardsHeld[i] = [];
         mapProperties.cardsUsed[i] = [];

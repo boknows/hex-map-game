@@ -1,6 +1,6 @@
 function singleAttack(hexagonGrid) {
     if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner, "", "", hexagonGrid);
+        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner, "", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
         map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
         map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
 
@@ -61,7 +61,7 @@ function singleAttack(hexagonGrid) {
 function contAttack(hexagonGrid) {
     while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
         if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units,  map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner,"", "", hexagonGrid);
+            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units,  map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner,"", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
             map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
             map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
@@ -322,12 +322,14 @@ function rollDice() {
     return rand;
 }
 
-function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
+function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowCol, hexagonGrid) {
     /**  Function to simulate battle between two armies. 
      * @param {Number} att - number of attacking armies
      * @param {Number} def - number of defending armies
      * @param {Text} attTer - terrain type of attacker, for purposes of modifiers
      * @param {Text} defTer - terrain type of defender, for purposes of modifiers
+     * @param {object} attRowCol - object representing row and col of attacker
+     * @param {object} defRowCol - object representing row and col of defender
      */
     var attArr = []; //Array of attackers rolls
     var defArr = []; //Array of defenders 
@@ -405,8 +407,8 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
         }
     }
 
-    /*
-    if(defArr.length < attArr.length){
+    //old function, before turnModifiers existed
+    /*if(defArr.length < attArr.length){
         if(defArr.length == 1){
             least = 1;
         }else if(defArr.length > 2){
@@ -418,6 +420,16 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, hexagonGrid) {
         least = defArr.length;
     }
     */
+    if(least > map.data[defRowCol.row][defRowCol.col].units){
+        least = map.data[defRowCol.row][defRowCol.col].units;
+    }
+    if(least > map.data[attRowCol.row][attRowCol.col].units && map.data[attRowCol.row][attRowCol.col].units > map.data[defRowCol.row][defRowCol.col].units){
+        least = map.data[defRowCol.row][defRowCol.col].units;
+    }
+    if(least > map.data[attRowCol.row][attRowCol.col].units && map.data[attRowCol.row][attRowCol.col].units < map.data[defRowCol.row][defRowCol.col].units){
+        least = map.data[attRowCol.row][attRowCol.col].units - 1;
+    }
+
 
     for (var i = 0; i < defArr.length; i++) {
         console.log(defArr[i], attArr[i], least);
