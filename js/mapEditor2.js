@@ -191,7 +191,82 @@ map.getData(function(map_data) {
         console.log(JSON.stringify(map.dataProp));
     }, false);
 
-
+    $('body').keydown(function(e) {
+        var cube = toCubeCoord(map.editMap.col, map.editMap.row);
+        console.log(e.keyCode);
+        if (e.keyCode == 103) {
+            $('#nw').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
+            var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+            map.data[offset.r][offset.q].se = $('#nw').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+        if (e.keyCode == 97) {
+            $('#sw').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
+            var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+            map.data[offset.r][offset.q].ne = $('#sw').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+        if (e.keyCode == 98) {
+            $('#s').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
+            var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+            map.data[offset.r][offset.q].n = $('#s').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+        if (e.keyCode == 99) {
+            $('#se').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
+            var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+            map.data[offset.r][offset.q].nw = $('#se').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+        if (e.keyCode == 105) {
+            $('#ne').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
+            var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+            map.data[offset.r][offset.q].sw = $('#ne').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+        if (e.keyCode == 104) {
+            $('#n').val("#000000");
+            map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
+            var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+            map.data[offset.r][offset.q].s = $('#n').val();
+            var data = {
+                data: JSON.stringify(map.data)
+            };
+            updateMap(data, "updateMap");
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+        }
+    });
 });
 
 function HexagonGrid(canvasId, radius) {
@@ -568,3 +643,4 @@ function toOffsetCoord(x, y, z) {
 
     return offset;
 }
+
