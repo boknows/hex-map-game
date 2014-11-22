@@ -32,8 +32,7 @@ var Map = function() {
             url: "getMapEditor.php",
             type: "POST",
             dataType: 'JSON',
-            data: {
-            },
+            data: {},
         }).success(callback);
     };
 };
@@ -47,78 +46,56 @@ function updateMap(data, param) {
         dataType: 'JSON'
     });
 };
-    var map = new Map();
-    map.getData(function(map_data){
-    map.data = new Array(parseInt($('#rows').val()));
+var map = new Map();
+map.getData(function(map_data) {
+    map.data = new Array(40);
     for (var i = 0; i < map.data.length; i++) {
-        map.data[i] = new Array(parseInt($('#cols').val()));
+        map.data[i] = new Array(40);
     }
-    for(var i=0;i<map.data.length;i++){
-       for(var j=0;j<map.data[i].length;j++){
+    for (var i = 0; i < map.data.length; i++) {
+        for (var j = 0; j < map.data[i].length; j++) {
             map.data[i][j] = {
-                "type":"water",
-                "units":0,
-                "n":"",
-                "s":"",
-                "nw":"",
-                "ne":"",
-                "sw":"",
-                "se":"",
-                "owner":"",
-                "color":"",
-                "connect":"",
-                "group":"",
+                "type": "water",
+                "units": 0,
+                "n": "",
+                "s": "",
+                "nw": "",
+                "ne": "",
+                "sw": "",
+                "se": "",
+                "owner": "",
+                "color": "",
+                "connect": "",
+                "group": "",
             };
-       }
+        }
     }
     map.dataProp = {
-        "owners":[],
-        "colors":[],
-        "turn":0,
-        "turnPhase":"fortify",
-        "fortifies":6,
-        "rows":parseInt($('#rows').val()),
-        "cols":parseInt($('#cols').val()),
+        "owners": [],
+        "colors": [],
+        "turn": 0,
+        "turnPhase": "fortify",
+        "fortifies": 6,
+        "rows": parseInt($('#rows').val()),
+        "cols": parseInt($('#cols').val()),
     };
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 20);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 300, 10, true);
-    
+
     //UI Buttons
     var updateRowsCols = document.getElementById('updateRowCols');
     updateRowsCols.addEventListener('click', function(e) { //For the map editor
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        map.data = new Array(parseInt($('#rows').val()));
-            for (var i = 0; i < map.data.length; i++) {
-                map.data[i] = new Array(parseInt($('#cols').val()));
-            }
-            for(var i=0;i<map.data.length;i++){
-               for(var j=0;j<map.data[i].length;j++){
-                    map.data[i][j] = {
-                        "type":"water",
-                        "units":0,
-                        "n":"",
-                        "s":"",
-                        "nw":"",
-                        "ne":"",
-                        "sw":"",
-                        "se":"",
-                        "owner":"",
-                        "color":"",
-                        "connect":"",
-                        "group":"",
-                    };
-               }
-            }
-            map.dataProp = {
-                "owners":[],
-                "colors":[],
-                "turn":0,
-                "turnPhase":"fortify",
-                "fortifies":6,
-                "rows":parseInt($('#rows').val()),
-                "cols":parseInt($('#cols').val()),
-            };
+        map.dataProp = {
+            "owners": [],
+            "colors": [],
+            "turn": 0,
+            "turnPhase": "fortify",
+            "fortifies": 6,
+            "rows": parseInt($('#rows').val()),
+            "cols": parseInt($('#cols').val()),
+        };
 
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 300, 10, true);
     }, false);
@@ -134,41 +111,70 @@ function updateMap(data, param) {
         map.data[map.editMap.row][map.editMap.col].group = $('#group').val();
         map.data[map.editMap.row][map.editMap.col].connect = JSON.parse($('#connect').val());
         if ($('#n').val() != "") {
-            if($('#n').val()=="None"){
+            if ($('#n').val() == "None") {
                 map.data[map.editMap.row][map.editMap.col].n = "";
                 var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
                 map.data[offset.r][offset.q].s = "";
-            }else{
+            } else {
                 map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
                 var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
                 map.data[offset.r][offset.q].s = $('#n').val();
             }
-            
         }
         if ($('#ne').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
-            var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-            map.data[offset.r][offset.q].sw = $('#ne').val();
+            if ($('#ne').val() == "None") {
+                map.data[map.editMap.row][map.editMap.col].ne = "";
+                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+                map.data[offset.r][offset.q].sw = "";
+            } else {
+                map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
+                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+                map.data[offset.r][offset.q].sw = $('#ne').val();
+            }
         }
         if ($('#se').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
-            var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-            map.data[offset.r][offset.q].nw = $('#se').val();
+            if ($('#se').val() == "None") {
+                map.data[map.editMap.row][map.editMap.col].se = "";
+                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+                map.data[offset.r][offset.q].nw = "";
+            } else {
+                map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
+                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+                map.data[offset.r][offset.q].nw = $('#se').val();
+            }
         }
         if ($('#s').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
-            var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-            map.data[offset.r][offset.q].n = $('#s').val();
+            if ($('#s').val() == "None") {
+                map.data[map.editMap.row][map.editMap.col].s = "";
+                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+                map.data[offset.r][offset.q].n = "";
+            } else {
+                map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
+                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+                map.data[offset.r][offset.q].n = $('#s').val();
+            }
         }
         if ($('#sw').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
-            var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-            map.data[offset.r][offset.q].ne = $('#sw').val();
+            if ($('#sw').val() == "None") {
+                map.data[map.editMap.row][map.editMap.col].sw = "";
+                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+                map.data[offset.r][offset.q].ne = "";
+            } else {
+                map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
+                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+                map.data[offset.r][offset.q].ne = $('#sw').val();
+            }
         }
         if ($('#nw').val() != "") {
-            map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
-            var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-            map.data[offset.r][offset.q].se = $('#nw').val();
+            if ($('#nw').val() == "None") {
+                map.data[map.editMap.row][map.editMap.col].nw = "";
+                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+                map.data[offset.r][offset.q].se = "";
+            } else {
+                map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
+                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+                map.data[offset.r][offset.q].se = $('#nw').val();
+            }
         }
         var data = {
             data: JSON.stringify(map.data)
@@ -176,16 +182,16 @@ function updateMap(data, param) {
         updateMap(data, "updateMap");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        
+
     }, false);
-	
+
     var saveMap = document.getElementById('saveMap');
     saveMap.addEventListener('click', function(e) { //For the map editor
         console.log(JSON.stringify(map.data));
         console.log(JSON.stringify(map.dataProp));
     }, false);
-	
-    
+
+
 });
 
 function HexagonGrid(canvasId, radius) {
@@ -206,123 +212,152 @@ function HexagonGrid(canvasId, radius) {
 
 };
 
-HexagonGrid.prototype.clickEvent = function (e) {
+HexagonGrid.prototype.clickEvent = function(e) {
     var mouseX = e.pageX;
     var mouseY = e.pageY;
     var localX = mouseX - this.canvasOriginX;
     var localY = mouseY - this.canvasOriginY;
     var tile = this.getSelectedTile(localX, localY);
-    map.editMap = { row: tile.row, col: tile.column};
-    if(map.data[tile.row][tile.column].type=="water"){
+    map.editMap = {
+        row: tile.row,
+        col: tile.column
+    };
+    if (map.data[tile.row][tile.column].type == "water") {
         map.data[tile.row][tile.column].type = "land";
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         this.drawHexGrid(map.dataProp.rows, map.dataProp.cols, this.canvasOriginX, this.canvasOriginY, true);
     }
-   
+
     console.log(tile);
     //populate hex data to form for map editing
     $('#type').val(map.data[tile.row][tile.column].type);
-    if(map.data[tile.row][tile.column].n ==""){
+    if (map.data[tile.row][tile.column].n == "") {
         $('#n').val("None");
-    }else{
+    } else {
         $('#n').val(map.data[tile.row][tile.column].n);
     }
-    $('#ne').val(map.data[tile.row][tile.column].ne);
-    $('#se').val(map.data[tile.row][tile.column].se);
-    $('#s').val(map.data[tile.row][tile.column].s);
-    $('#sw').val(map.data[tile.row][tile.column].sw);
-    $('#nw').val(map.data[tile.row][tile.column].nw);
+
+    if (map.data[tile.row][tile.column].ne == "") {
+        $('#ne').val("None");
+    } else {
+        $('#ne').val(map.data[tile.row][tile.column].ne);
+    }
+
+    if (map.data[tile.row][tile.column].nw == "") {
+        $('#nw').val("None");
+    } else {
+        $('#nw').val(map.data[tile.row][tile.column].nw);
+    }
+
+    if (map.data[tile.row][tile.column].s == "") {
+        $('#s').val("None");
+    } else {
+        $('#s').val(map.data[tile.row][tile.coswlumn].s);
+    }
+
+    if (map.data[tile.row][tile.column].se == "") {
+        $('#se').val("None");
+    } else {
+        $('#se').val(map.data[tile.row][tile.column].se);
+    }
+
+    if (map.data[tile.row][tile.column].sw == "") {
+        $('#sw').val("None");
+    } else {
+        $('#sw').val(map.data[tile.row][tile.column].sw);
+    }
+
     $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
     $('#group').val(map.data[tile.row][tile.column].group);
     $('#column').val(tile.column);
     $('#row').val(tile.row);
-        
+
 };
 
-HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highlight, highlightColor, owner) {  
-    this.context.font="bold 12px Helvetica";
+HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight, highlightColor, owner) {
+    this.context.font = "bold 12px Helvetica";
     this.owner = owner;
-    
+
     this.context.lineWidth = 1;
-    this.context.lineCap='round';
-    
+    this.context.lineCap = 'round';
+
     var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-    if(tile.row<3){
+    if (tile.row < 3) {
         //console.log(tile.row, tile.column, x0, this.width, this.side, y0)
     }
     var numberOfSides = 6,
-    size = this.radius,
-    Xcenter = x0 + (this.width / 2),
-    Ycenter = y0 + (this.height / 2);
+        size = this.radius,
+        Xcenter = x0 + (this.width / 2),
+        Ycenter = y0 + (this.height / 2);
     this.context.beginPath();
     this.context.strokeStyle = "#000000";
     this.context.lineWidth = 1;
-    this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
-    for (var i = 1; i <= numberOfSides;i += 1) {
-        this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+    this.context.moveTo(Xcenter + size * Math.cos(0), Ycenter + size * Math.sin(0));
+    for (var i = 1; i <= numberOfSides; i += 1) {
+        this.context.lineTo(Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
     }
 
     this.context.fillStyle = fillColor;
 
 
-    if (highlight == true){
+    if (highlight == true) {
         this.context.fillStyle = highlightColor;
-        this.context.globalAlpha=0.65;
+        this.context.globalAlpha = 0.65;
     }
     this.context.fill();
     this.context.closePath();
     this.context.stroke();
-    this.context.globalAlpha=1;
+    this.context.globalAlpha = 1;
 };
 
-HexagonGrid.prototype.drawHexBorders = function (x0, y0) {  
+HexagonGrid.prototype.drawHexBorders = function(x0, y0) {
     var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-    if(map.data[tile.row][tile.column].s != ""){
+    if (map.data[tile.row][tile.column].s != "") {
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].s;
+        this.context.strokeStyle = map.data[tile.row][tile.column].s;
         this.context.moveTo(x0 + this.side, y0 + this.height);
         this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
         this.context.stroke();
     }
-    if(map.data[tile.row][tile.column].n != ""){
-        
+    if (map.data[tile.row][tile.column].n != "") {
+
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].n;
+        this.context.strokeStyle = map.data[tile.row][tile.column].n;
         this.context.moveTo(x0 + this.side, y0);
         this.context.lineTo(x0 + this.width - this.side, y0);
         this.context.stroke();
     }
-    if(map.data[tile.row][tile.column].ne != ""){
+    if (map.data[tile.row][tile.column].ne != "") {
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].ne;
+        this.context.strokeStyle = map.data[tile.row][tile.column].ne;
         this.context.moveTo(x0 + this.side, y0);
         this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
         this.context.stroke();
     }
-    if(map.data[tile.row][tile.column].se != ""){
+    if (map.data[tile.row][tile.column].se != "") {
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].se;
+        this.context.strokeStyle = map.data[tile.row][tile.column].se;
         this.context.moveTo(x0 + this.width, y0 + (this.height / 2));
         this.context.lineTo(x0 + this.side, y0 + this.height);
         this.context.stroke();
     }
-    if(map.data[tile.row][tile.column].sw != ""){
+    if (map.data[tile.row][tile.column].sw != "") {
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].sw;
+        this.context.strokeStyle = map.data[tile.row][tile.column].sw;
         this.context.moveTo(x0 + this.width - this.side, y0 + this.height);
-        this.context.lineTo(x0, y0 + (this.height/2));
+        this.context.lineTo(x0, y0 + (this.height / 2));
         this.context.stroke();
     }
-    if(map.data[tile.row][tile.column].nw != ""){
+    if (map.data[tile.row][tile.column].nw != "") {
         this.context.beginPath();
         this.context.lineWidth = 5;
-        this.context.strokeStyle=map.data[tile.row][tile.column].nw;
-        this.context.moveTo(x0, y0 + (this.height/2));
+        this.context.strokeStyle = map.data[tile.row][tile.column].nw;
+        this.context.moveTo(x0, y0 + (this.height / 2));
         this.context.lineTo(x0 + this.width - this.side, y0);
         this.context.stroke();
     }
@@ -330,7 +365,8 @@ HexagonGrid.prototype.drawHexBorders = function (x0, y0) {
 
 //Recusivly step up to the body to calculate canvas offset.
 HexagonGrid.prototype.getRelativeCanvasOffset = function() {
-    var x = 0, y = 0;
+    var x = 0,
+        y = 0;
     var layoutElement = this.canvas;
     var bound = layoutElement.getBoundingClientRect();
     if (layoutElement.offsetParent) {
@@ -338,12 +374,15 @@ HexagonGrid.prototype.getRelativeCanvasOffset = function() {
             x += layoutElement.offsetLeft;
             y += layoutElement.offsetTop;
         } while (layoutElement = layoutElement.offsetParent);
-        
-        return { x: bound.left, y: bound.top };
+
+        return {
+            x: bound.left,
+            y: bound.top
+        };
     }
 }
 
-HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
+HexagonGrid.prototype.drawHexGrid = function(rows, cols, originX, originY, isDebug) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
     this.rows = rows;
@@ -366,17 +405,17 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
                 debugText = hexNum;
                 hexNum++;
             }
-            if(map.data[row][col].type=="land"){  
+            if (map.data[row][col].type == "land") {
                 this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, map.data[row][col].owner);
-            }else if(map.data[row][col].type=="water"){
+            } else if (map.data[row][col].type == "water") {
                 this.drawHex(currentHexX, currentHexY, "#3333FF", "", false, map.data[row][col].owner);
-            }else if(map.data[row][col].type=="grass"){
+            } else if (map.data[row][col].type == "grass") {
                 this.drawHex(currentHexX, currentHexY, "#009900", debugText, false, map.data[row][col].owner);
-            }else if(map.data[row][col].type=="desert"){
+            } else if (map.data[row][col].type == "desert") {
                 this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map.data[row][col].owner);
-            }else if(map.data[row][col].type=="mountains"){
+            } else if (map.data[row][col].type == "mountains") {
                 this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map.data[row][col].owner);
-            }   
+            }
         }
         offsetColumn = !offsetColumn;
     }
@@ -396,11 +435,11 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
         offsetColumn = !offsetColumn;
     }
 
-    if(map.dataProp.turnPhase == "unitPlacement"){
-        for(var i=0, len=map.unitPlacement.length; i<len; i++){
+    if (map.dataProp.turnPhase == "unitPlacement") {
+        for (var i = 0, len = map.unitPlacement.length; i < len; i++) {
             var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
             var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
-            this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); 
+            this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner);
         }
     }
 };
@@ -422,9 +461,7 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 
     var column = Math.floor((mouseX) / this.side);
     var row = Math.floor(
-        column % 2 == 0
-            ? Math.floor((mouseY) / this.height)
-            : Math.floor(((mouseY + (this.height * 0.5)) / this.height)) - 1);
+        column % 2 == 0 ? Math.floor((mouseY) / this.height) : Math.floor(((mouseY + (this.height * 0.5)) / this.height)) - 1);
 
     //Test if on left side of frame            
     if (mouseX > (column * this.side) && mouseX < (column * this.side) + this.width - this.side) {
@@ -432,9 +469,7 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
         //Top left triangle points
         var p1 = new Object();
         p1.x = column * this.side;
-        p1.y = column % 2 == 0
-            ? row * this.height
-            : (row * this.height) + (this.height / 2);
+        p1.y = column % 2 == 0 ? row * this.height : (row * this.height) + (this.height / 2);
 
         var p2 = new Object();
         p2.x = p1.x;
@@ -477,7 +512,10 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
         }
     }
 
-    return  { row: row, column: column };
+    return {
+        row: row,
+        column: column
+    };
 
 };
 

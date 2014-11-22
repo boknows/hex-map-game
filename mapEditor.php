@@ -66,19 +66,19 @@
             <span class='input-group-addon'><b>N:</b></span><select name='n' class='form-control' id='n'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>NE:</b></span><select name='ne' class='form-control' id='ne'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
+            <span class='input-group-addon'><b>NE:</b></span><select name='ne' class='form-control' id='ne'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>SE:</b></span><select name='se' class='form-control' id='se'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
+            <span class='input-group-addon'><b>SE:</b></span><select name='se' class='form-control' id='se'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>S:</b></span><select name='s' class='form-control' id='s'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
+            <span class='input-group-addon'><b>S:</b></span><select name='s' class='form-control' id='s'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>SW:</b></span><select name='sw' class='form-control' id='sw'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
+            <span class='input-group-addon'><b>SW:</b></span><select name='sw' class='form-control' id='sw'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
             <div class="input-group">
-            <span class='input-group-addon'><b>NW:</b></span><select name='nw' class='form-control' id='nw'><option value="">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
+            <span class='input-group-addon'><b>NW:</b></span><select name='nw' class='form-control' id='nw'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
             </div>
 			<div class="input-group">
             <span class='input-group-addon'><b>Connect:</b></span><input type='text' name='connect' class='form-control' id='connect' value=''>
