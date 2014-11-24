@@ -60,7 +60,7 @@
             <span class='input-group-addon'><b>Column:</b></span><input type='text' name='column' class='form-control' id='column' value=''>
             </div>
 			<div class="input-group">
-            <span class='input-group-addon'><b>Type:</b></span><select name='type' class='form-control' id='type'><option value='land'>Land</option><option value='water'>Water</option></select>
+            <span class='input-group-addon'><b>Type:</b></span><select name='type' class='form-control' id='type'><option value='land'>Land</option><option value='forest'>Forest</option><option value='water'>Water</option><option value='desert'>Desert</option><option value='mountains'>Mountains</option></select>
             </div>
             <div class="input-group">
             <span class='input-group-addon'><b>N:</b></span><select name='n' class='form-control' id='n'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
