@@ -39,6 +39,7 @@ $.ajax({
                 }
                 $('#inviteText').html(inviteText);
                 $('#inviteForm').show();
+                $('#spinnerLoad').hide();
             },
         });
 
@@ -79,6 +80,7 @@ function shuffle(array) {
 }
 
 function acceptInvite() {
+    $('#acceptInvite').hide();
     var data = {
         param: 'getAll',
         gameID: $('#game_id').val(),
@@ -200,7 +202,7 @@ function startGame(gameID, mapArray, mapProperties) {
     var countries = [];
     for (var i = 0; i < mapArray.length; i++) {
         for (var j = 0; j < mapArray[i].length; j++) {
-            if (mapArray[i][j].type == "land") {
+            if (mapArray[i][j].type != "water") {
                 countries.push({
                     width: i,
                     length: j,
@@ -336,7 +338,7 @@ function startGame(gameID, mapArray, mapProperties) {
         mapProperties.turnModifiers[i] = [];
         mapProperties.cardTicker[i] = {val: 0};
     }
-	mapProperties.cardDeck = cards;
+	//mapProperties.cardDeck = cards;
 	mapProperties.winCard = false;
     
     mapProperties.turnPhase = "unitPlacement";

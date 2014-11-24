@@ -222,7 +222,6 @@
             <script src='js/getSelectedTile.js?v5'></script>
             <script src='js/clickEvent.js?v5'></script>
             <script src='js/util.js?v5'></script>
-             <script src='js/test.js?v5'></script>
             <script src='js/tradeInCards.js?v5'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){
@@ -236,6 +235,7 @@
         }     
     ?>
         <p><table class="table" id="inviteText" style="width: 35%;"></table></p>
+
         Choose your color:
         <div class="form-group">
             <div class="col-sm-6">
@@ -311,7 +311,7 @@
         </div>
         <div style="clear: both;"></div>
         <div class='input-group'>
-		<button class="btn btn-success btn-large" id='acceptInvite' type='button' onclick=acceptInvite() data-loading-text="Loading...">Accept Invite</button>
+		<button class="btn btn-success btn-large" id='acceptInvite' type='button' onclick=acceptInvite() data-loading-text="Loading...">Accept Invite</button><div id='spinner' style="display:none"><img src="css/712.GIF"></div>
 		</div>
     </div><!-- end inviteForm -->
     <div id="accepted" style="display:<?php

@@ -153,7 +153,8 @@ function createGameVal() { //Validation Rules for Create Game form
 }
 
 function createGame() {
-	console.log("Definitely creating game!");
+	$('#createGame').hide();
+	$('#spinner').show();
 	var users = [];
 	users.push($('#username').val());
 	for(var i = 1;i<8;i++){
@@ -161,7 +162,6 @@ function createGame() {
 			users.push($("#player"+i).select2('data').text);
 		}
 	}
-
 	var data = { 	
 				colorpicker: $('#colorpicker').val(),
 				gameName: $('#name').val(),
@@ -173,6 +173,7 @@ function createGame() {
 				$("#player5").select2("val"), 
 				$("#player6").select2("val"), 
 				$("#player7").select2("val"), ],
+				mapID: $("#mapID").val(),
 				usernames: users,
 				minPlayers: $('#minPlayers').val(),
 				maxPlayers: $('#maxPlayers').val(),

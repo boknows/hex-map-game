@@ -9,11 +9,13 @@ if(empty($_SESSION['user']))
 
 $username = htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
 $stmt = $db->prepare('SELECT * FROM maps WHERE id = :id');
-$stmt->execute(array(':id' => '5'));
+$stmt->execute(array(':id' => $_POST['mapID']));
 foreach ($stmt as $row) {
 	$data['mapArray'] = $row['mapArray'];	
 	$data['mapProperties'] = $row['mapProperties'];	
 }
+$mapProperties = JSON_decode($data['mapProperties']);
+
 $now = time();
 $stmt = $db->prepare("SELECT MAX(gameID) FROM games");
 $stmt->execute();
@@ -22,19 +24,17 @@ $maxID++;
 $owners = array();
 foreach($_POST['emails'] as $var){
     if($var != ""){
-        $owners[] = $var;
+        $mapProperties->owners[] = $var;
     }
 }
 $ownersJson = json_encode($owners);
 $users = array();
 foreach($_POST['usernames'] as $var){
     if($var != ""){
-        $users[] = $var;
+        $mapProperties->users[] = $var;
     }
 }
 $usersJson = json_encode($users);
-$mapProperties = JSON_decode($data['mapProperties']);
-
 $mapProperties->fortifies = $_POST['fortifies'];
 $mapProperties->creator = $_SESSION['user']['email'];
 $mapProperties->turnPhase = "invites";
@@ -43,7 +43,7 @@ $mapProperties->colors[] = $_POST['colorpicker'];
 for($i=0;$i<count($owners)-1;$i++){
     $mapProperties->colors[] = "NULL";
 }   
-print_r($mapProperties);
+
 $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, mapLog) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]")');
 $stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => JSON_encode($mapProperties)));  
 if (!$stmt) {
