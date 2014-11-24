@@ -12,7 +12,7 @@ $stmt = $db->prepare('SELECT * FROM maps WHERE id = :id');
 $stmt->execute(array(':id' => '5'));
 foreach ($stmt as $row) {
 	$data['mapArray'] = $row['mapArray'];	
-	$data['mapProperties'] = $row['mapProperties'];
+	$data['mapProperties'] = $row['mapProperties'];	
 }
 $now = time();
 $stmt = $db->prepare("SELECT MAX(gameID) FROM games");
@@ -33,14 +33,19 @@ foreach($_POST['usernames'] as $var){
     }
 }
 $usersJson = json_encode($users);
+$mapProperties = JSON_decode($data['mapProperties']);
 
-$mapProperties = '{"owners":' . $ownersJson . ',"users":' . $usersJson . ',"colors":["'. $_POST['colorpicker'].'"';
+$mapProperties->fortifies = $_POST['fortifies'];
+$mapProperties->creator = $_SESSION['user']['email'];
+$mapProperties->turnPhase = "invites";
+$mapProperties->colors[] = $_POST['colorpicker'];
+
 for($i=0;$i<count($owners)-1;$i++){
-    $mapProperties .= ',"NULL"';
+    $mapProperties->colors[] = "NULL";
 }   
-$mapProperties .= '],"turn":0,"turnPhase":"invites","fortifies":' . $_POST['fortifies'] . ',"fortifiesUsed":0,"rows":8,"cols":14,"creator":"' . $_SESSION['user']['email'] . '"}';
+print_r($mapProperties);
 $stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, mapLog) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]")');
-$stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => $mapProperties));  
+$stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => JSON_encode($mapProperties)));  
 if (!$stmt) {
 	echo "\nPDO::errorInfo():\n";
 	print_r($db->errorInfo());
