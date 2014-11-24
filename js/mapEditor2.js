@@ -215,6 +215,8 @@ map.getData(function(map_data) {
                     data: JSON.stringify(map.data)
                 };
                 updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
             case 49: 
                 $('#group').val("1");
@@ -223,6 +225,8 @@ map.getData(function(map_data) {
                     data: JSON.stringify(map.data)
                 };
                 updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
             case 50: 
                 $('#group').val("2");
@@ -231,6 +235,8 @@ map.getData(function(map_data) {
                     data: JSON.stringify(map.data)
                 };
                 updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
             case 51: 
                 $('#group').val("3");
@@ -239,18 +245,26 @@ map.getData(function(map_data) {
                     data: JSON.stringify(map.data)
                 };
                 updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
             case 52: 
                 $('#group').val("4");
                 map.data[map.editMap.row][map.editMap.col].group = "4";
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
                 updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
             case 53: 
                 $('#group').val("5");
                 map.data[map.editMap.row][map.editMap.col].group = "5";
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
@@ -259,6 +273,8 @@ map.getData(function(map_data) {
             case 54: 
                 $('#group').val("6");
                 map.data[map.editMap.row][map.editMap.col].group = "6";
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
@@ -267,6 +283,8 @@ map.getData(function(map_data) {
             case 55: 
                 $('#group').val("7");
                 map.data[map.editMap.row][map.editMap.col].group = "7";
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
@@ -275,6 +293,7 @@ map.getData(function(map_data) {
             case 56: 
                 $('#group').val("8");
                 map.data[map.editMap.row][map.editMap.col].group = "8";
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
@@ -283,6 +302,7 @@ map.getData(function(map_data) {
             case 57: 
                 $('#group').val("9");
                 map.data[map.editMap.row][map.editMap.col].group = "9";
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 var data = {
                     data: JSON.stringify(map.data)
                 };
@@ -569,6 +589,13 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
     this.context.closePath();
     this.context.stroke();
     this.context.globalAlpha = 1;
+
+    //Print Group number
+    this.context.textAlign="center"; 
+    this.context.textBaseline = "middle";
+    this.context.font = 'bold 13pt Arial';
+    this.context.fillStyle = "#000000";
+    this.context.fillText(map.data[tile.row][tile.column].group, x0 + (this.width / 2) , y0 + (this.height / 2));
 };
 
 HexagonGrid.prototype.drawHexBorders = function(x0, y0) {
