@@ -110,7 +110,7 @@ map.getData(function(map_data) {
             "cols": parseInt($('#cols').val()),
         };
         updateMenu(hexagonGrid);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 0, 0, true);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
     }, false);
 
     var updateMapBtn = document.getElementById('updateMap');
@@ -206,7 +206,6 @@ map.getData(function(map_data) {
 
     $('body').keydown(function(e) {
         var cube = toCubeCoord(map.editMap.col, map.editMap.row);
-        console.log(e.keyCode);
         switch (e.keyCode){
             case 48: 
                 $('#group').val("0");
@@ -487,8 +486,8 @@ function HexagonGrid(canvasId, radius) {
 
     this.context = map.ctx;
     this.canvas = map.canvas;
-    this.canvasOriginX = 0;
-    this.canvasOriginY = 0;
+    this.canvasOriginX = 10;
+    this.canvasOriginY = 10;
 
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 
@@ -504,13 +503,13 @@ HexagonGrid.prototype.clickEvent = function(e) {
         row: tile.row,
         col: tile.column
     };
+    console.log(map.data[tile.row][tile.column]);
     if (map.data[tile.row][tile.column].type == "water") {
         map.data[tile.row][tile.column].type = "land";
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         this.drawHexGrid(map.dataProp.rows, map.dataProp.cols, this.canvasOriginX, this.canvasOriginY, true);
     }
 
-    console.log(tile);
     //populate hex data to form for map editing
     $('#type').val(map.data[tile.row][tile.column].type);
     if (map.data[tile.row][tile.column].n == "") {

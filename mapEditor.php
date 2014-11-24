@@ -85,7 +85,7 @@
    
 
 </body>
-<script src="js/mapEditor2.js"></script>
+<script src="js/mapEditor2.js?v3"></script>
 
 
 </html>
