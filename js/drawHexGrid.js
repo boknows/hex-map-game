@@ -25,7 +25,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				this.drawHex(currentHexX, currentHexY, "#99CC66", debugText, false, map.data[row][col].owner);
 			}else if(map.data[row][col].type=="water"){
 				this.drawHex(currentHexX, currentHexY, "#3333FF", "", false, map.data[row][col].owner);
-			}else if(map.data[row][col].type=="grass"){
+			}else if(map.data[row][col].type=="forest"){
 				this.drawHex(currentHexX, currentHexY, "#009900", debugText, false, map.data[row][col].owner);
 			}else if(map.data[row][col].type=="desert"){
 				this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map.data[row][col].owner);

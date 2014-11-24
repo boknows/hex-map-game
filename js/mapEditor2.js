@@ -81,7 +81,20 @@ map.getData(function(map_data) {
     };
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", 20);
-    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 300, 10, true);
+    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+
+    function updateMenu (hexagonGrid){
+        var x0 = hexagonGrid.width * (map.dataProp.cols-2) + hexagonGrid.canvasOriginX;
+        var y0 = ((hexagonGrid.height / 1.5)) + hexagonGrid.canvasOriginY;
+        var style = {
+            left: x0,
+            top: y0,
+            position: "absolute",
+            'font-size': '75%'
+        };
+        $("#panel").css(style);
+    }
+    updateMenu(hexagonGrid);
 
     //UI Buttons
     var updateRowsCols = document.getElementById('updateRowCols');
@@ -96,8 +109,8 @@ map.getData(function(map_data) {
             "rows": parseInt($('#rows').val()),
             "cols": parseInt($('#cols').val()),
         };
-
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 300, 10, true);
+        updateMenu(hexagonGrid);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 0, 0, true);
     }, false);
 
     var updateMapBtn = document.getElementById('updateMap');
@@ -454,8 +467,8 @@ function HexagonGrid(canvasId, radius) {
 
     this.context = map.ctx;
     this.canvas = map.canvas;
-    this.canvasOriginX = 300;
-    this.canvasOriginY = 10;
+    this.canvasOriginX = 0;
+    this.canvasOriginY = 0;
 
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 
