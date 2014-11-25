@@ -582,6 +582,7 @@ function updateLog(msg) {
 function updateLogDisp(hexagonGrid) {
     //Calc player list length to determine start point of msg log
     var x0 = hexagonGrid.width * (map.dataProp.cols) + hexagonGrid.canvasOriginX;
+    console.log(hexagonGrid.width,(map.dataProp.cols),hexagonGrid.canvasOriginX,x0);
     var y0 = 25 + ((hexagonGrid.height / 1.5) * map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
     var style = {
         left: x0,

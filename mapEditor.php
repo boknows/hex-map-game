@@ -36,6 +36,9 @@
                 <div class="input-group">
                 <span class='input-group-addon'><b>Columns:</b></span><input type='text' name='cols' class='form-control' id='cols' value='10'>
                 </div>
+                <div class="input-group">
+                <span class='input-group-addon'><b>Hex Size:</b></span><input type='text' name='size' class='form-control' id='size' value='30'>
+                </div>
                 <button type="button" id ="updateRowCols" class="btn btn-success">Update Map</button>
             </div>
             <div id="editMap">
@@ -73,7 +76,10 @@
                 <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
                 </div>
                 <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
-                <br><button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
+                <div class="input-group">
+                <span class='input-group-addon'><b>Map Name:</b></span><input type='text' name='saveMapName' class='form-control' id='saveMapName' value=''>
+                </div>
+                <button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
             </div> 
         </div>
         <div class="col-md-9">
@@ -85,7 +91,7 @@
    
 
 </body>
-<script src="js/mapEditor2.js?v4"></script>
+<script src="js/mapEditor2.js?v5"></script>
 
 
 </html>

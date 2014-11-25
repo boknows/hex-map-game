@@ -43,5 +43,18 @@ if($_POST['param']=="updateAll"){
 	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray, mapProperties = :mapProperties, mapLog = :mapLog WHERE gameID = :gameID');
 	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':mapLog' => $_POST['mapLog']));
 }
+if($_POST['param']=="getAllMaps"){
+	$stmt = $db->prepare('SELECT * FROM maps');
+	$stmt->execute();
+	foreach ($stmt as $row) {
+		$data['id'][] = $row['id'];
+		$data['name'][] = $row['name'];
+	}
+	echo JSON_encode($data);
+}
+if($_POST['param']=="saveMap"){
+	$stmt = $db->prepare('INSERT INTO maps (mapArray, mapProperties, name) VALUES (:mapArray, :mapProperties, :name)');
+	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name']));
+}
 
 ?>

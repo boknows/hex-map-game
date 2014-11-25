@@ -1,3 +1,4 @@
+$("body").css("overflow", "hidden");
 // Hex math defined here: http://blog.ruslans.com/2011/02/hexagonal-grid-math.html
 var Map = function() {
     var mapData;
@@ -78,9 +79,10 @@ map.getData(function(map_data) {
         "fortifies": 6,
         "rows": parseInt($('#rows').val()),
         "cols": parseInt($('#cols').val()),
+        "hexSize": parseInt($('#size').val()),
     };
     console.log(map.data);
-    var hexagonGrid = new HexagonGrid("HexCanvas", 20);
+    var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
 
     function updateMenu (hexagonGrid){
@@ -108,9 +110,19 @@ map.getData(function(map_data) {
             "fortifies": 6,
             "rows": parseInt($('#rows').val()),
             "cols": parseInt($('#cols').val()),
+            "hexSize": parseInt($('#size').val()),
         };
-        updateMenu(hexagonGrid);
+        hexagonGrid.radius = map.dataProp.hexSize;
+        hexagonGrid.height = Math.sqrt(3) * map.dataProp.hexSize;
+        hexagonGrid.width = 2 * map.dataProp.hexSize;
+        hexagonGrid.side = (3 / 2) * map.dataProp.hexSize;
+        map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
+        map.ctx = map.canvas.getContext('2d');
+        hexagonGrid.context = map.ctx;
+        hexagonGrid.canvas = map.canvas;
+
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+        updateMenu(hexagonGrid);
     }, false);
 
     var updateMapBtn = document.getElementById('updateMap');
@@ -189,10 +201,7 @@ map.getData(function(map_data) {
                 map.data[offset.r][offset.q].se = $('#nw').val();
             }
         }
-        var data = {
-            data: JSON.stringify(map.data)
-        };
-        updateMap(data, "updateMap");
+
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 
@@ -217,6 +226,12 @@ map.getData(function(map_data) {
                  map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":0});    
             }
         }
+        var data= {
+            mapArray: JSON.stringify(map.data),
+            mapProperties: JSON.stringify(map.dataProp),
+            name: $('#saveMapName').val(),
+        };
+        updateMap(data, "saveMap");
         console.log(JSON.stringify(map.data));
         console.log(JSON.stringify(map.dataProp));
     }, false);
@@ -374,6 +389,26 @@ map.getData(function(map_data) {
                 map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                 break;
+            case 78: 
+                $('#group').val("neutral");
+                map.data[map.editMap.row][map.editMap.col].group = "neutral";
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                break;
+            case 32: 
+                $('#group').val("");
+                map.data[map.editMap.row][map.editMap.col].group = "";
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                break;
         }
         if (e.keyCode == 103) {
             if($('#nw').val() != "#000000"){
@@ -493,11 +528,11 @@ map.getData(function(map_data) {
 });
 
 function HexagonGrid(canvasId, radius) {
-    this.radius = radius;
-    this.height = Math.sqrt(3) * radius;
-    this.width = 2 * radius;
-    this.side = (3 / 2) * radius;
-
+    this.radius = map.dataProp.hexSize;
+    this.height = Math.sqrt(3) * map.dataProp.hexSize;
+    this.width = 2 * map.dataProp.hexSize;
+    this.side = (3 / 2) * map.dataProp.hexSize;
+    console.log(this.width);
     map.canvas = document.getElementById(canvasId); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
 
@@ -583,7 +618,7 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
         //console.log(tile.row, tile.column, x0, this.width, this.side, y0)
     }
     var numberOfSides = 6,
-        size = this.radius,
+        size = map.dataProp.hexSize,
         Xcenter = x0 + (this.width / 2),
         Ycenter = y0 + (this.height / 2);
     this.context.beginPath();
@@ -611,7 +646,11 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
     this.context.textBaseline = "middle";
     this.context.font = 'bold 13pt Arial';
     this.context.fillStyle = "#000000";
-    this.context.fillText(map.data[tile.row][tile.column].group, x0 + (this.width / 2) , y0 + (this.height / 2));
+    if(map.data[tile.row][tile.column].group == "neutral"){
+        this.context.fillText("N", x0 + (this.width / 2) , y0 + (this.height / 2));
+    }else{
+        this.context.fillText(map.data[tile.row][tile.column].group, x0 + (this.width / 2) , y0 + (this.height / 2));
+    }
 };
 
 HexagonGrid.prototype.drawHexBorders = function(x0, y0) {

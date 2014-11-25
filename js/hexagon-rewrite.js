@@ -67,7 +67,7 @@ map.getData(function(map_data){
     }
 	*/
     console.log(map.data);
-    var hexagonGrid = new HexagonGrid("HexCanvas", 27);
+    var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
 
     if (map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {

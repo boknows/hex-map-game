@@ -85,7 +85,7 @@
 		<span class='input-group-addon'><b>Maximum Fortifies:</b></span><input type='text' name='maxFortifies' class='form-control' id='maxFortifies' value="1">
 		</div>
 		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Map ID:</b></span><select type='text' name='mapID' class='form-control' id='mapID'><option value="5">Default Map</option><option value="6">Cluster Hexes</option></select>
+		<span class='input-group-addon'><b>Map ID:</b></span><select type='text' name='mapID' class='form-control' id='mapID'></select>
 		</div>
 		<div class='input-group'>
 		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGameVal() data-loading-text="Creating...">Create Game</button><div id='spinner' style="display:none"><img src="css/712.GIF"></div>
