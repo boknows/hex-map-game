@@ -168,7 +168,7 @@ function contAttack(hexagonGrid) {
 };
 
 function calcUnits(username) {
-    //calc raw units for initial units
+    //calc raw units for initial units, based on number of countries held
     var units = 0;
     for (i = 0; i < map.data.length; i++) {
         for (j = 0; j < map.data[i].length; j++) {
@@ -180,35 +180,28 @@ function calcUnits(username) {
     if(units==0){
         return 0;
     }
-
     units = Math.floor(units / 3);
 
     //Calculate Bonuses - Make it more dynamic in the future
-    var bonus = [0, 0, 0, 0, 0, 0, 0];
-    for (i = 0; i < map.data.length; i++) {
-        for (j = 0; j < map.data[i].length; j++) {
+    var bonus = [];
+    for (var i=0;i<map.dataProp.mapBonus.length+1;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
+        bonus[i] = 0;
+    }
+    for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
+        for (var j = 0; j < map.data[i].length; j++) {
             if (map.data[i][j].owner == username) {
                 bonus[map.data[i][j].group]++;
             }
         }
     }
-    if (bonus[1] == 9) {
-        units = units + 5;
-    }
-    if (bonus[2] == 4) {
-        units = units + 2;
-    }
-    if (bonus[3] == 7) {
-        units = units + 5;
-    }
-    if (bonus[4] == 6) {
-        units = units + 3;
-    }
-    if (bonus[5] == 10) {
-        units = units + 7;
-    }
-    if (bonus[6] == 4) {
-        units = units + 2;
+
+    //Pull bonus sums and bonus amounts from mapProperties
+    for (var i=0;i<map.dataProp.mapBonus.length;i++){
+        for(var j=0;j<bonus.length;j++){
+            if(j == map.dataProp.mapBonus[i].group && bonus[j] == map.dataProp.mapBonus[i].sum){
+                units = units + map.dataProp.mapBonus[i].amount;
+            }
+        }
     }
 
     if (units < 3) {
