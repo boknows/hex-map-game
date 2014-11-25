@@ -10,8 +10,9 @@ function HexagonGrid(canvasId, radius) {
 
     this.context = map.ctx;
     this.canvas = map.canvas;
-    this.canvasOriginX = 50;
-    this.canvasOriginY = 10;
+
+    this.canvasOriginX = map.canvas.getBoundingClientRect().left;
+    this.canvasOriginY = map.canvas.getBoundingClientRect().top;
 
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 

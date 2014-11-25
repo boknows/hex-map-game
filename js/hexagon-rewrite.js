@@ -68,7 +68,7 @@ map.getData(function(map_data){
 	*/
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
-    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
+    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
 
     if (map.dataProp.turnPhase == "unitPlacement" && map.dataProp.owners[map.dataProp.turn] == map.email) {
         var arr = [{"id":"#endTurn","action":"hide"},{"id":"#attack","action":"hide"},{"id":"#unitButtons","action":"show"}];
@@ -140,7 +140,7 @@ map.getData(function(map_data){
                         map.data = JSON.parse(resp.mapArray);
                         map.dataProp = JSON.parse(resp.mapProperties);
                         map.log = JSON.parse(resp.mapLog);
-                        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 130, 10, true);
+                        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
                         showPlayers();
                         updateLogDisp(hexagonGrid);
@@ -546,13 +546,13 @@ map.getData(function(map_data){
 	
 	//UI - Players List
     function showPlayers() {
-        var x0 = hexagonGrid.width * (map.dataProp.cols);
+        var x0 = hexagonGrid.side * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left + 100;
         var y0 = 25;
         for (var i = 0; i < map.dataProp.colors.length; i++) {
             //Draw hex representing player's color
             var numberOfSides = 6,
                 size = hexagonGrid.radius / 2,
-                Xcenter = x0 + (hexagonGrid.width / 2),
+                Xcenter = x0,
                 Ycenter = y0 + (hexagonGrid.height / 2);
             ctxUI.strokeStyle = map.dataProp.colors[i];
             ctxUI.beginPath();
@@ -568,6 +568,7 @@ map.getData(function(map_data){
 
             //Draw text with player name
             ctxUI.textAlign = "left";
+            ctxUI.textBaseline = "left";
             if (map.dataProp.turn == i) {
                 ctxUI.font = 'bold 13pt Arial';
             } else {

@@ -24,13 +24,14 @@
 	<style>
 	canvas {
 		position: absolute;
-		left: 130px;
-		width: 1200px;
-		height: 900px;
+        left: 130px;
 	}
 	#panel {
 		position: absolute;
 	}
+    #log {
+        position: absolute;
+    }
 	#endTurn {
 		position: absolute;
         width: 250px;
@@ -50,7 +51,7 @@
 		top: 60px;
 	}
 	
-    .Game > #editMap {
+    #editMap {
 		position: absolute;
 		bottom: 450px;
         left: 800px;
@@ -107,9 +108,8 @@
 			$accepted = false;
 		}
     ?>
-		<canvas id="UICanvas" width="1200" height="900"></canvas>
-		<canvas id="HexCanvas" width="1200" height="900"></canvas>
-		
+    	<canvas id="UICanvas" width="1200" height="700"></canvas>
+    	<canvas id="HexCanvas" width="1200" height="700"></canvas>
 		<div id="panel">
             <h2><u>Actions</u></h2>
             <div id="notYourTurn" style="display:none;">

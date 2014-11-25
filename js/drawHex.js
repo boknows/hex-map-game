@@ -6,9 +6,6 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
     this.context.lineCap='round';
 	
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
-	if(tile.row<3){
-		//console.log(tile.row, tile.column, x0, this.width, this.side, y0)
-	}
 	var numberOfSides = 6,
 	size = this.radius,
 	Xcenter = x0 + (this.width / 2),
@@ -19,6 +16,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	for (var i = 1; i <= numberOfSides;i += 1) {
 		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
 	}
+
 	if(typeof(map.data[tile.row][tile.column]) != "undefined"){
 		if (fillColor && highlight == false && map.data[tile.row][tile.column].type =="land") {
 			this.context.fillStyle = map.data[tile.row][tile.column].color;

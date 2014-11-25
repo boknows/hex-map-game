@@ -1,6 +1,6 @@
 HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
-	this.canvasOriginX = originX;
-	this.canvasOriginY = originY;
+	//this.canvasOriginX = originX;
+	//this.canvasOriginY = originY;
 	this.rows = rows;
 	this.cols = cols;
 	var currentHexX;
@@ -8,6 +8,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 	var debugText = "";
 	var offsetColumn = false;
 	var hexNum = 1;
+
 	for (var col = 0; col < cols; col++) {
 		for (var row = 0; row < rows; row++) {
 			if (!offsetColumn) {
@@ -34,6 +35,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 			}	
 		}
 		offsetColumn = !offsetColumn;
+
 	}
 
 	var offsetColumn = false;
