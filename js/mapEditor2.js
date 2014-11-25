@@ -200,6 +200,23 @@ map.getData(function(map_data) {
 
     var saveMap = document.getElementById('saveMap');
     saveMap.addEventListener('click', function(e) { //For the map editor
+        var bonus = [];
+        for (var i=0;i<100;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
+            bonus[i] = 0;
+        }
+        for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
+            for (var j = 0; j < map.data[i].length; j++) {
+                if (map.data[i][j].group != "") {
+                    bonus[map.data[i][j].group]++;
+                }
+            }
+        }
+        map.dataProp.mapBonus = [];
+        for (var i=0; i<bonus.length;i++){
+            if(bonus[i] != 0){
+                 map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":0});    
+            }
+        }
         console.log(JSON.stringify(map.data));
         console.log(JSON.stringify(map.dataProp));
     }, false);
