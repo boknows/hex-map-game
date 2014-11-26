@@ -105,7 +105,7 @@ map.getData(function(map_data){
         showHide(arr,"Fortify phase. Initial Load.");
     }
     if (map.dataProp.owners[map.dataProp.turn] != map.email) {
-        var arr = [{"id":"#panel","action":"show"},{"id":"#notYourTurn","action":"show"},{"id":"#onoffswitch","action":"show"},{"id":"#endTurnButton","action":"hide"}];
+        var arr = [{"id":"#panel","action":"hide"},{"id":"#notYourTurn","action":"show"},{"id":"#onoffswitch","action":"show"},{"id":"#endTurnButton","action":"hide"}];
         showHide(arr,"Not your turn. Initial Load.");
     }
     if(map.dataProp.owners[map.dataProp.turn] == map.email && map.dataProp.turnPhase != "fortify"){
@@ -416,7 +416,6 @@ map.getData(function(map_data){
             map.dataProp.cardTicker[map.dataProp.turn].val = 0;
             drawCard(map.username);
         }
-        $('#notYourTurnText').html(notYourTurnText);
 
         if (map.dataProp.turn == map.dataProp.owners.length - 1) {
             map.dataProp.turn = 0;

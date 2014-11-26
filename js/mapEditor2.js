@@ -68,6 +68,8 @@ map.getData(function(map_data) {
                 "color": "",
                 "connect": "",
                 "group": "",
+                "neutral": false,
+                "nUnits": 0,
             };
         }
     }
@@ -84,6 +86,7 @@ map.getData(function(map_data) {
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+    var inputFocus = false;
 
     function updateMenu (hexagonGrid){
         var x0 = hexagonGrid.width * (map.dataProp.cols-2) + hexagonGrid.canvasOriginX;
@@ -235,293 +238,306 @@ map.getData(function(map_data) {
         console.log(JSON.stringify(map.dataProp));
     }, false);
 
+    $( "input" ).focus(function() {
+        hexagonGrid.inputFocus = true;
+    });
+
     $('body').keydown(function(e) {
-        var cube = toCubeCoord(map.editMap.col, map.editMap.row);
-        switch (e.keyCode){
-            case 48: 
-                $('#group').val("0");
-                map.data[map.editMap.row][map.editMap.col].group = "0";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 49: 
-                $('#group').val("1");
-                map.data[map.editMap.row][map.editMap.col].group = "1";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 50: 
-                $('#group').val("2");
-                map.data[map.editMap.row][map.editMap.col].group = "2";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 51: 
-                $('#group').val("3");
-                map.data[map.editMap.row][map.editMap.col].group = "3";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 52: 
-                $('#group').val("4");
-                map.data[map.editMap.row][map.editMap.col].group = "4";
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 53: 
-                $('#group').val("5");
-                map.data[map.editMap.row][map.editMap.col].group = "5";
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                break;
-            case 54: 
-                $('#group').val("6");
-                map.data[map.editMap.row][map.editMap.col].group = "6";
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                break;
-            case 55: 
-                $('#group').val("7");
-                map.data[map.editMap.row][map.editMap.col].group = "7";
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                break;
-            case 56: 
-                $('#group').val("8");
-                map.data[map.editMap.row][map.editMap.col].group = "8";
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                break;
-            case 57: 
-                $('#group').val("9");
-                map.data[map.editMap.row][map.editMap.col].group = "9";
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                break;
-            case 76: 
-                $('#type').val("Land");
-                map.data[map.editMap.row][map.editMap.col].type = "land";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 87: 
-                $('#type').val("Water");
-                map.data[map.editMap.row][map.editMap.col].type = "water";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 68: 
-                $('#type').val("desert");
-                map.data[map.editMap.row][map.editMap.col].type = "desert";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 77: 
-                $('#type').val("mountains");
-                map.data[map.editMap.row][map.editMap.col].type = "mountains";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 70: 
-                $('#type').val("forest");
-                map.data[map.editMap.row][map.editMap.col].type = "forest";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 78: 
-                $('#group').val("neutral");
-                map.data[map.editMap.row][map.editMap.col].group = "neutral";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-            case 32: 
-                $('#group').val("");
-                map.data[map.editMap.row][map.editMap.col].group = "";
-                var data = {
-                    data: JSON.stringify(map.data)
-                };
-                updateMap(data, "updateMap");
-                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                break;
-        }
-        if (e.keyCode == 103) {
-            if($('#nw').val() != "#000000"){
-                $('#nw').val("#000000"); 
-                map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
-                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-                map.data[offset.r][offset.q].se = $('#nw').val();  
-            }else{
-                $('#nw').val("None");
-                map.data[map.editMap.row][map.editMap.col].nw = "";
-                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-                map.data[offset.r][offset.q].se = "";  
+
+        if (inputFocus == false) {
+            var cube = toCubeCoord(map.editMap.col, map.editMap.row);
+            
+            switch (e.keyCode) {
+                case 48:
+                    $('#group').val("0");
+                    map.data[map.editMap.row][map.editMap.col].group = "0";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 49:
+                    $('#group').val("1");
+                    map.data[map.editMap.row][map.editMap.col].group = "1";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 50:
+                    $('#group').val("2");
+                    map.data[map.editMap.row][map.editMap.col].group = "2";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 51:
+                    $('#group').val("3");
+                    map.data[map.editMap.row][map.editMap.col].group = "3";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 52:
+                    $('#group').val("4");
+                    map.data[map.editMap.row][map.editMap.col].group = "4";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 53:
+                    $('#group').val("5");
+                    map.data[map.editMap.row][map.editMap.col].group = "5";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    break;
+                case 54:
+                    $('#group').val("6");
+                    map.data[map.editMap.row][map.editMap.col].group = "6";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    break;
+                case 55:
+                    $('#group').val("7");
+                    map.data[map.editMap.row][map.editMap.col].group = "7";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    break;
+                case 56:
+                    $('#group').val("8");
+                    map.data[map.editMap.row][map.editMap.col].group = "8";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    break;
+                case 57:
+                    $('#group').val("9");
+                    map.data[map.editMap.row][map.editMap.col].group = "9";
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    break;
+                case 76:
+                    $('#type').val("Land");
+                    map.data[map.editMap.row][map.editMap.col].type = "land";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 87:
+                    $('#type').val("Water");
+                    map.data[map.editMap.row][map.editMap.col].type = "water";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 68:
+                    $('#type').val("desert");
+                    map.data[map.editMap.row][map.editMap.col].type = "desert";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 77:
+                    $('#type').val("mountains");
+                    map.data[map.editMap.row][map.editMap.col].type = "mountains";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 70:
+                    $('#type').val("forest");
+                    map.data[map.editMap.row][map.editMap.col].type = "forest";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 78:
+                    if (map.data[map.editMap.row][map.editMap.col].neutral == true) {
+                        map.data[map.editMap.row][map.editMap.col].neutral = false;
+                        $('#neutral').val("false");
+                    } else {
+                        map.data[map.editMap.row][map.editMap.col].neutral = true;
+                        $('#neutral').val("true");
+                    }
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 67:
+                    $('#group').val("");
+                    map.data[map.editMap.row][map.editMap.col].group = "";
+                    var data = {
+                        data: JSON.stringify(map.data)
+                    };
+                    updateMap(data, "updateMap");
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        }
-        if (e.keyCode == 97) {
-            if($('#sw').val() != "#000000"){
-                $('#sw').val("#000000");
-                map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
-                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-                map.data[offset.r][offset.q].ne = $('#sw').val();
-            }else{
-                $('#sw').val("None");
-                map.data[map.editMap.row][map.editMap.col].sw = "";
-                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-                map.data[offset.r][offset.q].ne = "";
+            if (e.keyCode == 103) {
+                if ($('#nw').val() != "#000000") {
+                    $('#nw').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
+                    var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+                    map.data[offset.r][offset.q].se = $('#nw').val();
+                } else {
+                    $('#nw').val("None");
+                    map.data[map.editMap.row][map.editMap.col].nw = "";
+                    var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
+                    map.data[offset.r][offset.q].se = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        }
-        if (e.keyCode == 98) {
-            if($('#s').val() != "#000000"){
-                $('#s').val("#000000");
-                map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
-                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-                map.data[offset.r][offset.q].n = $('#s').val();
-            }else{
-                $('#s').val("None");
-                map.data[map.editMap.row][map.editMap.col].s = "";
-                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-                map.data[offset.r][offset.q].n = "";
+            if (e.keyCode == 97) {
+                if ($('#sw').val() != "#000000") {
+                    $('#sw').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
+                    var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+                    map.data[offset.r][offset.q].ne = $('#sw').val();
+                } else {
+                    $('#sw').val("None");
+                    map.data[map.editMap.row][map.editMap.col].sw = "";
+                    var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
+                    map.data[offset.r][offset.q].ne = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        }
-        if (e.keyCode == 99) {
-            if($('#se').val() != "#000000"){
-                $('#se').val("#000000");
-                map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
-                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-                map.data[offset.r][offset.q].nw = $('#se').val();
-            }else{
-                $('#se').val("None");
-                map.data[map.editMap.row][map.editMap.col].se = "";
-                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-                map.data[offset.r][offset.q].nw = "";
+            if (e.keyCode == 98) {
+                if ($('#s').val() != "#000000") {
+                    $('#s').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
+                    var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+                    map.data[offset.r][offset.q].n = $('#s').val();
+                } else {
+                    $('#s').val("None");
+                    map.data[map.editMap.row][map.editMap.col].s = "";
+                    var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
+                    map.data[offset.r][offset.q].n = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        }
-        if (e.keyCode == 105) {
-            if( $('#ne').val() != "#000000"){
-                $('#ne').val("#000000");
-                map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
-                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-                map.data[offset.r][offset.q].sw = $('#ne').val();
-            }else{
-                $('#ne').val("None");
-                map.data[map.editMap.row][map.editMap.col].ne = "";
-                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-                map.data[offset.r][offset.q].sw = "";
+            if (e.keyCode == 99) {
+                if ($('#se').val() != "#000000") {
+                    $('#se').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
+                    var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+                    map.data[offset.r][offset.q].nw = $('#se').val();
+                } else {
+                    $('#se').val("None");
+                    map.data[map.editMap.row][map.editMap.col].se = "";
+                    var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
+                    map.data[offset.r][offset.q].nw = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-        }
-        if (e.keyCode == 104) {
-            if ($('#n').val() != "#000000") {
-                $('#n').val("#000000");
-                map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
-                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-                map.data[offset.r][offset.q].s = $('#n').val();
-            } else {
-                $('#n').val("None");
-                map.data[map.editMap.row][map.editMap.col].n = "";
-                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-                map.data[offset.r][offset.q].s = "";
+            if (e.keyCode == 105) {
+                if ($('#ne').val() != "#000000") {
+                    $('#ne').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
+                    var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+                    map.data[offset.r][offset.q].sw = $('#ne').val();
+                } else {
+                    $('#ne').val("None");
+                    map.data[map.editMap.row][map.editMap.col].ne = "";
+                    var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
+                    map.data[offset.r][offset.q].sw = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
-            var data = {
-                data: JSON.stringify(map.data)
-            };
-            updateMap(data, "updateMap");
-            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+            if (e.keyCode == 104) {
+                if ($('#n').val() != "#000000") {
+                    $('#n').val("#000000");
+                    map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
+                    var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+                    map.data[offset.r][offset.q].s = $('#n').val();
+                } else {
+                    $('#n').val("None");
+                    map.data[map.editMap.row][map.editMap.col].n = "";
+                    var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
+                    map.data[offset.r][offset.q].s = "";
+                }
+                var data = {
+                    data: JSON.stringify(map.data)
+                };
+                updateMap(data, "updateMap");
+                map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+            }
         }
     });
 });
@@ -539,12 +555,13 @@ function HexagonGrid(canvasId, radius) {
     this.canvas = map.canvas;
     this.canvasOriginX = 10;
     this.canvasOriginY = 10;
-
+    this.inputFocus = false;
     this.canvas.addEventListener("mousedown", this.clickEvent.bind(this), false);
 
 };
 
 HexagonGrid.prototype.clickEvent = function(e) {
+    this.inputFocus = false;
     var mouseX = e.pageX;
     var mouseY = e.pageY;
     var localX = mouseX - this.canvasOriginX;
@@ -600,6 +617,8 @@ HexagonGrid.prototype.clickEvent = function(e) {
     $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
     $('#group').val(map.data[tile.row][tile.column].group);
     $('#column').val(tile.column);
+    $('#neutral').val(map.data[tile.row][tile.column].neutral);
+    $('#nUnits').val(map.data[tile.row][tile.column].nUnits);
     $('#row').val(tile.row);
 
 };
@@ -644,8 +663,10 @@ HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText, highlight
     this.context.textBaseline = "middle";
     this.context.font = 'bold 13pt Arial';
     this.context.fillStyle = "#000000";
-    if(map.data[tile.row][tile.column].group == "neutral"){
+    if(map.data[tile.row][tile.column].neutral == true && map.data[tile.row][tile.column].group == ""){
         this.context.fillText("N", x0 + (this.width / 2) , y0 + (this.height / 2));
+    }else if(map.data[tile.row][tile.column].neutral == true && map.data[tile.row][tile.column].group !== ""){
+        this.context.fillText(map.data[tile.row][tile.column].group + " + N", x0 + (this.width / 2) , y0 + (this.height / 2));
     }else{
         this.context.fillText(map.data[tile.row][tile.column].group, x0 + (this.width / 2) , y0 + (this.height / 2));
     }

@@ -75,6 +75,12 @@
                 <div class="input-group">
                 <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
                 </div>
+                <div class="input-group">
+                <span class='input-group-addon'><b>Neutral Owner Start:</b></span><select name='neutral' id='neutral' class='form-control'><option value="false">No</option><option value="true">Yes</option></select>
+                </div>
+                <div class="input-group">
+                <span class='input-group-addon'><b>Neutral Units Start:</b></span><input type='text' name='nUnits' id='nUnits' class='form-control'>
+                </div>
                 <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
                 <div class="input-group">
                 <span class='input-group-addon'><b>Map Name:</b></span><input type='text' name='saveMapName' class='form-control' id='saveMapName' value=''>

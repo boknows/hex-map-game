@@ -47,7 +47,7 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				currentHexX = col * this.side + originX;
 				currentHexY = (row * this.height) + originY + (this.height * 0.5);
 			}
-			//this.drawHexBorders(currentHexX, currentHexY);
+			this.drawHexBorders(currentHexX, currentHexY);
 		}
 		offsetColumn = !offsetColumn;
 	}

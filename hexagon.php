@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
     <link href="css/onoffswitch.css" rel="stylesheet">
-
 	<style>
 	canvas {
 		position: absolute;
@@ -110,18 +109,22 @@
     ?>
     	<canvas id="UICanvas" width="1400" height="1000"></canvas>
     	<canvas id="HexCanvas" width="1400" height="1000"></canvas>
+        <div id="notYourTurn" style="display:none;">
+            It is no longer your turn.</p>
+        </div>
 		<div id="panel">
             <h2><u>Actions</u></h2>
+            <!--
             <div id="notYourTurn" style="display:none;">
                 <p id="notYourTurnText">It is no longer your turn.</p>
-                <div class="onoffswitch" id="onoffswitch"> <!-- On/off switch for auto-refreshing page -->
+                <div class="onoffswitch" id="onoffswitch"> 
                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
                     <label class="onoffswitch-label" for="myonoffswitch">
                         <span class="onoffswitch-inner"></span>
                         <span class="onoffswitch-switch"></span>
                     </label>
                 </div>
-            </div>
+            </div> -->
             <p id='msg' style='width:200px'></p>
     		<div class="controls" id="endTurn" style="display:none">
                 <p id="fortUnits"></p>
@@ -215,21 +218,21 @@
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php
         if($data['status'] == "started"){
-            echo "<script src='js/hexagon-rewrite.js?v5'></script>
-	        <script src='js/HexagonGrid.js?v5'></script>
-            <script src='js/drawHexGrid.js?v5'></script>
-            <script src='js/drawHex.js?v5'></script>
-            <script src='js/getSelectedTile.js?v5'></script>
-            <script src='js/clickEvent.js?v5'></script>
-            <script src='js/util.js?v5'></script>
-            <script src='js/tradeInCards.js?v5'></script>";
+            echo "<script src='js/hexagon-rewrite.js?v6'></script>
+	        <script src='js/HexagonGrid.js?v6'></script>
+            <script src='js/drawHexGrid.js?v6'></script>
+            <script src='js/drawHex.js?v6'></script>
+            <script src='js/getSelectedTile.js?v6'></script>
+            <script src='js/clickEvent.js?v6'></script>
+            <script src='js/util.js?v6'></script>
+            <script src='js/tradeInCards.js?v6'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){
             echo "<div class='inviteForm' style='display:none;' id='inviteForm'>";
 			if ($accepted == false){
 				echo "<div class='inviteForm'>";
-				echo "<script src='js/util.js?v5'></script>
-			<script src='js/acceptInvite.js?v5'></script>";
+				echo "<script src='js/util.js?v6'></script>
+			<script src='js/acceptInvite.js?v6'></script>";
 			}
 			
         }     

@@ -3,8 +3,8 @@
 HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 	var offSet = map.canvas.getBoundingClientRect();
 
-	mouseX -= offSet.x;
-	mouseY -= offSet.y;
+	mouseX -= offSet.left;
+	mouseY -= offSet.top;
 
 	var column = Math.floor((mouseX) / this.side);
 	var row = Math.floor(
