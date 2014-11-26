@@ -609,7 +609,7 @@ function updateLogDisp(hexagonGrid) {
     if(map.username=="bo_knows"){
         var style = {
             left: 0,
-            top: y0*2,
+            top: y0*2+100,
             position: "absolute",
             width: "200px",
             'font-size': '75%'

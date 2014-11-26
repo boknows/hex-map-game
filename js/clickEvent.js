@@ -381,17 +381,31 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var x0 = this.width * (map.dataProp.cols);
     var y0 = 25;
     for (var i = 0; i < map.dataProp.users.length; i++) {
-        if(map.dataProp.cardsHeld[i].length>0){
-            var width2 = 15, height2 = 20;
-            var boundingBox = (x0-this.width/6) + " " + ((x0-this.width/6)+width2) + " " + (y0+(this.height/3)+height2) + " " + (y0+(this.height/3));
-            if(localX>(x0-this.width/6) && localX<((x0-this.width/6)+width2) && localY<(y0+(this.height/3)+height2) && localY>(y0+(this.height/3))){
+        if (map.dataProp.cardsHeld[i].length > 0) {
+            var width2 = 15,
+                height2 = 20;
+            var boundingBox = (x0 - this.width / 6) + " " + ((x0 - this.width / 6) + width2) + " " + (y0 + (this.height / 3) + height2) + " " + (y0 + (this.height / 3));
+            if (localX > (x0 - this.width / 6) && localX < ((x0 - this.width / 6) + width2) && localY < (y0 + (this.height / 3) + height2) && localY > (y0 + (this.height / 3))) {
                 var cardHTML = "";
-                if((map.dataProp.turn == i && map.dataProp.users[i]==map.username) || map.dataProp.users[i]==map.username){                    for(var j=0;j<map.dataProp.cardsHeld[i].length;j++){
-                        cardHTML = cardHTML + "<tr id='"+ map.dataProp.cardsHeld[i][j].id +"'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "' id='"+ map.dataProp.cardsHeld[i][j].id +"check'></td><td>" + map.dataProp.cardsHeld[i][j].desc +"</td></tr>";
+                if ((map.dataProp.turn == i && map.dataProp.users[i] == map.username) || map.dataProp.users[i] == map.username) {
+                    for (var j = 0; j < map.dataProp.cardsHeld[i].length; j++) {
+                        cardHTML = cardHTML + "<tr id='" + map.dataProp.cardsHeld[i][j].id + "'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[i][j].id + "' id='" + map.dataProp.cardsHeld[i][j].id + "check'></td><td>" + map.dataProp.cardsHeld[i][j].desc + "</td></tr>";
                     }
                     $('#cardDisp').html(cardHTML);
-                    var arr = [{"id":"#cardDisp","action":"show"},{"id":"#cardTrade","action":"show"},{"id":"#cardTradeClose","action":"show"},{"id":"#log","action":"hide"}];
-                    showHide(arr,"Clicked a card.");
+                    var arr = [{
+                        "id": "#cardDisp",
+                        "action": "show"
+                    }, {
+                        "id": "#cardTrade",
+                        "action": "show"
+                    }, {
+                        "id": "#cardTradeClose",
+                        "action": "show"
+                    }, {
+                        "id": "#log",
+                        "action": "hide"
+                    }];
+                    showHide(arr, "Clicked a card.");
                 }
             }
         }

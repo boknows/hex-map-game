@@ -70,7 +70,10 @@
                 <span class='input-group-addon'><b>NW:</b></span><select name='nw' class='form-control' id='nw'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
                 </div>
                 <div class="input-group">
-                <span class='input-group-addon'><b>Connect:</b></span><input type='text' name='connect' class='form-control' id='connect' value=''>
+                    <span class='input-group-addon'><b>Connectors:</b></span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" id="connectBtn">Select</button>
+                    </span>
                 </div>
                 <div class="input-group">
                 <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>

@@ -654,7 +654,12 @@ HexagonGrid.prototype.clickEvent = function(e) {
     $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
     $('#group').val(map.data[tile.row][tile.column].group);
     $('#column').val(tile.column);
-    $('#neutral').val(map.data[tile.row][tile.column].neutral);
+    if($('#neutral').val() == true){
+        $('#neutral').val("true");
+    }else{
+        $('#neutral').val("false");
+    }
+    
     $('#nUnits').val(map.data[tile.row][tile.column].nUnits);
     $('#groupBonusAmt').val(map.data[tile.row][tile.column].groupBonus);
     $('#row').val(tile.row);
