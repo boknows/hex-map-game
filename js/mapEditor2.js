@@ -68,6 +68,7 @@ map.getData(function(map_data) {
                 "color": "",
                 "connect": "",
                 "group": "",
+                "groupBonus": 0,
                 "neutral": false,
                 "nUnits": 0,
             };
@@ -82,6 +83,7 @@ map.getData(function(map_data) {
         "rows": parseInt($('#rows').val()),
         "cols": parseInt($('#cols').val()),
         "hexSize": parseInt($('#size').val()),
+        "groupBonus": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     };
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
@@ -225,7 +227,7 @@ map.getData(function(map_data) {
         map.dataProp.mapBonus = [];
         for (var i=0; i<bonus.length;i++){
             if(bonus[i] != 0){
-                 map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":0});    
+                 map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":map.dataProp.groupBonus[i]});    
             }
         }
         var data= {
@@ -242,11 +244,44 @@ map.getData(function(map_data) {
         hexagonGrid.inputFocus = true;
     });
 
-    $('body').keydown(function(e) {
+    $('#nUnits').keyup(function(e) {
+        map.data[map.editMap.row][map.editMap.col].nUnits = parseInt($('#nUnits').val());
+    });
 
-        if (inputFocus == false) {
+    $('#group1bonus').keyup(function(e) {
+        map.dataProp.groupBonus[1] = parseInt($('#group1bonus').val());
+    });
+    $('#group2bonus').keyup(function(e) {
+        map.dataProp.groupBonus[2] = parseInt($('#group2bonus').val());
+    });
+    $('#group3bonus').keyup(function(e) {
+        map.dataProp.groupBonus[3] = parseInt($('group3bonus').val());
+    });
+    $('#group4bonus').keyup(function(e) {
+        map.dataProp.groupBonus[4] = parseInt($('#group4bonus').val());
+    });
+    $('#group5bonus').keyup(function(e) {
+        map.dataProp.groupBonus[5] = parseInt($('#group5bonus').val());
+    });
+    $('#group6bonus').keyup(function(e) {
+        map.dataProp.groupBonus[6] = parseInt($('#group6bonus').val());
+    });
+    $('#group7bonus').keyup(function(e) {
+        map.dataProp.groupBonus[7] = parseInt($('#group7bonus').val());
+    });
+    $('#group8bonus').keyup(function(e) {
+        map.dataProp.groupBonus[8] = parseInt($('#group8bonus').val());
+    });
+    $('#group9bonus').keyup(function(e) {
+        map.dataProp.groupBonus[9] = parseInt($('#group9bonus').val());
+    });
+    $('#group10bonus').keyup(function(e) {
+        map.dataProp.groupBonus[10] = parseInt($('#group10bonus').val());
+    });
+
+    $('body').keydown(function(e) {
+        if (hexagonGrid.inputFocus == false) {
             var cube = toCubeCoord(map.editMap.col, map.editMap.row);
-            
             switch (e.keyCode) {
                 case 48:
                     $('#group').val("0");
@@ -571,6 +606,7 @@ HexagonGrid.prototype.clickEvent = function(e) {
         row: tile.row,
         col: tile.column
     };
+    console.log(map.data[tile.row][tile.column]);
     if (map.data[tile.row][tile.column].type == "water") {
         map.data[tile.row][tile.column].type = "land";
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -619,6 +655,7 @@ HexagonGrid.prototype.clickEvent = function(e) {
     $('#column').val(tile.column);
     $('#neutral').val(map.data[tile.row][tile.column].neutral);
     $('#nUnits').val(map.data[tile.row][tile.column].nUnits);
+    $('#groupBonusAmt').val(map.data[tile.row][tile.column].groupBonus);
     $('#row').val(tile.row);
 
 };
