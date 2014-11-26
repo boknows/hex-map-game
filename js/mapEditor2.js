@@ -230,6 +230,7 @@ map.getData(function(map_data) {
                  map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":map.dataProp.groupBonus[i]});    
             }
         }
+        delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
         var data= {
             mapArray: JSON.stringify(map.data),
             mapProperties: JSON.stringify(map.dataProp),

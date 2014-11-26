@@ -202,7 +202,7 @@ function startGame(gameID, mapArray, mapProperties) {
     var countries = [];
     for (var i = 0; i < mapArray.length; i++) {
         for (var j = 0; j < mapArray[i].length; j++) {
-            if (mapArray[i][j].type != "water") {
+            if (mapArray[i][j].type != "water" && mapArray[i][j].neutral == false) {
                 countries.push({
                     width: i,
                     length: j,
@@ -268,6 +268,15 @@ function startGame(gameID, mapArray, mapProperties) {
             mapArray[w][l].owner = mapProperties.users[i];
             mapArray[w][l].units = cntSplt[i][j].units;
             mapArray[w][l].color = mapProperties.colors[i];
+        }
+    }
+
+    //Add neutral units to map
+    for (var i = 0; i < mapArray.length; i++) {
+        for (var j = 0; j < mapArray[i].length; j++) {
+            if (mapArray[i][j].type != "water" && mapArray[i][j].neutral == true) {
+                mapArray[i][j].units = mapArray[i][j].nUnits;
+            }
         }
     }
 

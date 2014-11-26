@@ -20,7 +20,11 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	if(typeof(map.data[tile.row][tile.column]) != "undefined"){
 		if (fillColor && highlight == false && map.data[tile.row][tile.column].type !="water") {
-			this.context.fillStyle = map.data[tile.row][tile.column].color;
+			if(map.data[tile.row][tile.column].neutral == true){
+				this.context.fillStyle = fillColor;
+			}else{
+				this.context.fillStyle = map.data[tile.row][tile.column].color;
+			}
 		}else{
 			this.context.fillStyle = fillColor;
 		}
@@ -91,7 +95,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		//Print number of units
 		this.context.textAlign="center"; 
 		this.context.textBaseline = "middle";
-		this.context.font = 'bold '+ (map.dataProp.hexSize/2) +'pt Arial';
+		this.context.font = 'bold '+ (map.dataProp.hexSize/2.25) +'pt Arial';
 		//Code for contrasting text with background color
         /*var clr = getContrastYIQ(map.data[tile.row][tile.column].color); //contrast against player color 
 		var clr = getContrastYIQ(fillColor); //contrast against land color (fillColor)
