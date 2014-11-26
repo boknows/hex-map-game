@@ -4,7 +4,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var localX = mouseX - this.canvasOriginX;
     var localY = mouseY - this.canvasOriginY;
     var tile = this.getSelectedTile(localX, localY);
-    console.log(map.data[tile.row][tile.column]);
+    console.log(localX, localY);
     if(map.username=="bo_knows"){
         map.editMap = {col: tile.column, row: tile.row};
         //populate hex data to form for map editing
@@ -377,15 +377,17 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var mouseX = e.pageX;
     var mouseY = e.pageY;
     var localX = mouseX - this.canvasOriginX;
-    var localY = mouseY;
-    var x0 = this.width * (map.dataProp.cols);
+    var localY = mouseY - this.canvasOriginY;
+    var x0 = this.side * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left + 100;
     var y0 = 25;
     for (var i = 0; i < map.dataProp.users.length; i++) {
         if (map.dataProp.cardsHeld[i].length > 0) {
             var width2 = 15,
                 height2 = 20;
-            var boundingBox = (x0 - this.width / 6) + " " + ((x0 - this.width / 6) + width2) + " " + (y0 + (this.height / 3) + height2) + " " + (y0 + (this.height / 3));
-            if (localX > (x0 - this.width / 6) && localX < ((x0 - this.width / 6) + width2) && localY < (y0 + (this.height / 3) + height2) && localY > (y0 + (this.height / 3))) {
+            var xStart = (x0-this.width/1.5);
+            var yStart = y0+(this.height/3);
+            console.log(xStart,yStart);
+            if (localX > xStart && localX < (xStart + width2) && localY > yStart && localY < (yStart - height2)) {
                 var cardHTML = "";
                 if ((map.dataProp.turn == i && map.dataProp.users[i] == map.username) || map.dataProp.users[i] == map.username) {
                     for (var j = 0; j < map.dataProp.cardsHeld[i].length; j++) {

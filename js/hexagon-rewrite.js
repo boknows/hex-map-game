@@ -583,8 +583,8 @@ map.getData(function(map_data){
 
             //Show card icon if player has cards
             if(map.dataProp.cardsHeld[i].length>0){
-                console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
-                roundRect(ctxUI, (x0-hexagonGrid.width/1.5), y0+(hexagonGrid.height/3), 15, 20, 1, "" , map.dataProp.colors[i]);
+                //console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
+                $('body').append('<button type="button" id="cards'+i+'" style="position:absolute;left:'+(x0+map.canvas.getBoundingClientRect().left-hexagonGrid.width/1.5)+'px;top:'+(y0+(hexagonGrid.height/4))+'px;height:22px;width:15px;background-color:'+map.dataProp.colors[i]+'""></button>');
             }
 
             y0 = y0 + hexagonGrid.height / 1.5; //add to Y coordinate for next player

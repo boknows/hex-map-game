@@ -230,6 +230,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     if (typeof radius === "undefined") {
         radius = 5;
     }
+    $('#panel').add( "<button type='button' class='btn btn-success'>Card</button>");
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -670,7 +671,7 @@ function showHide(arr, from){
      * @param {array} arr - array of objects, {id: DOM id to change, action: show/hide}
      * @param {Text} from - description of what function triggered this change
      */
-     console.log(from, " triggered these events", arr);
+     //console.log(from, " triggered these events", arr);
      for(var i=0;i<arr.length;i++){
         if(arr[i].action=="show"){
             $(arr[i].id).show();   

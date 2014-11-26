@@ -4,7 +4,6 @@ function HexagonGrid(canvasId, radius) {
     this.height = Math.round(Math.sqrt(3) * radius);
     this.width = Math.round(2 * radius);
     this.side = Math.round((3 / 2) * radius);
-    console.log("Dimensions:", this.radius, this.height, this.width, this.side);
     map.canvas = document.getElementById(canvasId); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
 
