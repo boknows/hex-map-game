@@ -338,7 +338,7 @@ function startGame(gameID, mapArray, mapProperties) {
         mapProperties.turnModifiers[i] = [];
         mapProperties.cardTicker[i] = {val: 0};
     }
-	//mapProperties.cardDeck = cards;
+	mapProperties.cardDeck = cards;
 	mapProperties.winCard = false;
     
     mapProperties.turnPhase = "unitPlacement";
