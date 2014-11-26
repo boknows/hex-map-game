@@ -1,6 +1,6 @@
 HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
-	this.canvasOriginX = originX;
-	this.canvasOriginY = originY;
+	//this.canvasOriginX = originX;
+	//this.canvasOriginY = originY;
 	this.rows = rows;
 	this.cols = cols;
 	var currentHexX;
@@ -37,7 +37,6 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 		offsetColumn = !offsetColumn;
 
 	}
-
 	var offsetColumn = false;
 	for (var col = 0; col < cols; col++) { //Draw borders separately so they don't get overlapped by other graphics. 
 		for (var row = 0; row < rows; row++) {
@@ -48,17 +47,9 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				currentHexX = col * this.side + originX;
 				currentHexY = (row * this.height) + originY + (this.height * 0.5);
 			}
-			this.drawHexBorders(currentHexX, currentHexY);
+			//this.drawHexBorders(currentHexX, currentHexY);
 		}
 		offsetColumn = !offsetColumn;
-	}
-
-	if(map.dataProp.turnPhase == "unitPlacement"){
-		for(var i=0, len=map.unitPlacement.length; i<len; i++){
-			var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-			var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
-			this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner); 
-		}
 	}
 };
 

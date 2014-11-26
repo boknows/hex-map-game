@@ -30,13 +30,13 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	if (highlight == true){
 		this.context.fillStyle = highlightColor;
 	}
+	
 	this.context.fill();
 	this.context.closePath();
 	this.context.save();
 	this.context.clip();
 	this.context.lineWidth *= 2;
 	this.context.stroke();
-
 
 
 	if(map.data[tile.row][tile.column].type != "water"){
@@ -101,10 +101,12 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 		this.context.fillStyle = "";
 	}
+	this.context.restore();
 };
 
 HexagonGrid.prototype.drawHexBorders = function (x0, y0) {  
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
+	
 	if(map.data[tile.row][tile.column].s != ""){
 		this.context.beginPath();
 		this.context.lineWidth = 5;

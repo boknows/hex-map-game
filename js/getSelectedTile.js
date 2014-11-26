@@ -1,7 +1,7 @@
 //Uses a grid overlay algorithm to determine hexagon location
 //Left edge of grid has a test to acuratly determin correct hex
 HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
-	var offSet = this.getRelativeCanvasOffset();
+	var offSet = map.canvas.getBoundingClientRect();
 
 	mouseX -= offSet.x;
 	mouseY -= offSet.y;
@@ -36,7 +36,6 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 
 		if (this.isPointInTriangle(mousePoint, p1, p2, p3)) {
 			column--;
-
 			if (column % 2 != 0) {
 				row--;
 			}
@@ -62,7 +61,7 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 			}
 		}
 	}
-
+	console.log(row, column);
 	return  { row: row, column: column };
 
 };

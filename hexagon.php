@@ -25,6 +25,7 @@
 	canvas {
 		position: absolute;
         left: 130px;
+
 	}
 	#panel {
 		position: absolute;
