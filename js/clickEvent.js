@@ -4,6 +4,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
     var localX = mouseX - this.canvasOriginX;
     var localY = mouseY - this.canvasOriginY;
     var tile = this.getSelectedTile(localX, localY);
+
     if(map.username=="bo_knows"){
         map.editMap = {col: tile.column, row: tile.row};
         //populate hex data to form for map editing

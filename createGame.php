@@ -35,10 +35,11 @@ foreach($_POST['usernames'] as $var){
     }
 }
 $usersJson = json_encode($users);
-$mapProperties->fortifies = $_POST['fortifies'];
+$mapProperties->fortifies = intval($_POST['fortifies']);
 $mapProperties->creator = $_SESSION['user']['email'];
 $mapProperties->turnPhase = "invites";
 $mapProperties->colors[] = $_POST['colorpicker'];
+$mapProperties->fortifiesUsed = 0;
 
 for($i=0;$i<count($owners)-1;$i++){
     $mapProperties->colors[] = "NULL";

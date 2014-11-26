@@ -4,14 +4,15 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 	this.context.strokeStyle = "#000000";
 	this.context.lineWidth = 1;
     this.context.lineCap='round';
-	
+
+	this.context.restore();
 	var tile = this.getSelectedTile(x0 + this.width - this.side, y0);
 	var numberOfSides = 6,
 	size = this.radius,
 	Xcenter = x0 + (this.width / 2),
 	Ycenter = y0 + (this.height / 2);
 	this.context.beginPath();
-	this.context.lineWidth = 1.5;
+	this.context.lineWidth = 1;
 	this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 	for (var i = 1; i <= numberOfSides;i += 1) {
 		this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
@@ -28,25 +29,26 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	if (highlight == true){
 		this.context.fillStyle = highlightColor;
-		this.context.globalAlpha=0.65;
 	}
 	this.context.fill();
 	this.context.closePath();
+	this.context.save();
+	this.context.clip();
+	this.context.lineWidth *= 2;
 	this.context.stroke();
-	
-	this.context.globalAlpha=1;
+
 
 
 	if(map.data[tile.row][tile.column].type != "water"){
 		//Draw smaller hex inside bigger hex - v2
 		var numberOfSides = 6,
-		size = this.radius-4.75,
+		size = this.radius*0.7,
 		Xcenter = x0 + (this.width / 2),
 		Ycenter = y0 + (this.height / 2);
 		this.context.fillStyle = fillColor;
 		this.context.strokeStyle = map.data[tile.row][tile.column].color;
 		this.context.beginPath();
-		this.context.lineWidth = 6;
+		this.context.lineWidth = .5;
 		this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
 		for (var i = 1; i <= numberOfSides;i += 1) {
 			this.context.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));

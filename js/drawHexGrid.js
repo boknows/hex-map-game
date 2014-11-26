@@ -1,6 +1,6 @@
 HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
-	//this.canvasOriginX = originX;
-	//this.canvasOriginY = originY;
+	this.canvasOriginX = originX;
+	this.canvasOriginY = originY;
 	this.rows = rows;
 	this.cols = cols;
 	var currentHexX;

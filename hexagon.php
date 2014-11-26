@@ -108,8 +108,8 @@
 			$accepted = false;
 		}
     ?>
-    	<canvas id="UICanvas" width="1200" height="700"></canvas>
-    	<canvas id="HexCanvas" width="1200" height="700"></canvas>
+    	<canvas id="UICanvas" width="1400" height="1000"></canvas>
+    	<canvas id="HexCanvas" width="1400" height="1000"></canvas>
 		<div id="panel">
             <h2><u>Actions</u></h2>
             <div id="notYourTurn" style="display:none;">

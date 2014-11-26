@@ -128,7 +128,6 @@ map.getData(function(map_data) {
     var updateMapBtn = document.getElementById('updateMap');
     updateMapBtn.addEventListener('click', function(e) { //For the map editor
         var cube = toCubeCoord(map.editMap.col, map.editMap.row);
-        console.log(cube);
         map.data[map.editMap.row][map.editMap.col].type = $('#type').val();
         map.data[map.editMap.row][map.editMap.col].owner = $('#owner').val();
         map.data[map.editMap.row][map.editMap.col].units = $('#unitsEdit').val();
@@ -555,7 +554,6 @@ HexagonGrid.prototype.clickEvent = function(e) {
         row: tile.row,
         col: tile.column
     };
-    console.log(map.data[tile.row][tile.column]);
     if (map.data[tile.row][tile.column].type == "water") {
         map.data[tile.row][tile.column].type = "land";
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
