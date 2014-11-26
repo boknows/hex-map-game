@@ -583,7 +583,6 @@ map.getData(function(map_data){
 
             //Show card icon if player has cards
             if(map.dataProp.cardsHeld[i].length>0){
-                //console.log(map.dataProp.users[i] + " has cards.", map.dataProp.cardsHeld[i]);
                 $('body').append('<button type="button" id="cards'+i+'" style="position:absolute;left:'+(x0+map.canvas.getBoundingClientRect().left-hexagonGrid.width/1.5)+'px;top:'+(y0+(hexagonGrid.height/4))+'px;height:22px;width:15px;background-color:'+map.dataProp.colors[i]+'""></button>');
             }
 
@@ -592,7 +591,52 @@ map.getData(function(map_data){
     }
 	showPlayers();
     updateLogDisp(hexagonGrid);
-    
+
+    //player card buttons
+    var cards0 = document.getElementById('cards0');
+    cards0.addEventListener('click', function(e) {
+        showCards(0);
+    }, false);
+    var cards1 = document.getElementById('cards1');
+    cards1.addEventListener('click', function(e) {
+        showCards(1);
+    }, false);
+    var cards2 = document.getElementById('cards2');
+    if (cards2 != null) {
+        cards2.addEventListener('click', function(e) {
+            showCards(2);
+        }, false);
+    }
+    var cards3 = document.getElementById('cards3');
+    if (cards3 != null) {
+        cards3.addEventListener('click', function(e) {
+            showCards(3);
+        }, false);
+    }
+    var cards4 = document.getElementById('cards4');
+    if (cards4 != null) {
+        cards4.addEventListener('click', function(e) {
+            showCards(4);
+        }, false);
+    }
+    var cards5 = document.getElementById('cards5');
+    if (cards5 != null) {
+        cards5.addEventListener('click', function(e) {
+            showCards(5);
+        }, false);
+    }
+    var cards6 = document.getElementById('cards6');
+    if (cards6 != null) {
+        cards6.addEventListener('click', function(e) {
+            showCards(6);
+        }, false);
+    }
+    var cards7 = document.getElementById('cards7');
+    if (cards7 != null) {
+        cards7.addEventListener('click', function(e) {
+            showCards(7);
+        }, false);
+    }
 });
 
 /*
