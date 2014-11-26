@@ -61,7 +61,6 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
 			}
 		}
 	}
-	console.log(row, column);
 	return  { row: row, column: column };
 
 };
