@@ -159,6 +159,14 @@ map.getData(function(map_data) {
         updateMenu(hexagonGrid);
     }, false);
 
+    var connectBtn = document.getElementById('connectBtn');
+    connectBtn.addEventListener('click', function(e) { //For the map editor
+        var drawy = map.editMap.col % 2 == 0 ? (map.editMap.row * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.editMap.row *hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+        var drawx = (map.editMap.col * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+        hexagonGrid.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", ""); //highlight selected
+        console.log(map.editMap.col, map.editMap.row);
+    }, false);
+
     var updateMapBtn = document.getElementById('updateMap');
     updateMapBtn.addEventListener('click', function(e) { //For the map editor
         var cube = toCubeCoord(map.editMap.col, map.editMap.row);
