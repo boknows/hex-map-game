@@ -127,6 +127,7 @@ map.getData(function(map_data) {
     console.log(map.data);
     var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+    updateMenu(hexagonGrid);
     var inputFocus = false;
 
     function updateMenu (hexagonGrid){
@@ -261,6 +262,9 @@ map.getData(function(map_data) {
             var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
             hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
             updateMenu(hexagonGrid);
+            $('#rows').val(map.dataProp.rows);
+            $('#cols').val(map.dataProp.cols);
+            $('#size').val(map.dataProp.hexSize);
         });
         
         
