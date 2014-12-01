@@ -61,6 +61,17 @@ var Map = function() {
             data: {},
         }).success(callback);
     };
+    this.updateData = function(callback){
+        $.ajax({
+            url: "getMap.php",
+            type: "POST",
+            dataType: 'JSON',
+            data: {
+                param: "getSingleMap",
+                id: $('#loadMap').val(),
+            },
+        }).success(callback);
+    };
 };
 
 function updateMap(data, param) {
@@ -129,7 +140,7 @@ map.getData(function(map_data) {
         };
         $("#panel").css(style);
     }
-    updateMenu(hexagonGrid);
+    
 
     //UI Buttons
     var updateRowsCols = document.getElementById('updateRowCols');
@@ -155,7 +166,7 @@ map.getData(function(map_data) {
         hexagonGrid.canvas = map.canvas;
 
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-        updateMenu(hexagonGrid);
+        
     }, false);
 
     var otherOptions = document.getElementById('options');
@@ -240,6 +251,21 @@ map.getData(function(map_data) {
         console.log(JSON.stringify(map.dataProp));
     }, false);
 
+    var loadMapBtn = document.getElementById('loadMapBtn');
+    loadMapBtn.addEventListener('click', function(e) { //For the map editor
+        map.updateData(function(resp){
+            map.data = JSON.parse(resp.mapArray);
+            map.dataProp = JSON.parse(resp.mapProperties);
+            console.log(map.dataProp);
+            map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+            var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
+            hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+            updateMenu(hexagonGrid);
+        });
+        
+        
+    }, false);
+
     $( "input" ).focus(function() {
         hexagonGrid.inputFocus = true;
     });
@@ -298,6 +324,9 @@ map.getData(function(map_data) {
     });
     $( "#neutral" ).change(function() {
         map.data[map.editMap.row][map.editMap.col].neutral == $('#neutral').val();
+    });
+    $( "#group" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].group == $('#group').val();
     });
 
 
@@ -366,6 +395,12 @@ map.getData(function(map_data) {
                 case 57:
                     $('#group').val("9");
                     map.data[map.editMap.row][map.editMap.col].group = "9";
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 32:
+                    e.preventDefault();
+                    $('#group').val("");
+                    map.data[map.editMap.row][map.editMap.col].group = "";
                     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                     break;
                 case 76:
@@ -610,7 +645,6 @@ function HexagonGrid(canvasId, radius) {
     this.height = Math.sqrt(3) * map.dataProp.hexSize;
     this.width = 2 * map.dataProp.hexSize;
     this.side = (3 / 2) * map.dataProp.hexSize;
-    console.log(this.width);
     map.canvas = document.getElementById(canvasId); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
 

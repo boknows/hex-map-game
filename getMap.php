@@ -57,5 +57,15 @@ if($_POST['param']=="saveMap"){
 	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name']));
 	echo JSON_encode("Success");
 }
+if($_POST['param']=="getSingleMap"){
+	$stmt = $db->prepare('SELECT * FROM maps WHERE id=:id');
+	$stmt->execute(array(":id" => $_POST['id']));
+	foreach ($stmt as $row) {
+		$data['mapArray'] = $row['mapArray'];	
+		$data['mapProperties'] = $row['mapProperties'];
+	}
+	echo JSON_encode($data);
+}
+
 
 ?>

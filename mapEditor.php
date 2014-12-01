@@ -67,7 +67,11 @@
                 </div>
                 <button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
                 <br><br>
-                <button class="btn btn-primary" type="button" id="options">Other Map Options</button>
+                <button class="btn btn-primary" type="button" id="options">Show/Hide All Options</button><br><br>
+                <div class="input-group">
+                    <span class='input-group-addon'><b>Load Map:</b></span><select type='text' name='loadMap' class='form-control' id='loadMap'></select>
+                </div>
+                <button type="button" id ="loadMapBtn" class="btn btn-success">Load</button>
             </div> 
         </div>
         <div class="col-md-3" id="otherMapOptions" style="display:none">
@@ -128,6 +132,7 @@
 
 </body>
 <script src="js/mapEditor2.js?v6"></script>
+<script src="js/mapEditorData.js?v6"></script>
 
 
 </html>
