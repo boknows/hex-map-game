@@ -18,7 +18,7 @@
     }
     #panel {
         position: absolute;
-        top: 50px;
+        top: 0px;
         right: 100px;
     }
 

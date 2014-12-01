@@ -2,6 +2,7 @@
     require("config.php"); 
     $submitted_username = ''; 
     if(!empty($_POST)){ 
+        //print_r($_POST);
         $query = " 
             SELECT 
                 id, 
@@ -43,7 +44,7 @@
         } 
         else{ 
             print("Login Failed."); 
-            $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
+            //$submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
         } 
     } 
 ?> 

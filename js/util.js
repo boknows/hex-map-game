@@ -702,23 +702,25 @@ function shuffle(array) {
 }
 
 function showCards(userNum){
-    var cardHTML = "";
-    for (var j = 0; j < map.dataProp.cardsHeld[userNum].length; j++) {
-        cardHTML = cardHTML + "<tr id='" + map.dataProp.cardsHeld[userNum][j].id + "'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[userNum][j].id + "' id='" + map.dataProp.cardsHeld[userNum][j].id + "check'></td><td>" + map.dataProp.cardsHeld[userNum][j].desc + "</td></tr>";
+    if(map.dataProp.users[userNum]==map.username){
+        var cardHTML = "";
+        for (var j = 0; j < map.dataProp.cardsHeld[userNum].length; j++) {
+            cardHTML = cardHTML + "<tr id='" + map.dataProp.cardsHeld[userNum][j].id + "'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[userNum][j].id + "' id='" + map.dataProp.cardsHeld[userNum][j].id + "check'></td><td>" + map.dataProp.cardsHeld[userNum][j].desc + "</td></tr>";
+        }
+        $('#cardDisp').html(cardHTML);
+        var arr = [{
+            "id": "#cardDisp",
+            "action": "show"
+        }, {
+            "id": "#cardTrade",
+            "action": "show"
+        }, {
+            "id": "#cardTradeClose",
+            "action": "show"
+        }, {
+            "id": "#log",
+            "action": "hide"
+        }];
+        showHide(arr, "Clicked a card.");
     }
-    $('#cardDisp').html(cardHTML);
-    var arr = [{
-        "id": "#cardDisp",
-        "action": "show"
-    }, {
-        "id": "#cardTrade",
-        "action": "show"
-    }, {
-        "id": "#cardTradeClose",
-        "action": "show"
-    }, {
-        "id": "#log",
-        "action": "hide"
-    }];
-    showHide(arr, "Clicked a card.");
 }
