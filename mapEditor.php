@@ -73,6 +73,7 @@
                     <span class='input-group-addon'><b>Connectors:</b></span>
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" id="connectBtn">Select</button>
+                        <button class="btn btn-success" type="button" id="connectConfirm" style="display:none">Confirm</button>
                     </span>
                 </div>
                 <div class="input-group">

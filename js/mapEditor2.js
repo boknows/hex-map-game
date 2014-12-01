@@ -38,18 +38,14 @@ var Map = function() {
         defX: null,
         defY: null
     };
-    this.selected = {
-        col: null,
-        row: null,
-        nCol: null,
-        nRow: null
-    };
+    this.selected = [];
     this.editMap = {
         col: null,
         row: null,
     };
+    this.connectors = [];
+    this.connectorBtn = false;
     this.unitPlacement = [];
-    this.clickState = null;
     this.neighbors = [];
     this.username = $('#username').val();
     this.email = $('#email').val();
@@ -95,7 +91,7 @@ map.getData(function(map_data) {
                 "se": "",
                 "owner": "",
                 "color": "",
-                "connect": "",
+                "connect": [],
                 "group": "",
                 "groupBonus": 0,
                 "neutral": false,
@@ -161,10 +157,44 @@ map.getData(function(map_data) {
 
     var connectBtn = document.getElementById('connectBtn');
     connectBtn.addEventListener('click', function(e) { //For the map editor
-        var drawy = map.editMap.col % 2 == 0 ? (map.editMap.row * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.editMap.row *hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
-        var drawx = (map.editMap.col * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-        hexagonGrid.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", ""); //highlight selected
-        console.log(map.editMap.col, map.editMap.row);
+        if(map.connectorBtn == false && map.data[map.editMap.row][map.editMap.col].connect.length == 0){
+            map.connectorBtn = true;
+            $('#connectConfirm').show();
+            $('#connectBtn').hide();
+            map.connectors.push({"row":map.editMap.row, "col":map.editMap.col, "origin": true});
+            var drawy = map.editMap.col % 2 == 0 ? (map.editMap.row * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.editMap.row *hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+            var drawx = (map.editMap.col * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+            hexagonGrid.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", ""); //highlight selected
+            console.log(map.editMap.col, map.editMap.row); 
+        }else if(map.connectorBtn == false && map.data[map.editMap.row][map.editMap.col].connect.length > 0){
+            map.connectors.push({"row":map.editMap.row, "col": map.editMap.col, "origin":true});
+            map.connectorBtn = true;
+            $('#connectConfirm').show();
+            $('#connectBtn').hide();
+            var drawy = map.editMap.col % 2 == 0 ? (map.editMap.row * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.editMap.row *hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+            var drawx = (map.editMap.col * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+            hexagonGrid.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", ""); //highlight selected 
+            for(var i=0;i<map.data[map.editMap.row][map.editMap.col].connect.length;i++){
+                map.connectors.push({"row":map.data[map.editMap.row][map.editMap.col].connect[i].row, "col": map.data[map.editMap.row][map.editMap.col].connect[i].col, "origin":false});
+                var drawy = map.data[map.editMap.row][map.editMap.col].connect[i].col % 2 == 0 ? (map.data[map.editMap.row][map.editMap.col].connect[i].row * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.data[map.editMap.row][map.editMap.col].connect[i].row *hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
+                var drawx = (map.data[map.editMap.row][map.editMap.col].connect[i].col * hexagonGrid.side) + hexagonGrid.canvasOriginX;
+                hexagonGrid.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", "");
+            }    
+        }
+    }, false);
+
+    var connectConfirm = document.getElementById('connectConfirm');
+    connectConfirm.addEventListener('click', function(e) { //For the map editor
+        map.connectorBtn = false;
+        $('#connectConfirm').hide();
+        $('#connectBtn').show();
+        var originCol = map.connectors[0].col;
+        var originRow = map.connectors[0].row;
+        for(var i=1;i<map.connectors.length;i++){
+           map.data[originRow][originCol].connect.push({"row":map.connectors[i].row, "col":map.connectors[i].col});
+        }
+        map.connectors = [];
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
     }, false);
 
     var updateMapBtn = document.getElementById('updateMap');
@@ -644,6 +674,25 @@ HexagonGrid.prototype.clickEvent = function(e) {
         row: tile.row,
         col: tile.column
     };
+    if(map.connectorBtn == true && map.data[tile.row][tile.column].type != "water"){
+        var trigger = false;
+        for(var i=0;i<map.connectors.length;i++){
+            if(map.connectors[i].col == tile.column && map.connectors[i].row == tile.row){
+                trigger = true;
+                if(map.connectors[i].origin == false){
+                    map.connectors.splice(i,1);
+                }
+                this.drawHexGrid(map.dataProp.rows, map.dataProp.cols, this.canvasOriginX, this.canvasOriginY, true);
+            }
+        }
+        if(trigger == false){
+            map.connectors.push({"row":tile.row,"col":tile.column, "origin": false});
+            var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+            var drawx = (tile.column * this.side) + this.canvasOriginX;
+            this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", "");
+        }
+    }
+
     console.log(map.data[tile.row][tile.column]);
     if (map.data[tile.row][tile.column].type == "water") {
         map.data[tile.row][tile.column].type = "land";
@@ -877,11 +926,15 @@ HexagonGrid.prototype.drawHexGrid = function(rows, cols, originX, originY, isDeb
         offsetColumn = !offsetColumn;
     }
 
-    if (map.dataProp.turnPhase == "unitPlacement") {
-        for (var i = 0, len = map.unitPlacement.length; i < len; i++) {
-            var y = map.unitPlacement[i].col % 2 == 0 ? (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 : (map.unitPlacement[i].row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-            var x = (map.unitPlacement[i].col * this.side) + this.canvasOriginX;
-            this.drawHex(x, y - 6, "", "", true, "#00F2FF", map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].owner);
+    for(var i = 0; i<map.connectors.length; i++){
+        if(map.connectors[i].origin == true){
+            var drawy = map.connectors[i].col % 2 == 0 ? (map.connectors[i].row * this.height) + this.canvasOriginY + 6 : (map.connectors[i].row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+            var drawx = (map.connectors[i].col * this.side) + this.canvasOriginX;
+            this.drawHex(drawx, drawy - 6, "", "", true, "#00F2FF", ""); //highlight selected
+        }else if(map.connectors[i].origin == false){
+            var drawy = map.connectors[i].col % 2 == 0 ? (map.connectors[i].row * this.height) + this.canvasOriginY + 6 : (map.connectors[i].row *this.height) + this.canvasOriginY + 6 + (this.height / 2);
+            var drawx = (map.connectors[i].col * this.side) + this.canvasOriginX;
+            this.drawHex(drawx, drawy - 6, "", "", true, "#FF0000", "")
         }
     }
 };
