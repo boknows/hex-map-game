@@ -158,6 +158,15 @@ map.getData(function(map_data) {
         updateMenu(hexagonGrid);
     }, false);
 
+    var otherOptions = document.getElementById('options');
+    otherOptions.addEventListener('click', function(e) { //For the map editor
+        if($('#otherMapOptions').css('display') == "none"){
+            $('#otherMapOptions').show(); 
+        }else{
+            $('#otherMapOptions').hide();
+        }
+        
+    }, false);
     var connectBtn = document.getElementById('connectBtn');
     connectBtn.addEventListener('click', function(e) { //For the map editor
         if(map.connectorBtn == false && map.data[map.editMap.row][map.editMap.col].connect.length == 0){
@@ -193,92 +202,12 @@ map.getData(function(map_data) {
         $('#connectBtn').show();
         var originCol = map.connectors[0].col;
         var originRow = map.connectors[0].row;
+        map.data[originRow][originCol].connect = [];
         for(var i=1;i<map.connectors.length;i++){
            map.data[originRow][originCol].connect.push({"row":map.connectors[i].row, "col":map.connectors[i].col});
         }
         map.connectors = [];
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-    }, false);
-
-    var updateMapBtn = document.getElementById('updateMap');
-    updateMapBtn.addEventListener('click', function(e) { //For the map editor
-        var cube = toCubeCoord(map.editMap.col, map.editMap.row);
-        map.data[map.editMap.row][map.editMap.col].type = $('#type').val();
-        map.data[map.editMap.row][map.editMap.col].owner = $('#owner').val();
-        map.data[map.editMap.row][map.editMap.col].units = $('#unitsEdit').val();
-        map.data[map.editMap.row][map.editMap.col].color = $('#color').val();
-        map.data[map.editMap.row][map.editMap.col].group = $('#group').val();
-        map.data[map.editMap.row][map.editMap.col].connect = JSON.parse($('#connect').val());
-        if ($('#n').val() != "") {
-            if ($('#n').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].n = "";
-                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-                map.data[offset.r][offset.q].s = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].n = $('#n').val();
-                var offset = toOffsetCoord(cube.x, cube.y + 1, cube.z - 1);
-                map.data[offset.r][offset.q].s = $('#n').val();
-            }
-        }
-        if ($('#ne').val() != "") {
-            if ($('#ne').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].ne = "";
-                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-                map.data[offset.r][offset.q].sw = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].ne = $('#ne').val();
-                var offset = toOffsetCoord(cube.x + 1, cube.y, cube.z - 1);
-                map.data[offset.r][offset.q].sw = $('#ne').val();
-            }
-        }
-        if ($('#se').val() != "") {
-            if ($('#se').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].se = "";
-                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-                map.data[offset.r][offset.q].nw = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
-                var offset = toOffsetCoord(cube.x + 1, cube.y - 1, cube.z);
-                map.data[offset.r][offset.q].nw = $('#se').val();
-            }
-        }
-        if ($('#s').val() != "") {
-            if ($('#s').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].s = "";
-                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-                map.data[offset.r][offset.q].n = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].s = $('#s').val();
-                var offset = toOffsetCoord(cube.x, cube.y - 1, cube.z + 1);
-                map.data[offset.r][offset.q].n = $('#s').val();
-            }
-        }
-        if ($('#sw').val() != "") {
-            if ($('#sw').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].sw = "";
-                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-                map.data[offset.r][offset.q].ne = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
-                var offset = toOffsetCoord(cube.x - 1, cube.y, cube.z + 1);
-                map.data[offset.r][offset.q].ne = $('#sw').val();
-            }
-        }
-        if ($('#nw').val() != "") {
-            if ($('#nw').val() == "None") {
-                map.data[map.editMap.row][map.editMap.col].nw = "";
-                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-                map.data[offset.r][offset.q].se = "";
-            } else {
-                map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
-                var offset = toOffsetCoord(cube.x - 1, cube.y + 1, cube.z);
-                map.data[offset.r][offset.q].se = $('#nw').val();
-            }
-        }
-
-        map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-
     }, false);
 
     var saveMap = document.getElementById('saveMap');
@@ -315,10 +244,10 @@ map.getData(function(map_data) {
         hexagonGrid.inputFocus = true;
     });
 
+    //functions to update Map object when options are selected or typed in
     $('#nUnits').keyup(function(e) {
         map.data[map.editMap.row][map.editMap.col].nUnits = parseInt($('#nUnits').val());
     });
-
     $('#group1bonus').keyup(function(e) {
         map.dataProp.groupBonus[1] = parseInt($('#group1bonus').val());
     });
@@ -349,6 +278,30 @@ map.getData(function(map_data) {
     $('#group10bonus').keyup(function(e) {
         map.dataProp.groupBonus[10] = parseInt($('#group10bonus').val());
     });
+    $( "#n" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].n == $('#n').val();
+    });
+    $( "#ne" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].ne == $('#ne').val();
+    });
+    $( "#nw" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].nw == $('#nw').val();
+    });
+    $( "#s" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].s == $('#s').val();
+    });
+    $( "#se" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].se == $('#se').val();
+    });
+    $( "#sw" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].sw == $('#sw').val();
+    });
+    $( "#neutral" ).change(function() {
+        map.data[map.editMap.row][map.editMap.col].neutral == $('#neutral').val();
+    });
+
+
+
 
     $('body').keydown(function(e) {
         if (hexagonGrid.inputFocus == false) {
@@ -409,7 +362,6 @@ map.getData(function(map_data) {
                     $('#group').val("8");
                     map.data[map.editMap.row][map.editMap.col].group = "8";
                     map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-
                     break;
                 case 57:
                     $('#group').val("9");
@@ -431,7 +383,6 @@ map.getData(function(map_data) {
                 case 68:
                     $('#type').val("desert");
                     map.data[map.editMap.row][map.editMap.col].type = "desert";
-
                     map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
                     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                     break;
@@ -588,6 +539,7 @@ map.getData(function(map_data) {
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
             if (e.keyCode == 34) {
+                e.preventDefault();
                 if ($('#se').val() != "#00FF00") {
                     $('#se').val("#00FF00");
                     map.data[map.editMap.row][map.editMap.col].se = $('#se').val();
@@ -618,6 +570,7 @@ map.getData(function(map_data) {
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
             if (e.keyCode == 35) {
+                e.preventDefault();
                 if ($('#sw').val() != "#00FF00") {
                     $('#sw').val("#00FF00");
                     map.data[map.editMap.row][map.editMap.col].sw = $('#sw').val();
@@ -633,6 +586,7 @@ map.getData(function(map_data) {
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
             }
             if (e.keyCode == 36) {
+                e.preventDefault();
                 if ($('#nw').val() != "#00FF00") {
                     $('#nw').val("#00FF00");
                     map.data[map.editMap.row][map.editMap.col].nw = $('#nw').val();
@@ -645,7 +599,7 @@ map.getData(function(map_data) {
                     map.data[offset.r][offset.q].se = "";
                 }
                 map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true); 
             }
         }
     });
@@ -745,7 +699,7 @@ HexagonGrid.prototype.clickEvent = function(e) {
 
     $('#connect').val(JSON.stringify(map.data[tile.row][tile.column].connect));
     $('#group').val(map.data[tile.row][tile.column].group);
-    if($('#neutral').val() == true){
+    if(map.data[tile.row][tile.column].neutral == true){
         $('#neutral').val("true");
     }else{
         $('#neutral').val("false");

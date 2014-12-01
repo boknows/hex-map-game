@@ -30,8 +30,6 @@
     <div class="row">
 
         <div class="col-md-3">
-            <button class="btn btn-primary" type="button" id="options">Other Map Options</button>
-            
             <div id="editMapRowsCols">
                 <div class="input-group">
                 <span class='input-group-addon'><b>Rows:</b></span><input type='text' name='rows' class='form-control' id='rows' value='10'>
@@ -64,14 +62,15 @@
                         <button class="btn btn-success" type="button" id="connectConfirm" style="display:none">Confirm</button>
                     </span>
                 </div>
-                <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
                 <div class="input-group">
                 <span class='input-group-addon'><b>Map Name:</b></span><input type='text' name='saveMapName' class='form-control' id='saveMapName' value=''>
                 </div>
                 <button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
+                <br><br>
+                <button class="btn btn-primary" type="button" id="options">Other Map Options</button>
             </div> 
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" id="otherMapOptions" style="display:none">
             <p style="font-size:150%"><b><u>Borders</u></b></p>
             <div class="input-group">
                 <span class='input-group-addon'><b>N:</b></span><select name='n' class='form-control' id='n'><option value="None">None</option><option value="#000000">Black</option><option value="#00FF00">Green</option></select>
@@ -128,7 +127,7 @@
    
 
 </body>
-<script src="js/mapEditor2.js?v5"></script>
+<script src="js/mapEditor2.js?v6"></script>
 
 
 </html>
