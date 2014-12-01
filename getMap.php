@@ -55,6 +55,7 @@ if($_POST['param']=="getAllMaps"){
 if($_POST['param']=="saveMap"){
 	$stmt = $db->prepare('INSERT INTO maps (mapArray, mapProperties, name) VALUES (:mapArray, :mapProperties, :name)');
 	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name']));
+	echo JSON_encode("Success");
 }
 
 ?>
