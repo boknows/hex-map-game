@@ -88,9 +88,9 @@ function updateMap(data, param) {
 };
 var map = new Map();
 map.getData(function(map_data) {
-    map.data = new Array(40);
+    map.data = new Array(100);
     for (var i = 0; i < map.data.length; i++) {
-        map.data[i] = new Array(40);
+        map.data[i] = new Array(100);
     }
     for (var i = 0; i < map.data.length; i++) {
         for (var j = 0; j < map.data[i].length; j++) {
@@ -131,7 +131,7 @@ map.getData(function(map_data) {
     var inputFocus = false;
 
     function updateMenu (hexagonGrid){
-        var x0 = hexagonGrid.side * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left+20;
+        var x0 = ($('#size').val()*1.75) * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left;
         var y0 = ((hexagonGrid.height / 1.5)) + hexagonGrid.canvasOriginY;
         var style = {
             left: x0,
@@ -167,7 +167,7 @@ map.getData(function(map_data) {
         hexagonGrid.canvas = map.canvas;
 
         hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-        
+        updateMenu(hexagonGrid);
     }, false);
 
     var otherOptions = document.getElementById('options');
@@ -428,6 +428,12 @@ map.getData(function(map_data) {
                 case 77:
                     $('#type').val("mountains");
                     map.data[map.editMap.row][map.editMap.col].type = "mountains";
+                    map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
+                    hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
+                    break;
+                case 65:
+                    $('#type').val("artic");
+                    map.data[map.editMap.row][map.editMap.col].type = "artic";
                     map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
                     hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
                     break;
@@ -901,6 +907,8 @@ HexagonGrid.prototype.drawHexGrid = function(rows, cols, originX, originY, isDeb
                 this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map.data[row][col].owner);
             } else if (map.data[row][col].type == "mountains") {
                 this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map.data[row][col].owner);
+            } else if (map.data[row][col].type == "artic"){
+                this.drawHex(currentHexX, currentHexY, "#FFFFFF", debugText, false, map.data[row][col].owner);
             }
         }
         offsetColumn = !offsetColumn;

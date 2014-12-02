@@ -218,21 +218,21 @@
 	<input type='hidden' id='game_id' value='<?php echo $_GET['id']; ?>'>
     <?php
         if($data['status'] == "started"){
-            echo "<script src='js/hexagon-rewrite.js?v6'></script>
-	        <script src='js/HexagonGrid.js?v6'></script>
-            <script src='js/drawHexGrid.js?v6'></script>
-            <script src='js/drawHex.js?v6'></script>
-            <script src='js/getSelectedTile.js?v6'></script>
-            <script src='js/clickEvent.js?v6'></script>
-            <script src='js/util.js?v6'></script>
-            <script src='js/tradeInCards.js?v6'></script>";
+            echo "<script src='js/hexagon-rewrite.js?v9'></script>
+	        <script src='js/HexagonGrid.js?v9'></script>
+            <script src='js/drawHexGrid.js?v9'></script>
+            <script src='js/drawHex.js?v9'></script>
+            <script src='js/getSelectedTile.js?v9'></script>
+            <script src='js/clickEvent.js?v9'></script>
+            <script src='js/util.js?v9'></script>
+            <script src='js/tradeInCards.js?v9'></script>";
             echo "<div class='inviteForm' style='display:none;'>";
         }else if($data['status'] == "invites"){
             echo "<div class='inviteForm' style='display:none;' id='inviteForm'>";
 			if ($accepted == false){
 				echo "<div class='inviteForm'>";
-				echo "<script src='js/util.js?v6'></script>
-			<script src='js/acceptInvite.js?v6'></script>";
+				echo "<script src='js/util.js?v9'></script>
+			<script src='js/acceptInvite.js?v9'></script>";
 			}
 			
         }     

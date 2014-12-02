@@ -44,7 +44,7 @@
             </div>
             <div id="editMap">
                 <div class="input-group">
-                    <span class='input-group-addon'><b>Type:</b></span><select name='type' class='form-control' id='type'><option value='land'>Land</option><option value='forest'>Forest</option><option value='water'>Water</option><option value='desert'>Desert</option><option value='mountains'>Mountains</option></select>
+                    <span class='input-group-addon'><b>Type:</b></span><select name='type' class='form-control' id='type'><option value='land'>Land</option><option value='forest'>Forest</option><option value='water'>Water</option><option value='desert'>Desert</option><option value='mountains'>Mountains</option><option value='artic'>Artic</option></select>
                 </div>
                 <div class="input-group">
                     <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
@@ -98,31 +98,31 @@
                 <span class='input-group-addon'><b>Group 1 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 2 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 2 Bonus:</b></span><input type='text' name='group2bonus' class='form-control' id='group2bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 3 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 3 Bonus:</b></span><input type='text' name='group3bonus' class='form-control' id='group3bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 4 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 4 Bonus:</b></span><input type='text' name='group4bonus' class='form-control' id='group4bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 5 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 5 Bonus:</b></span><input type='text' name='group5bonus' class='form-control' id='group5bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 6 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 6 Bonus:</b></span><input type='text' name='group6bonus' class='form-control' id='group6bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 7 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 7 Bonus:</b></span><input type='text' name='group7bonus' class='form-control' id='group7bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 8 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 8 Bonus:</b></span><input type='text' name='group8bonus' class='form-control' id='group8bonus' value='0'>
             </div>
             <div class="input-group">
-                <span class='input-group-addon'><b>Group 9 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 9 Bonus:</b></span><input type='text' name='group9bonus' class='form-control' id='group9bonus' value='0'>
             </div>
              <div class="input-group">
-                <span class='input-group-addon'><b>Group 10 Bonus:</b></span><input type='text' name='group1bonus' class='form-control' id='group1bonus' value='0'>
+                <span class='input-group-addon'><b>Group 10 Bonus:</b></span><input type='text' name='group10bonus' class='form-control' id='group10bonus' value='0'>
             </div>
         </div>
     </div>

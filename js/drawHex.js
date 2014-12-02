@@ -20,7 +20,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	if(typeof(map.data[tile.row][tile.column]) != "undefined"){
 		if (fillColor && highlight == false && map.data[tile.row][tile.column].type !="water") {
-			if(map.data[tile.row][tile.column].neutral == true){
+			if(map.data[tile.row][tile.column].neutral == true && map.data[tile.row][tile.column].owner == ""){
 				this.context.fillStyle = fillColor;
 			}else{
 				this.context.fillStyle = map.data[tile.row][tile.column].color;
@@ -30,7 +30,6 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		}
 	}
 	
-
 	if (highlight == true){
 		this.context.fillStyle = highlightColor;
 	}

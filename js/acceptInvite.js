@@ -202,7 +202,7 @@ function startGame(gameID, mapArray, mapProperties) {
     var countries = [];
     for (var i = 0; i < mapArray.length; i++) {
         for (var j = 0; j < mapArray[i].length; j++) {
-            if (mapArray[i][j].type != "water" && mapArray[i][j].neutral == false) {
+            if (mapArray[i][j].type != "water" && mapArray[i][j].neutral != true) {
                 countries.push({
                     width: i,
                     length: j,

@@ -594,13 +594,17 @@ map.getData(function(map_data){
 
     //player card buttons
     var cards0 = document.getElementById('cards0');
-    cards0.addEventListener('click', function(e) {
+    if (cards0 != null) {
+        cards0.addEventListener('click', function(e) {
         showCards(0);
     }, false);
+    }
     var cards1 = document.getElementById('cards1');
-    cards1.addEventListener('click', function(e) {
-        showCards(1);
-    }, false);
+    if (cards1 != null) {
+        cards1.addEventListener('click', function(e) {
+            showCards(1);
+        }, false);
+    }
     var cards2 = document.getElementById('cards2');
     if (cards2 != null) {
         cards2.addEventListener('click', function(e) {

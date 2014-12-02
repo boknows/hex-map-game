@@ -32,7 +32,9 @@ HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDe
 				this.drawHex(currentHexX, currentHexY, "#F5E8C1", debugText, false, map.data[row][col].owner);
 			}else if(map.data[row][col].type=="mountains"){
 				this.drawHex(currentHexX, currentHexY, "#996600", debugText, false, map.data[row][col].owner);
-			}	
+			}else if (map.data[row][col].type == "artic"){
+                this.drawHex(currentHexX, currentHexY, "#FFFFFF", debugText, false, map.data[row][col].owner);
+            }
 		}
 		offsetColumn = !offsetColumn;
 
