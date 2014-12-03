@@ -56,28 +56,38 @@ var Map = function() {
 };
 
 var map = new Map();
-map.data = new Array(40);
+map.data = new Array(50);
+map.dataUnits = new Array(50);
 for (var i = 0; i < map.data.length; i++) {
-    map.data[i] = new Array(40);
+    map.data[i] = new Array(50);
+}
+for (var i = 0; i < map.dataUnits.length; i++) {
+    map.dataUnits[i] = new Array(50);
 }
 for (var i = 0; i < map.data.length; i++) {
     for (var j = 0; j < map.data[i].length; j++) {
         map.data[i][j] = {
             "type": "water",
-            "units": 0,
             "n": "",
             "s": "",
             "nw": "",
             "ne": "",
             "sw": "",
             "se": "",
-            "owner": "",
-            "color": "",
             "connect": [],
             "group": "",
             "groupBonus": 0,
             "neutral": false,
             "nUnits": 0,
+        };
+    }
+}
+for (var i = 0; i < map.dataUnits.length; i++) {
+    for (var j = 0; j < map.dataUnits[i].length; j++) {
+        map.dataUnits[i][j] = {
+            "owner": "",
+            "color": "",
+            "units": "",
         };
     }
 }
@@ -618,8 +628,12 @@ saveMap.addEventListener('click', function(e) { //For the map editor
     //Cut unused hexes out of array
     console.log($('#rows').val());
     var newMap = new Array(parseInt($('#rows').val()));
+    var newMapUnits = new Array(parseInt($('#rows').val()));
     for (var i = 0; i < newMap.length; i++) {
         newMap[i] = new Array(parseInt($('#cols').val()));
+    }
+    for (var i = 0; i < newMapUnits.length; i++) {
+        newMapUnits[i] = new Array(parseInt($('#cols').val()));
     }
     for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
         for (var j = 0; j < map.data[i].length; j++) {
@@ -628,9 +642,17 @@ saveMap.addEventListener('click', function(e) { //For the map editor
             }
         }
     }
+    for (var i = 0; i < map.dataUnits.length; i++) { //calculate how many of each group the player has
+        for (var j = 0; j < map.dataUnits[i].length; j++) {
+            if (i < parseInt($('#rows').val()) && j < parseInt($('#cols').val())) {
+                newMapUnits[i][j] = map.dataUnits[i][j];
+            }
+        }
+    }
     var data= {
         mapArray: JSON.stringify(newMap),
         mapProperties: JSON.stringify(map.dataProp),
+        mapUnits: JSON.stringify(newMapUnits),
         name: $('#saveMapName').val(),
     };
     updateMap(data, "saveMap");
@@ -641,39 +663,51 @@ saveMap.addEventListener('click', function(e) { //For the map editor
 var loadMapBtn = document.getElementById('loadMapBtn');
 loadMapBtn.addEventListener('click', function(e) { //For the map editor
     map.updateData(function(resp){
-        /*
         tmpMap = JSON.parse(resp.mapArray); //temporarily hold loaded map so you can add it line by line to map.data
-        map.data = new Array(40);
+        map.data = new Array(50);
         for (var i = 0; i < map.data.length; i++) {
-            map.data[i] = new Array(40);
+            map.data[i] = new Array(50);
+        }
+        for (var i = 0; i < map.data.length; i++) {
+            for (var j = 0; j < map.data[i].length; j++) {
+                map.data[i][j] = {
+                    "type": "water",
+                    "n": "",
+                    "s": "",
+                    "nw": "",
+                    "ne": "",
+                    "sw": "",
+                    "se": "",
+                    "connect": [],
+                    "group": "",
+                    "groupBonus": 0,
+                    "neutral": false,
+                    "nUnits": 0,
+                };
+            }
         }
         for (var i = 0; i < tmpMap.length; i++){
             for(var j = 0; j < tmpMap[i].length; j++){
                 map.data[i][j] = tmpMap[i][j];
             }
-        }*/
-        map.dataProp = JSON.parse(resp.mapProperties);
-        map.data = [];
-        map.data = JSON.parse(resp.mapArray);
-        console.log(map.dataProp, map.data);
-        
-        var hexagonGrid = new HexagonGrid("HexCanvas", map.dataProp.hexSize);
-        
+        }
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
-        updateMenu(hexagonGrid);
+        map.dataProp = JSON.parse(resp.mapProperties);
+        map.dataUnits = JSON.parse(resp.mapUnits);
+        hexagonGrid.radius = Math.round(map.dataProp.hexSize);
+        hexagonGrid.height = Math.round(Math.sqrt(3) * map.dataProp.hexSize);
+        hexagonGrid.width = Math.round(2 * map.dataProp.hexSize);
+        hexagonGrid.side = Math.round((3 / 2) * map.dataProp.hexSize)
+
+        map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
+        map.ctx = map.canvas.getContext('2d');
+        hexagonGrid.context = map.ctx;
+        hexagonGrid.canvas = map.canvas;
         $('#rows').val(map.dataProp.rows);
         $('#cols').val(map.dataProp.cols);
         $('#size').val(map.dataProp.hexSize);
-
-        //debug
-        var tmpStr = "";
-        for(var i = 0; i < map.data.length; i++){
-            for (var j = 0; j < map.data[i].length; j++){
-                tmpStr = tmpStr + i + " " + j + ",";
-            }
-        }
-        console.log(tmpStr);
+        hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, 10, 10, true);
+        updateMenu(hexagonGrid);
     });
     
     
