@@ -20,10 +20,10 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 
 	if(typeof(map.data[tile.row][tile.column]) != "undefined"){
 		if (fillColor && highlight == false && map.data[tile.row][tile.column].type !="water") {
-			if(map.data[tile.row][tile.column].neutral == true && map.data[tile.row][tile.column].owner == ""){
+			if(map.data[tile.row][tile.column].neutral == true && map.dataUnits[tile.row][tile.column].owner == ""){
 				this.context.fillStyle = fillColor;
 			}else{
-				this.context.fillStyle = map.data[tile.row][tile.column].color;
+				this.context.fillStyle = map.dataUnits[tile.row][tile.column].color;
 			}
 		}else{
 			this.context.fillStyle = fillColor;
@@ -49,7 +49,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		Xcenter = x0 + (this.width / 2),
 		Ycenter = y0 + (this.height / 2);
 		this.context.fillStyle = fillColor;
-		this.context.strokeStyle = map.data[tile.row][tile.column].color;
+		this.context.strokeStyle = map.dataUnits[tile.row][tile.column].color;
 		this.context.beginPath();
 		this.context.lineWidth = .5;
 		this.context.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
@@ -63,7 +63,7 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		//if defensive boost active, draw grey dotted hex inside of owners colored hex.
 		var index = 0;
 		for(var i=0;i<map.dataProp.users.length;i++){
-			if(map.dataProp.users[i]==map.data[tile.row][tile.column].owner){
+			if(map.dataProp.users[i]==map.dataUnits[tile.row][tile.column].owner){
 				index = i;
 			}
 		}
@@ -96,12 +96,12 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText, highligh
 		this.context.textBaseline = "middle";
 		this.context.font = 'bold '+ (map.dataProp.hexSize/2.25) +'pt Arial';
 		//Code for contrasting text with background color
-        /*var clr = getContrastYIQ(map.data[tile.row][tile.column].color); //contrast against player color 
+        /*var clr = getContrastYIQ(map.dataUnits[tile.row][tile.column].color); //contrast against player color 
 		var clr = getContrastYIQ(fillColor); //contrast against land color (fillColor)
         this.context.fillStyle = clr;
 		*/
 		this.context.fillStyle = "#000000";
-		this.context.fillText(map.data[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
+		this.context.fillText(map.dataUnits[tile.row][tile.column].units, x0 + (this.width / 2) , y0 + (this.height / 2));
 		this.context.fillStyle = "";
 	}
 	this.context.restore();

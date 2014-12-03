@@ -57,8 +57,6 @@ $.ajax({
     },
 });
 
-
-
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -118,6 +116,7 @@ function acceptInvite() {
                     success: function(resp) {
                         var mapProperties = JSON.parse(resp.mapProperties);
                         var mapArray = JSON.parse(resp.mapArray);
+                        var mapUnits = JSON.parse(resp.mapUnits);
                         var email = 0;
                         var public = false;
                         for (var i = 0; i < mapProperties.owners.length; i++) {
@@ -158,7 +157,7 @@ function acceptInvite() {
                             data: data,
                             success: function(resp) {
                                 if (resp == "started") {
-                                    startGame($('#game_id').val(), mapArray, mapProperties);
+                                    startGame($('#game_id').val(), mapArray, mapProperties, mapUnits);
                                 } else if (resp == "accepted") {
                                     window.location.reload(true);
                                 }
@@ -174,7 +173,7 @@ function acceptInvite() {
 
 }
 
-function startGame(gameID, mapArray, mapProperties) {
+function startGame(gameID, mapArray, mapProperties, mapUnits) {
     var mapLog = []; //History log
     var order = []; //track order
     for (var i = 0; i < mapProperties.owners.length; i++) {
@@ -265,9 +264,9 @@ function startGame(gameID, mapArray, mapProperties) {
         for (var j = 0; j < cntSplt[i].length; j++) {
             var l = cntSplt[i][j].length;
             var w = cntSplt[i][j].width;
-            mapArray[w][l].owner = mapProperties.users[i];
-            mapArray[w][l].units = cntSplt[i][j].units;
-            mapArray[w][l].color = mapProperties.colors[i];
+            mapUnits[w][l].owner = mapProperties.users[i];
+            mapUnits[w][l].units = cntSplt[i][j].units;
+            mapUnits[w][l].color = mapProperties.colors[i];
         }
     }
 
@@ -275,7 +274,7 @@ function startGame(gameID, mapArray, mapProperties) {
     for (var i = 0; i < mapArray.length; i++) {
         for (var j = 0; j < mapArray[i].length; j++) {
             if (mapArray[i][j].type != "water" && mapArray[i][j].neutral == true) {
-                mapArray[i][j].units = mapArray[i][j].nUnits;
+                mapUnits[i][j].units = mapArray[i][j].nUnits;
             }
         }
     }
@@ -352,6 +351,7 @@ function startGame(gameID, mapArray, mapProperties) {
     
     mapProperties.turnPhase = "unitPlacement";
     var mapString = JSON.stringify(mapArray);
+    var mapUnitsString = JSON.stringify(mapUnits);
     var mapPropertiesString = JSON.stringify(mapProperties);
     var mapLogString = JSON.stringify(mapLog);
     var data = {
@@ -359,6 +359,7 @@ function startGame(gameID, mapArray, mapProperties) {
         gameID: $('#game_id').val(),
         mapArray: mapString,
         mapProperties: mapPropertiesString,
+        mapUnits: mapUnitsString,
         mapLog: mapLogString
     };
     $.ajax({

@@ -728,7 +728,7 @@ $('#group2bonus').keyup(function(e) {
     map.dataProp.groupBonus[2] = parseInt($('#group2bonus').val());
 });
 $('#group3bonus').keyup(function(e) {
-    map.dataProp.groupBonus[3] = parseInt($('group3bonus').val());
+    map.dataProp.groupBonus[3] = parseInt($('#group3bonus').val());
 });
 $('#group4bonus').keyup(function(e) {
     map.dataProp.groupBonus[4] = parseInt($('#group4bonus').val());

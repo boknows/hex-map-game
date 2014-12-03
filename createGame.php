@@ -13,9 +13,11 @@ $stmt->execute(array(':id' => $_POST['mapID']));
 foreach ($stmt as $row) {
 	$data['mapArray'] = $row['mapArray'];	
 	$data['mapProperties'] = $row['mapProperties'];	
+	$data['mapUnits'] = $row['mapUnits'];	
 }
 $mapProperties = JSON_decode($data['mapProperties']);
-
+echo $data['mapArray'];
+echo $data['mapUnits'];
 $now = time();
 $stmt = $db->prepare("SELECT MAX(gameID) FROM games");
 $stmt->execute();
@@ -45,8 +47,8 @@ for($i=0;$i<count($owners)-1;$i++){
     $mapProperties->colors[] = "NULL";
 }   
 
-$stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, mapLog) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]")');
-$stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => JSON_encode($mapProperties)));  
+$stmt = $db->prepare('INSERT INTO games (gameID, game_name, created, status, minPlayers, maxPlayers, publicPrivate, mapArray, mapProperties, mapLog, mapUnits) VALUES(:gameID, :gameName, :created, :status, :minPlayers, :maxPlayers, :publicPrivate, :mapArray, :mapProperties, "[]", :mapUnits)');
+$stmt->execute(array(':gameID' => $maxID, ':gameName' => $_POST['gameName'], ':created' => $now, ':status' => 'invites', ':minPlayers' => $_POST['minPlayers'], ':maxPlayers' => $_POST['maxPlayers'], ':publicPrivate' => $_POST['publicPrivate'], ':mapArray' => $data['mapArray'], ':mapProperties' => JSON_encode($mapProperties), ':mapUnits' => $data['mapUnits']));  
 if (!$stmt) {
 	echo "\nPDO::errorInfo():\n";
 	print_r($db->errorInfo());

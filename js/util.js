@@ -1,31 +1,31 @@
 function singleAttack(hexagonGrid) {
-    if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-        var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units, map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner, "", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
-        map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
-        map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
+    if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
+        var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units-1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner, "", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
+        map.dataUnits[map.attack.attX][map.attack.attY].units = map.dataUnits[map.attack.attX][map.attack.attY].units - losses.att;
+        map.dataUnits[map.attack.defX][map.attack.defY].units = map.dataUnits[map.attack.defX][map.attack.defY].units - losses.def;
 
-        if (map.data[map.attack.defX][map.attack.defY].units == 0) {
+        if (map.dataUnits[map.attack.defX][map.attack.defY].units == 0) {
             map.dataProp.winCard = true;
-            var units = calcUnits(map.data[map.attack.defX][map.attack.defY].owner);
+            var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner);
             if(units == 0){
                 updateLog("--------------------");
-                updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
-                map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
+                updateLog(map.dataUnits[map.attack.defX][map.attack.defY].owner + " was eliminated.");
+                map.dataProp.eliminated.push(map.dataUnits[map.attack.defX][map.attack.defY].owner);
             }
-            map.data[map.attack.defX][map.attack.defY].units++;
-            map.data[map.attack.attX][map.attack.attY].units--;
+            map.dataUnits[map.attack.defX][map.attack.defY].units++;
+            map.dataUnits[map.attack.attX][map.attack.attY].units--;
             var arr = [{"id":"#attack","action":"hide"}];
-            if (map.data[map.attack.attX][map.attack.attY].units > 1) {
+            if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
                 arr.push({"id":"#attackMove","action":"show"});
                 var options = "";
-                for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
+                for (i = 0; i < map.dataUnits[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
             }
             showHide(arr,"SingleAttack function.");
-            map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner;
-            map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color;
+            map.dataUnits[map.attack.defX][map.attack.defY].owner = map.dataUnits[map.attack.attX][map.attack.attY].owner;
+            map.dataUnits[map.attack.defX][map.attack.defY].color = map.dataUnits[map.attack.attX][map.attack.attY].color;
             //$('#endTurn').hide();
         }
         var data = {
@@ -59,18 +59,18 @@ function singleAttack(hexagonGrid) {
 };
 
 function contAttack(hexagonGrid) {
-    while (map.data[map.attack.attX][map.attack.attY].units > 4 && map.data[map.attack.defX][map.attack.defY].units > 0) {
-        if (map.data[map.attack.attX][map.attack.attY].units > 1) {
-            var losses = battle(map.data[map.attack.attX][map.attack.attY].units-1, map.data[map.attack.defX][map.attack.defY].units,  map.data[map.attack.attX][map.attack.attY].owner, map.data[map.attack.defX][map.attack.defY].owner,"", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
-            map.data[map.attack.attX][map.attack.attY].units = map.data[map.attack.attX][map.attack.attY].units - losses.att;
-            map.data[map.attack.defX][map.attack.defY].units = map.data[map.attack.defX][map.attack.defY].units - losses.def;
-            if (map.data[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
+    while (map.dataUnits[map.attack.attX][map.attack.attY].units > 4 && map.dataUnits[map.attack.defX][map.attack.defY].units > 0) {
+        if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
+            var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units-1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner,"", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
+            map.dataUnits[map.attack.attX][map.attack.attY].units = map.dataUnits[map.attack.attX][map.attack.attY].units - losses.att;
+            map.dataUnits[map.attack.defX][map.attack.defY].units = map.dataUnits[map.attack.defX][map.attack.defY].units - losses.def;
+            if (map.dataUnits[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
                 map.dataProp.winCard = true;
-                var units = calcUnits(map.data[map.attack.defX][map.attack.defY].owner);
+                var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner);
                 if(units == 0){
                     updateLog("--------------------");
-                    updateLog(map.data[map.attack.defX][map.attack.defY].owner + " was eliminated.");
-                    map.dataProp.eliminated.push(map.data[map.attack.defX][map.attack.defY].owner);
+                    updateLog(map.dataUnits[map.attack.defX][map.attack.defY].owner + " was eliminated.");
+                    map.dataProp.eliminated.push(map.dataUnits[map.attack.defX][map.attack.defY].owner);
                     var chk = calcEndState(map.email);
                     if (chk == true) {
                         map.dataProp.turnPhase = "ended";
@@ -94,28 +94,28 @@ function contAttack(hexagonGrid) {
                         updateMap(data, "updateMapLog");
                     }
                 }
-                map.data[map.attack.defX][map.attack.defY].units++;
-                map.data[map.attack.attX][map.attack.attY].units--;
+                map.dataUnits[map.attack.defX][map.attack.defY].units++;
+                map.dataUnits[map.attack.attX][map.attack.attY].units--;
                 var arr = [{"id":"#attack","action":"hide"},{"id":"#attackMove","action":"show"}];
                 showHide(arr,"contAttack function.");
 
                 //update dropdown for move troops screen
                 var options = "";
-                for (i = 0; i < map.data[map.attack.attX][map.attack.attY].units; i++) {
+                for (i = 0; i < map.dataUnits[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
 
-                map.data[map.attack.defX][map.attack.defY].owner = map.data[map.attack.attX][map.attack.attY].owner; //switch owners of defending hex to show takeover
-                map.data[map.attack.defX][map.attack.defY].color = map.data[map.attack.attX][map.attack.attY].color; //switch color of defending hex to show takeover
+                map.dataUnits[map.attack.defX][map.attack.defY].owner = map.dataUnits[map.attack.attX][map.attack.attY].owner; //switch owners of defending hex to show takeover
+                map.dataUnits[map.attack.defX][map.attack.defY].color = map.dataUnits[map.attack.attX][map.attack.attY].color; //switch color of defending hex to show takeover
                 var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
                 var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
                 var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
                 var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
                 hexagonGrid.context.clearRect(0, 0, hexagonGrid.canvas.width, hexagonGrid.canvas.height);
                 hexagonGrid.drawHexGrid(map.dataProp.rows, map.dataProp.cols, hexagonGrid.canvasOriginX, hexagonGrid.canvasOriginY, true);
-                hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
-                hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
+                hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.dataUnits[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
+                hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.dataUnits[map.attack.defX][map.attack.defY].owner); //highlight defender hex
                 var data = {
                     mapProperties: JSON.stringify(map.dataProp),
                     mapArray: JSON.stringify(map.data),
@@ -170,9 +170,9 @@ function contAttack(hexagonGrid) {
 function calcUnits(username) {
     //calc raw units for initial units, based on number of countries held
     var units = 0;
-    for (i = 0; i < map.data.length; i++) {
-        for (j = 0; j < map.data[i].length; j++) {
-            if (map.data[i][j].owner == username) {
+    for (i = 0; i < map.dataUnits.length; i++) {
+        for (j = 0; j < map.dataUnits[i].length; j++) {
+            if (map.dataUnits[i][j].owner == username) {
                 units++;
             }
         }
@@ -187,9 +187,9 @@ function calcUnits(username) {
     for (var i=0;i<map.dataProp.mapBonus.length+1;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
         bonus[i] = 0;
     }
-    for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
-        for (var j = 0; j < map.data[i].length; j++) {
-            if (map.data[i][j].owner == username) {
+    for (var i = 0; i < map.dataUnits.length; i++) { //calculate how many of each group the player has
+        for (var j = 0; j < map.dataUnits[i].length; j++) {
+            if (map.dataUnits[i][j].owner == username) {
                 bonus[map.data[i][j].group]++;
             }
         }
@@ -436,14 +436,14 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowC
         least = defArr.length;
     }
     */
-    if(least > map.data[defRowCol.row][defRowCol.col].units){
-        least = map.data[defRowCol.row][defRowCol.col].units;
+    if(least > map.dataUnits[defRowCol.row][defRowCol.col].units){
+        least = map.dataUnits[defRowCol.row][defRowCol.col].units;
     }
-    if(least > map.data[attRowCol.row][attRowCol.col].units && map.data[attRowCol.row][attRowCol.col].units > map.data[defRowCol.row][defRowCol.col].units){
-        least = map.data[defRowCol.row][defRowCol.col].units;
+    if(least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units > map.dataUnits[defRowCol.row][defRowCol.col].units){
+        least = map.dataUnits[defRowCol.row][defRowCol.col].units;
     }
-    if(least > map.data[attRowCol.row][attRowCol.col].units && map.data[attRowCol.row][attRowCol.col].units < map.data[defRowCol.row][defRowCol.col].units){
-        least = map.data[attRowCol.row][attRowCol.col].units - 1;
+    if(least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units < map.dataUnits[defRowCol.row][defRowCol.col].units){
+        least = map.dataUnits[attRowCol.row][attRowCol.col].units - 1;
     }
 
 
@@ -539,9 +539,9 @@ function calcEndState(username) {
         }
     }
     var occupied = 0;
-    for (var i = 0; i < map.data.length; i++) {
-        for (var j = 0; j < map.data[i].length; j++) {
-            if (map.data[i][j].owner == username) {
+    for (var i = 0; i < map.dataUnits.length; i++) {
+        for (var j = 0; j < map.dataUnits[i].length; j++) {
+            if (map.dataUnits[i][j].owner == username) {
                 occupied++;
             }
         }

@@ -35,7 +35,6 @@ var Map = function() {
             data: {
                 param: "getAll",
                 gameID: $('#game_id').val(),
-                email: $('#email').val()
             },
         }).success(callback);
     };
@@ -56,13 +55,14 @@ map.getData(function(map_data){
     map.data = JSON.parse(map_data.mapArray);
     map.dataProp = JSON.parse(map_data.mapProperties);
     map.log = JSON.parse(map_data.mapLog);
+    map.dataUnits = JSON.parse(map_data.mapUnits);
     var uiCanvas = document.getElementById("UICanvas");
     var ctxUI = uiCanvas.getContext("2d");
     /*for(i=0;i<map.data.length;i++){ //clear map 
         for(j=0;j<map.data[i].length;j++){
-                map.data[i][j].units = 0;
-				map.data[i][j].owner = "";
-				map.data[i][j].color = "";
+                map.dataUnits[i][j].units = 0;
+				map.dataUnits[i][j].owner = "";
+				map.dataUnits[i][j].color = "";
         }
     }
 	*/
@@ -168,7 +168,7 @@ map.getData(function(map_data){
         map.unitCnt = 0;
         var units = calcUnits(map.username);
         for (i = 0; i < map.unitPlacement.length; i++) {
-            map.data[map.unitPlacement[i].row][map.unitPlacement[i].col].units--;
+            map.dataUnits[map.unitPlacement[i].row][map.unitPlacement[i].col].units--;
         }
         map.unitPlacement = null;
         map.unitPlacement = [];
@@ -181,7 +181,7 @@ map.getData(function(map_data){
     
     var undoLast = document.getElementById('undoLast');
     undoLast.addEventListener('click', function(e) {
-        map.data[map.unitPlacement[map.unitPlacement.length - 1].row][map.unitPlacement[map.unitPlacement.length - 1].col].units--;
+        map.dataUnits[map.unitPlacement[map.unitPlacement.length - 1].row][map.unitPlacement[map.unitPlacement.length - 1].col].units--;
         map.unitPlacement.pop();
         map.unitCnt--;
         var units = calcUnits(map.username);
@@ -227,17 +227,18 @@ map.getData(function(map_data){
         var drawx2 = (map.attack.attY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
         var drawy3 = map.attack.defY % 2 == 0 ? (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.defX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
         var drawx3 = (map.attack.defY * hexagonGrid.side) + hexagonGrid.canvasOriginX;
-        if (map.data[map.attack.attX][map.attack.attY].units == 1) {
+        if (map.dataUnits[map.attack.attX][map.attack.attY].units == 1) {
             var arr = [{"id":"#attack","action":"hide"},{"id":"#endTurn","action":"show"},{"id":"#fortifyButton","action":"show"}];
             showHide(arr,"SingleAttack button pressed.");
         } else {
-            hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.data[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
-            hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.data[map.attack.defX][map.attack.defY].owner); //highlight defender hex
+            hexagonGrid.drawHex(drawx2, drawy2 - 6, "", "", true, "#00F2FF", map.dataUnits[map.attack.attX][map.attack.attY].owner); //highlight attacker hex
+            hexagonGrid.drawHex(drawx3, drawy3 - 6, "", "", true, "#FF0000", map.dataUnits[map.attack.defX][map.attack.defY].owner); //highlight defender hex
         }
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         console.log(map.dataProp.rows, map.dataProp.cols);
@@ -256,15 +257,16 @@ map.getData(function(map_data){
     var attackMove = document.getElementById('attackMoveBtn');
     attackMove.addEventListener('click', function(e) {
         var move = $('#attackMoveDrop').val();
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(move);
-        map.data[map.attack.attX][map.attack.attY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units) - parseInt(move);
+        map.dataUnits[map.attack.defX][map.attack.defY].units = parseInt(map.dataUnits[map.attack.defX][map.attack.defY].units) + parseInt(move);
+        map.dataUnits[map.attack.attX][map.attack.attY].units = parseInt(map.dataUnits[map.attack.attX][map.attack.attY].units) - parseInt(move);
         map.clickState = null;
         map.selected = null;
         updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + parseInt(move) + " units to the defeated hex.")
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -276,15 +278,16 @@ map.getData(function(map_data){
     
     var attackMoveAll = document.getElementById('attackMoveAllBtn');
     attackMoveAll.addEventListener('click', function(e) {
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.attX][map.attack.attY].units);
-        map.data[map.attack.attX][map.attack.attY].units = 1;
+        map.dataUnits[map.attack.defX][map.attack.defY].units = parseInt(map.dataUnits[map.attack.attX][map.attack.attY].units);
+        map.dataUnits[map.attack.attX][map.attack.attY].units = 1;
         map.clickState = null;
         map.selected = null;
-        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + (map.data[map.attack.defX][map.attack.defY].units) + " units to the defeated hex.")
+        updateLog(map.dataProp.users[map.dataProp.turn] + " moved " + (map.dataUnits[map.attack.defX][map.attack.defY].units) + " units to the defeated hex.")
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -302,7 +305,8 @@ map.getData(function(map_data){
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -337,8 +341,8 @@ map.getData(function(map_data){
 
     var transferMaxButton = document.getElementById('transferMaxButton');
     transferMaxButton.addEventListener('click', function(e) {
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + parseInt(map.data[map.attack.attX][map.attack.attY].units) - 1;
-        map.data[map.attack.attX][map.attack.attY].units = 1;
+        map.dataUnits[map.attack.defX][map.attack.defY].units = parseInt(map.dataUnits[map.attack.defX][map.attack.defY].units) + parseInt(map.dataUnits[map.attack.attX][map.attack.attY].units) - 1;
+        map.dataUnits[map.attack.attX][map.attack.attY].units = 1;
         map.dataProp.fortifiesUsed++;
         map.selected = null;
         map.clickState = null;
@@ -352,7 +356,8 @@ map.getData(function(map_data){
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"},{"id":"#endTurn","action":"show"}];
@@ -363,10 +368,10 @@ map.getData(function(map_data){
     transferButton.addEventListener('click', function(e) {
         var num = $('#transfer').val();
         num = parseInt(num);
-        var tmp = parseInt(map.data[map.attack.attX][map.attack.attY].units);
+        var tmp = parseInt(map.dataUnits[map.attack.attX][map.attack.attY].units);
         map.dataProp.fortifiesUsed++;
-        map.data[map.attack.defX][map.attack.defY].units = parseInt(map.data[map.attack.defX][map.attack.defY].units) + num;
-        map.data[map.attack.attX][map.attack.attY].units = tmp - num;
+        map.dataUnits[map.attack.defX][map.attack.defY].units = parseInt(map.dataUnits[map.attack.defX][map.attack.defY].units) + num;
+        map.dataUnits[map.attack.attX][map.attack.attY].units = tmp - num;
         updateLog(map.dataProp.fortifiesUsed + " / " + map.dataProp.fortifies + " fortifies used.");
         var fortUnitsDisp = document.getElementById('fortUnits').innerHTML;
         fortUnitsDisp = map.dataProp.fortifiesUsed + "/" + map.dataProp.fortifies + " fortifications used.";
@@ -380,7 +385,8 @@ map.getData(function(map_data){
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         var arr = [{"id":"#fortify","action":"hide"},{"id":"#endTurnButton","action":"show"},{"id":"#backToAttack","action":"hide"},{"id":"#endTurn","action":"show"}];
@@ -467,7 +473,8 @@ map.getData(function(map_data){
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
-            mapLog: JSON.stringify(map.log)
+            mapLog: JSON.stringify(map.log),
+            mapUnits: JSON.stringify(map.dataUnits),
         };
         updateMap(data, "updateAll");
         ctxUI.clearRect(0, 0, map.canvas.width, map.canvas.height);
@@ -498,9 +505,9 @@ map.getData(function(map_data){
         updateMapBtn.addEventListener('click', function(e) { //For the map editor
             var cube = toCubeCoord(map.editMap.col, map.editMap.row);
             map.data[map.editMap.row][map.editMap.col].type = $('#type').val();
-            map.data[map.editMap.row][map.editMap.col].owner = $('#owner').val();
-            map.data[map.editMap.row][map.editMap.col].units = $('#unitsEdit').val();
-            map.data[map.editMap.row][map.editMap.col].color = $('#color').val();
+            map.dataUnits[map.editMap.row][map.editMap.col].owner = $('#owner').val();
+            map.dataUnits[map.editMap.row][map.editMap.col].units = $('#unitsEdit').val();
+            map.dataUnits[map.editMap.row][map.editMap.col].color = $('#color').val();
             map.data[map.editMap.row][map.editMap.col].group = $('#group').val();
             map.data[map.editMap.row][map.editMap.col].connect = JSON.parse($('#connect').val());
             if ($('#n').val() != "") {
