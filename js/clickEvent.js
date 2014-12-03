@@ -22,9 +22,9 @@ HexagonGrid.prototype.clickEvent = function (e) {
         $('#group').val(map.data[tile.row][tile.column].group);
         $('#column').val(tile.column);
         $('#row').val(tile.row);
-        
         //END map editor
     }
+
     if(map.dataProp.owners[map.dataProp.turn] == map.email){
         //Add clicks to a click array for tracking
         if(map.dataProp.turnPhase == "fortify"){
