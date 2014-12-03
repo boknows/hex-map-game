@@ -174,5 +174,5 @@ HexagonGrid.prototype.getRelativeCanvasOffset = function() {
 		
 		return { x: bound.left, y: bound.top };
 	}
-}
+};
 

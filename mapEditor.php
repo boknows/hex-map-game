@@ -1,6 +1,5 @@
 <?php
     require("config.php");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -131,7 +130,7 @@
    
 
 </body>
-<script src="js/mapEditor2.js?v6"></script>
+<script src="js/mapEditorRework.js?v6"></script>
 <script src="js/mapEditorData.js?v6"></script>
 
 

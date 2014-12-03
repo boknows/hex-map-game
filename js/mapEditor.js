@@ -947,8 +947,7 @@ HexagonGrid.prototype.getSelectedTile = function(mouseX, mouseY) {
     mouseY -= offSet.y;
 
     var column = Math.floor((mouseX) / this.side);
-    var row = Math.floor(
-        column % 2 == 0 ? Math.floor((mouseY) / this.height) : Math.floor(((mouseY + (this.height * 0.5)) / this.height)) - 1);
+    var row = Math.floor(column % 2 == 0 ? Math.floor((mouseY) / this.height) : Math.floor(((mouseY + (this.height * 0.5)) / this.height)) - 1);
 
     //Test if on left side of frame            
     if (mouseX > (column * this.side) && mouseX < (column * this.side) + this.width - this.side) {
