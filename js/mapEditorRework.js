@@ -114,6 +114,9 @@ function HexagonGrid(canvasId, radius) {
     this.context = map.ctx;
     this.canvas = map.canvas;
 
+    map.canvas.width = this.side * (map.dataProp.cols+2) + map.canvas.getBoundingClientRect().left;
+    map.canvas.height = (this.height * map.dataProp.rows+2) + map.canvas.getBoundingClientRect().top + this.height;
+
     this.canvasOriginX = map.canvas.getBoundingClientRect().left;
     this.canvasOriginY = map.canvas.getBoundingClientRect().top;
 
@@ -544,6 +547,9 @@ updateRowsCols.addEventListener('click', function(e) { //For the map editor
 
     map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
+    map.canvas.width = hexagonGrid.side * (map.dataProp.cols+2) + map.canvas.getBoundingClientRect().left;
+    map.canvas.height = (hexagonGrid.height * map.dataProp.rows+2) + map.canvas.getBoundingClientRect().top + hexagonGrid.height;
+
     hexagonGrid.context = map.ctx;
     hexagonGrid.canvas = map.canvas;
 
@@ -693,7 +699,8 @@ loadMapBtn.addEventListener('click', function(e) { //For the map editor
                 map.data[i][j] = tmpMap[i][j];
             }
         }
-        document.write('<img src="'+resp.mapImage+'"/>');
+        //code to print Image from DB onto screen:
+        //document.write('<img src="'+resp.mapImage+'"/>');
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.dataProp = JSON.parse(resp.mapProperties);
         map.dataUnits = JSON.parse(resp.mapUnits);
@@ -704,6 +711,9 @@ loadMapBtn.addEventListener('click', function(e) { //For the map editor
 
         map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
         map.ctx = map.canvas.getContext('2d');
+        map.canvas.width = hexagonGrid.side * (map.dataProp.cols+2) + map.canvas.getBoundingClientRect().left;
+        map.canvas.height = (hexagonGrid.height * map.dataProp.rows+2) + map.canvas.getBoundingClientRect().top + hexagonGrid.height;
+
         hexagonGrid.context = map.ctx;
         hexagonGrid.canvas = map.canvas;
         $('#rows').val(map.dataProp.rows);

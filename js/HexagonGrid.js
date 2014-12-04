@@ -7,6 +7,10 @@ function HexagonGrid(canvasId, radius) {
     map.canvas = document.getElementById(canvasId); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
 
+    //Dyanmically size canvas to fit the map
+    map.canvas.width = this.side * (map.dataProp.cols+2) + map.canvas.getBoundingClientRect().left;
+    map.canvas.height = (this.height * map.dataProp.rows+2) + map.canvas.getBoundingClientRect().top + this.height;
+
     this.context = map.ctx;
     this.canvas = map.canvas;
 
