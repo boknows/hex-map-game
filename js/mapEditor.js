@@ -231,10 +231,12 @@ map.getData(function(map_data) {
             }
         }
         delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
+        var mapImage = map.canvas.toDataURL();
         var data= {
             mapArray: JSON.stringify(map.data),
             mapProperties: JSON.stringify(map.dataProp),
             name: $('#saveMapName').val(),
+            mapImage: mapImage,
         };
         updateMap(data, "saveMap");
         console.log(JSON.stringify(map.data));

@@ -649,11 +649,13 @@ saveMap.addEventListener('click', function(e) { //For the map editor
             }
         }
     }
+    var mapImage = map.canvas.toDataURL();
     var data= {
         mapArray: JSON.stringify(newMap),
         mapProperties: JSON.stringify(map.dataProp),
         mapUnits: JSON.stringify(newMapUnits),
         name: $('#saveMapName').val(),
+        mapImage: mapImage,
     };
     updateMap(data, "saveMap");
     console.log(newMap);
@@ -691,6 +693,7 @@ loadMapBtn.addEventListener('click', function(e) { //For the map editor
                 map.data[i][j] = tmpMap[i][j];
             }
         }
+        document.write('<img src="'+resp.mapImage+'"/>');
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.dataProp = JSON.parse(resp.mapProperties);
         map.dataUnits = JSON.parse(resp.mapUnits);
