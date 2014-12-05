@@ -146,7 +146,6 @@ $(document).ready(function() {
 	    	var html = "";
 	    	for(var i=0;i<resp.id.length;i++){
 	    		if(resp.id[i] >= 5){
-	    			console.log(resp.id[i]);
 	    			html = html + "<option value='" + resp.id[i]+ "'>" + resp.name[i]+ "</option>";
 	    		}
 	    	}
@@ -211,5 +210,39 @@ function createGame() {
 			//window.location.replace("dashboard.php");
 		}
 	});
-}
 
+	
+    
+}
+var mapSelectBtn = document.getElementById('mapSelectBtn');
+mapSelectBtn.addEventListener('click', function(e) {
+	initMapSelect();
+   	$('#mapSelectPanel').show();
+}, false);
+
+var closeMapPanel = document.getElementById('closeMapPanel');
+closeMapPanel.addEventListener('click', function(e) {
+   $('#mapSelectPanel').hide();
+}, false);
+
+function initMapSelect(){
+	$.ajax({
+		url: "mapSelectData.php",
+		type: "POST",
+		dataType: 'JSON', 
+		data: {"param": "init"},
+		success: function(resp){
+			console.log(resp);
+			var html = "";
+			for(var i=0;i<resp.id.length;i++){
+				html = html + "<div class='col-md-6'><img src='mapImages/"+resp.id[i]+".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap("+resp.id[i]+") type='button'>Select This Map</button></div></div></div>";
+			}
+			$('#results').html(html);
+		}
+	});
+};
+
+function selectMap(id){
+	console.log("Selected Map ID "+id);
+	$('#mapSelectPanel').hide();
+};
