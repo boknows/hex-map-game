@@ -146,7 +146,6 @@ $(document).ready(function() {
 	    	var html = "";
 	    	for(var i=0;i<resp.id.length;i++){
 	    		if(resp.id[i] >= 5){
-	    			console.log(resp.id[i]);
 	    			html = html + "<option value='" + resp.id[i]+ "'>" + resp.name[i]+ "</option>";
 	    		}
 	    	}
@@ -211,5 +210,34 @@ function createGame() {
 			//window.location.replace("dashboard.php");
 		}
 	});
-}
 
+	
+    
+}
+var mapSelectBtn = document.getElementById('mapSelectBtn');
+mapSelectBtn.addEventListener('click', function(e) {
+	initMapSelect();
+   	$('#mapSelectPanel').show();
+}, false);
+
+var closeMapPanel = document.getElementById('closeMapPanel');
+closeMapPanel.addEventListener('click', function(e) {
+   $('#mapSelectPanel').hide();
+}, false);
+
+function initMapSelect(){
+	$.ajax({
+		url: "mapSelectData.php",
+		type: "POST",
+		dataType: 'JSON', 
+		data: {"param": "init"},
+		success: function(resp){
+			console.log(resp);
+			var html = "";
+			for(var i=0;i<resp.id.length;i++){
+				html = html + "<img src="+resp.mapImage[i]+"/>";
+			}
+			$('#results').html(html);
+		}
+	});
+};

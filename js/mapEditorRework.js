@@ -649,7 +649,8 @@ saveMap.addEventListener('click', function(e) { //For the map editor
             }
         }
     }
-    var mapImage = map.canvas.toDataURL();
+    var mapImage = map.canvas.toDataURL("image/jpeg", 1.0);
+    console.log(mapImage);
     var data= {
         mapArray: JSON.stringify(newMap),
         mapProperties: JSON.stringify(map.dataProp),
@@ -693,7 +694,8 @@ loadMapBtn.addEventListener('click', function(e) { //For the map editor
                 map.data[i][j] = tmpMap[i][j];
             }
         }
-        document.write('<img src="'+resp.mapImage+'"/>');
+        //for loading image from db and displaying:
+        //document.write('<img src="'+resp.mapImage+'"/>');
         map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
         map.dataProp = JSON.parse(resp.mapProperties);
         map.dataUnits = JSON.parse(resp.mapUnits);
@@ -778,9 +780,6 @@ $( "#neutral" ).change(function() {
 $( "#group" ).change(function() {
     map.data[map.editMap.row][map.editMap.col].group == $('#group').val();
 });
-
-
-
 
 $('body').keydown(function(e) {
     if (hexagonGrid.inputFocus == false) {

@@ -54,8 +54,14 @@ if($_POST['param']=="getAllMaps"){
 	echo JSON_encode($data);
 }
 if($_POST['param']=="saveMap"){
-	$stmt = $db->prepare('INSERT INTO maps (mapArray, mapProperties, name, mapUnits, mapImage) VALUES (:mapArray, :mapProperties, :name, :mapUnits, :mapImage)');
-	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name'], ':mapUnits' => $_POST['mapUnits'], ':mapImage' => $_POST['mapImage']));
+	$stmt = $db->prepare('INSERT INTO maps (mapArray, mapProperties, name, mapUnits) VALUES (:mapArray, :mapProperties, :name, :mapUnits)');
+	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name'], ':mapUnits' => $_POST['mapUnits']));
+	$img = $_POST['mapImage'];
+	$img = str_replace('data:image/jpeg;base64,', '', $img);
+	$img = str_replace(' ', '+', $img);
+	$data = base64_decode($img); 
+	file_put_contents('1.jpg', $data);
+
 	echo JSON_encode("Success");
 }
 if($_POST['param']=="getSingleMap"){

@@ -15,8 +15,6 @@
 	<script type="text/javascript" src="js/bootstrap-select.min.js"></script> 
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script src="js/select2.min.js"></script>
-	<script type="text/javascript" src="js/startNewGame.js?v3"></script>
-
     <script src="js/jquery.simplecolorpicker.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -25,70 +23,109 @@
 
     <link href="css/select2-bootstrap.css" rel="stylesheet"/>
 	<link href="css/select2.css" rel="stylesheet"/>
-
+	<style>
+	div.panel
+	{
+		border: 1px solid #FFFFFF;
+		border-radius: 0.5em;
+		background-color: rgba(32, 64, 128, 0.75);
+		box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 1), 0 0 2px 2px rgba(255, 255, 255, 0.25);
+		padding: 0.5em;
+		color: rgba(255, 255, 255, 1);
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), 1px 1px 3px rgba(0, 0, 0, 1);
+	}
+	</style>
 </head>
 <body>
-<div class="row-fluid">
-	<input type="hidden" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
-	<input type="hidden" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
-	<div class="col-md-12">
-		<h3>Start New Game</h3>
-		Choose your color:
-		<div class="form-group">
-			<div class="col-sm-12">
-			  <select name="colorpicker" id="colorpicker" class="form-control">
-				<option value="#FF66FF" selected>Pink</option>
-				<option value="#FF6600">Orange</option>
-				<option value="#FFFF00">Yellow</option>
-				<option value="#33CC33">Green</option>
-				<option value="#0000FF">Blue</option>
-				<option value="#AA70AA">Purple</option>
-			  </select>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<input type="hidden" id="username" value="<?php echo $_SESSION['user']['username']; ?>">
+		<input type="hidden" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
+		<div class="col-md-12">
+			<h3>Start New Game</h3>
+			Choose your color:
+			<div class="form-group">
+				<div class="col-sm-12">
+				  <select name="colorpicker" id="colorpicker" class="form-control">
+					<option value="#FF66FF" selected>Pink</option>
+					<option value="#FF6600">Orange</option>
+					<option value="#FFFF00">Yellow</option>
+					<option value="#33CC33">Green</option>
+					<option value="#0000FF">Blue</option>
+					<option value="#AA70AA">Purple</option>
+				  </select>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Game Name:</b></span><input type='text' name='name' class='form-control' id='name'>
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 1:</b></span><input type="hidden" id="player1" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 2:</b></span><input type="hidden" id="player2" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 3:</b></span><input type="hidden" id="player3" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 4:</b></span><input type="hidden" id="player4" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 5:</b></span><input type="hidden" id="player5" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 6:</b></span><input type="hidden" id="player6" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Opponent 7:</b></span><input type="hidden" id="player7" class="form-control select2">
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Minimum Players:</b></span><select class='form-control' id='minPlayers'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Maximum Players:</b></span><select class='form-control' id='maxPlayers' disabled><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
+			</div>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Public/Private Game:</b></span><select class='form-control' id='publicPrivate'><option value='public'>Public</option><option value='private'>Private</option></select>
+			</div>
+			<h3>Game Options</h3>
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Maximum Fortifies:</b></span><input type='text' name='maxFortifies' class='form-control' id='maxFortifies' value="1">
+			</div>
+			<!--
+			<div class="input-group col-md-9">
+			<span class='input-group-addon'><b>Map ID:</b></span><select type='text' name='mapID' class='form-control' id='mapID'></select>
+			</div> -->
+			<div class="input-group col-md-2">
+	            <span class='input-group-addon'><b>Map</b></span>
+	            <span class="input-group-btn">
+	                <button class="btn btn-primary" type="button" id="mapSelectBtn">Select</button>
+	            </span>
+	        </div>
+			<div class='input-group'>
+			<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGameVal() data-loading-text="Creating...">Create Game</button><div id='spinner' style="display:none"><img src="css/712.GIF"></div>
 			</div>
 		</div>
-		<div style="clear: both;"></div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Game Name:</b></span><input type='text' name='name' class='form-control' id='name'>
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 1:</b></span><input type="hidden" id="player1" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 2:</b></span><input type="hidden" id="player2" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 3:</b></span><input type="hidden" id="player3" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 4:</b></span><input type="hidden" id="player4" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 5:</b></span><input type="hidden" id="player5" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 6:</b></span><input type="hidden" id="player6" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Opponent 7:</b></span><input type="hidden" id="player7" class="form-control select2">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Minimum Players:</b></span><select class='form-control' id='minPlayers'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Maximum Players:</b></span><select class='form-control' id='maxPlayers' disabled><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option></select>
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Public/Private Game:</b></span><select class='form-control' id='publicPrivate'><option value='public'>Public</option><option value='private'>Private</option></select>
-		</div>
-		<h3>Game Options</h3>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Maximum Fortifies:</b></span><input type='text' name='maxFortifies' class='form-control' id='maxFortifies' value="1">
-		</div>
-		<div class="input-group col-md-9">
-		<span class='input-group-addon'><b>Map ID:</b></span><select type='text' name='mapID' class='form-control' id='mapID'></select>
-		</div>
-		<div class='input-group'>
-		<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGameVal() data-loading-text="Creating...">Create Game</button><div id='spinner' style="display:none"><img src="css/712.GIF"></div>
+		
+	</div>
+	<div class="row-fluid">
+		<div id="mapSelectPanel" class="col-md-9" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); bottom: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+			<p id="results">
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem massa, tincidunt ut lobortis laoreet, ultricies ac nunc. Vestibulum suscipit a metus et ullamcorper. Fusce porta nisl in dapibus consectetur. Etiam justo sem, vehicula in cursus at, efficitur a nulla. Etiam urna ipsum, sollicitudin a pharetra ut, tempus et leo. Proin blandit turpis et facilisis convallis. Donec quis justo ultricies, vestibulum nibh at, facilisis metus. Nulla libero diam, efficitur a erat vel, rutrum aliquam mi. Ut sit amet facilisis enim. Nulla ex sapien, consectetur id eros eu, auctor consectetur quam. Proin sed felis ultricies, sollicitudin velit et, ornare risus.
+
+Proin dignissim enim fringilla felis fermentum finibus. Maecenas vitae fermentum ex, vitae cursus purus. Fusce nec pellentesque elit. Sed cursus ante quis dolor tempus facilisis. In fringilla facilisis aliquam. Aenean velit ipsum, egestas eu lobortis eu, congue at elit. Vivamus ut magna id neque bibendum interdum varius a quam. Nulla non ornare magna, eget placerat diam. Vestibulum non purus justo. Aliquam nibh mauris, ultrices non vulputate ac, vestibulum sit amet purus.
+
+Donec consectetur tellus convallis augue porttitor, sit amet mollis leo sollicitudin. Mauris tempus quam nec ante sagittis, et vehicula ipsum sollicitudin. Praesent a aliquet quam, id bibendum nibh. Vestibulum ullamcorper massa massa. Fusce quis semper odio. Vivamus ac mi vel orci tincidunt iaculis non id nibh. Aliquam dapibus libero et diam maximus pellentesque.
+
+Nulla ac dapibus purus. Cras accumsan, lacus in ultricies auctor, mauris lorem blandit massa, a commodo turpis lectus facilisis diam. Sed condimentum auctor erat ac placerat. Vivamus id nibh sed sapien porta vehicula. Mauris a blandit nibh, et pellentesque orci. Morbi vitae risus ut diam iaculis scelerisque eget nec metus. Phasellus quis lobortis velit, at rutrum ipsum. Sed a dui et eros sagittis blandit. Maecenas hendrerit sapien ac odio sodales venenatis. Pellentesque ut enim faucibus, malesuada enim gravida, dictum erat. Sed nunc felis, finibus at sapien in, hendrerit egestas sem. Nullam metus ex, feugiat ac mi non, placerat feugiat ante.
+
+Praesent pulvinar placerat risus, sed aliquam tortor elementum eget. Integer ornare vulputate mi, convallis blandit massa faucibus ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dictum vel arcu id rutrum. Vestibulum est massa, sagittis a sem at, mattis varius eros. Morbi et ligula in enim congue posuere ac eu quam. Quisque mollis pellentesque tempus. Aenean nec lectus vel lorem rhoncus dapibus. Vivamus aliquet quam sapien, a luctus lorem varius non. Sed pretium erat vel facilisis sollicitudin. Morbi feugiat sem lacus, nec egestas eros aliquam ornare. </p>
+			<div class='input-group'>
+				<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -96,4 +133,5 @@
 <script>
 $('select[name="colorpicker"]').simplecolorpicker({theme: 'glyphicons'});
 </script>
+<script type="text/javascript" src="js/startNewGame.js?v3"></script>
 </html>
