@@ -56,11 +56,13 @@ if($_POST['param']=="getAllMaps"){
 if($_POST['param']=="saveMap"){
 	$stmt = $db->prepare('INSERT INTO maps (mapArray, mapProperties, name, mapUnits) VALUES (:mapArray, :mapProperties, :name, :mapUnits)');
 	$stmt->execute(array(':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':name' => $_POST['name'], ':mapUnits' => $_POST['mapUnits']));
+	$maxMapID = $db->query('SELECT max(id) from maps')->fetchColumn(); 
 	$img = $_POST['mapImage'];
 	$img = str_replace('data:image/jpeg;base64,', '', $img);
 	$img = str_replace(' ', '+', $img);
 	$data = base64_decode($img); 
-	file_put_contents('1.jpg', $data);
+	$filename = "mapImages/".$maxMapID. ".jpg";
+	file_put_contents($filename, $data);
 
 	echo JSON_encode("Success");
 }
