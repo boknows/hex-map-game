@@ -113,6 +113,8 @@ function HexagonGrid(canvasId, radius) {
 
     this.context = map.ctx;
     this.canvas = map.canvas;
+    map.canvas.width = this.side * (map.dataProp.cols+1);
+    map.canvas.height = this.height * (map.dataProp.rows+1);
 
     this.canvasOriginX = map.canvas.getBoundingClientRect().left;
     this.canvasOriginY = map.canvas.getBoundingClientRect().top;
@@ -544,6 +546,9 @@ updateRowsCols.addEventListener('click', function(e) { //For the map editor
 
     map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
     map.ctx = map.canvas.getContext('2d');
+    map.canvas.width = hexagonGrid.side * (map.dataProp.cols+1);
+    map.canvas.height = hexagonGrid.height * (map.dataProp.rows+1);
+
     hexagonGrid.context = map.ctx;
     hexagonGrid.canvas = map.canvas;
 
@@ -706,6 +711,8 @@ loadMapBtn.addEventListener('click', function(e) { //For the map editor
 
         map.canvas = document.getElementById("HexCanvas"); //replicate canvas/context in global object for future use. 
         map.ctx = map.canvas.getContext('2d');
+        map.canvas.width = hexagonGrid.side * (map.dataProp.cols+1);
+        map.canvas.height = hexagonGrid.height * (map.dataProp.rows+1);
         hexagonGrid.context = map.ctx;
         hexagonGrid.canvas = map.canvas;
         $('#rows').val(map.dataProp.rows);

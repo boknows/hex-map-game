@@ -63,7 +63,6 @@ if($_POST['param']=="saveMap"){
 	$data = base64_decode($img); 
 	$filename = "mapImages/".$maxMapID. ".jpg";
 	file_put_contents($filename, $data);
-
 	echo JSON_encode("Success");
 }
 if($_POST['param']=="getSingleMap"){
