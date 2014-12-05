@@ -16,6 +16,7 @@ if($_POST['param']=="init"){
 		$data['id'][] = $row['id'];	
 		$data['name'][] = $row['name'];
 		$data['mapImage'][] = $row['mapImage'];	
+		$data['mapProperties'][] = $row['mapProperties'];	
 	}
 	echo JSON_encode($data);
 }

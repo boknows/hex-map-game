@@ -654,7 +654,7 @@ saveMap.addEventListener('click', function(e) { //For the map editor
             }
         }
     }
-    var mapImage = map.canvas.toDataURL("image/jpeg", 1.0);
+    var mapImage = map.canvas.toDataURL();
     console.log(mapImage);
     var data= {
         mapArray: JSON.stringify(newMap),

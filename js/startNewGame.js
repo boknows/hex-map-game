@@ -235,9 +235,14 @@ function initMapSelect(){
 			console.log(resp);
 			var html = "";
 			for(var i=0;i<resp.id.length;i++){
-				html = html + "<img src="+resp.mapImage[i]+"/>";
+				html = html + "<div class='col-md-6'><img src='mapImages/"+resp.id[i]+".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap("+resp.id[i]+") type='button'>Select This Map</button></div></div></div>";
 			}
 			$('#results').html(html);
 		}
 	});
+};
+
+function selectMap(id){
+	console.log("Selected Map ID "+id);
+	$('#mapSelectPanel').hide();
 };

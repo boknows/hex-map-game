@@ -20,21 +20,9 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker.css">
     <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
-
     <link href="css/select2-bootstrap.css" rel="stylesheet"/>
 	<link href="css/select2.css" rel="stylesheet"/>
-	<style>
-	div.panel
-	{
-		border: 1px solid #FFFFFF;
-		border-radius: 0.5em;
-		background-color: rgba(32, 64, 128, 0.75);
-		box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 1), 0 0 2px 2px rgba(255, 255, 255, 0.25);
-		padding: 0.5em;
-		color: rgba(255, 255, 255, 1);
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), 1px 1px 3px rgba(0, 0, 0, 1);
-	}
-	</style>
+
 </head>
 <body>
 <div class="container-fluid">
@@ -111,20 +99,13 @@
 		
 	</div>
 	<div class="row-fluid">
-		<div id="mapSelectPanel" class="col-md-9" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); bottom: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
-			<p id="results">
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem massa, tincidunt ut lobortis laoreet, ultricies ac nunc. Vestibulum suscipit a metus et ullamcorper. Fusce porta nisl in dapibus consectetur. Etiam justo sem, vehicula in cursus at, efficitur a nulla. Etiam urna ipsum, sollicitudin a pharetra ut, tempus et leo. Proin blandit turpis et facilisis convallis. Donec quis justo ultricies, vestibulum nibh at, facilisis metus. Nulla libero diam, efficitur a erat vel, rutrum aliquam mi. Ut sit amet facilisis enim. Nulla ex sapien, consectetur id eros eu, auctor consectetur quam. Proin sed felis ultricies, sollicitudin velit et, ornare risus.
-
-Proin dignissim enim fringilla felis fermentum finibus. Maecenas vitae fermentum ex, vitae cursus purus. Fusce nec pellentesque elit. Sed cursus ante quis dolor tempus facilisis. In fringilla facilisis aliquam. Aenean velit ipsum, egestas eu lobortis eu, congue at elit. Vivamus ut magna id neque bibendum interdum varius a quam. Nulla non ornare magna, eget placerat diam. Vestibulum non purus justo. Aliquam nibh mauris, ultrices non vulputate ac, vestibulum sit amet purus.
-
-Donec consectetur tellus convallis augue porttitor, sit amet mollis leo sollicitudin. Mauris tempus quam nec ante sagittis, et vehicula ipsum sollicitudin. Praesent a aliquet quam, id bibendum nibh. Vestibulum ullamcorper massa massa. Fusce quis semper odio. Vivamus ac mi vel orci tincidunt iaculis non id nibh. Aliquam dapibus libero et diam maximus pellentesque.
-
-Nulla ac dapibus purus. Cras accumsan, lacus in ultricies auctor, mauris lorem blandit massa, a commodo turpis lectus facilisis diam. Sed condimentum auctor erat ac placerat. Vivamus id nibh sed sapien porta vehicula. Mauris a blandit nibh, et pellentesque orci. Morbi vitae risus ut diam iaculis scelerisque eget nec metus. Phasellus quis lobortis velit, at rutrum ipsum. Sed a dui et eros sagittis blandit. Maecenas hendrerit sapien ac odio sodales venenatis. Pellentesque ut enim faucibus, malesuada enim gravida, dictum erat. Sed nunc felis, finibus at sapien in, hendrerit egestas sem. Nullam metus ex, feugiat ac mi non, placerat feugiat ante.
-
-Praesent pulvinar placerat risus, sed aliquam tortor elementum eget. Integer ornare vulputate mi, convallis blandit massa faucibus ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dictum vel arcu id rutrum. Vestibulum est massa, sagittis a sem at, mattis varius eros. Morbi et ligula in enim congue posuere ac eu quam. Quisque mollis pellentesque tempus. Aenean nec lectus vel lorem rhoncus dapibus. Vivamus aliquet quam sapien, a luctus lorem varius non. Sed pretium erat vel facilisis sollicitudin. Morbi feugiat sem lacus, nec egestas eros aliquam ornare. </p>
-			<div class='input-group'>
-				<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
+		<div id="mapSelectPanel" class="col-md-9" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+			<div class="row">
+				<div id="results">
+				</div>
+				<div class='input-group'>
+					<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
