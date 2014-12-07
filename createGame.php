@@ -16,8 +16,6 @@ foreach ($stmt as $row) {
 	$data['mapUnits'] = $row['mapUnits'];	
 }
 $mapProperties = JSON_decode($data['mapProperties']);
-echo $data['mapArray'];
-echo $data['mapUnits'];
 $now = time();
 $stmt = $db->prepare("SELECT MAX(gameID) FROM games");
 $stmt->execute();

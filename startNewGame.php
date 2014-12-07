@@ -103,11 +103,13 @@
 	                <button class="btn btn-primary" type="button" id="mapSelectBtn">Select</button>
 	            </span>
 	        </div>
+	        <div class="input-group col-md-10" id="selectedMapDiv">
+			
+	        </div>
 			<div class='input-group'>
 			<button class="btn btn-success btn-large" id='createGame' type='button' onclick=createGameVal() data-loading-text="Creating...">Create Game</button><div id='spinner' style="display:none"><img src="css/712.GIF"></div>
 			</div>
 		</div>
-		
 	</div>
 	<div class="row-fluid">
 		<div id="mapSelectPanel" class="col-md-9 panel" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
@@ -115,7 +117,6 @@
 				<div id="results" class="col-md-12">
 				</div>
 				<div id="pages" class="col-md-12">
-
 				</div>
 			</div>
 		</div>

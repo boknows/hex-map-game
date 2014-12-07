@@ -194,7 +194,7 @@ function createGame() {
 				$("#player5").select2("val"), 
 				$("#player6").select2("val"), 
 				$("#player7").select2("val"), ],
-				mapID: $("#mapID").val(),
+				mapID: $("#selectedMapID").val(),
 				usernames: users,
 				minPlayers: $('#minPlayers').val(),
 				maxPlayers: $('#maxPlayers').val(),
@@ -207,7 +207,7 @@ function createGame() {
 		dataType: 'JSON', 
 		data: data,
 		success: function(){
-			//window.location.replace("dashboard.php");
+			window.location.replace("dashboard.php");
 		}
 	});
 
@@ -221,7 +221,7 @@ mapSelectBtn.addEventListener('click', function(e) {
 }, false);
 
 
-
+var maps = {};
 function initMapSelect() {
     $.ajax({
         url: "mapSelectData.php",
@@ -232,6 +232,7 @@ function initMapSelect() {
         },
         success: function(resp) {
             console.log(resp);
+            maps.data = resp;
             var html = "";
             for (var i = 0; i < resp.id.length; i++) { //create an <img> for each map
                 html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
@@ -280,6 +281,12 @@ function getNewPage(p) {
 
 
 function selectMap(id){
-	console.log("Selected Map ID "+id);
+	var html = "";
+	for(var i=0;i<maps.data.id.length;i++){
+		if(id == maps.data.id[i]){
+			html = "<div class='input-group col-md-9'><span class='input-group-addon'><b>Selected Map:</b></span><input type='text' class='form-control' value='"+ maps.data.name[i] +"''><input type='hidden' id='selectedMapID' value='"+id+"'</div>";
+		}
+	}
+	$('#selectedMapDiv').html(html);
 	$('#mapSelectPanel').hide();
 };
