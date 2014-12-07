@@ -225,22 +225,58 @@ closeMapPanel.addEventListener('click', function(e) {
    $('#mapSelectPanel').hide();
 }, false);
 
-function initMapSelect(){
+function initMapSelect() {
+    $.ajax({
+        url: "mapSelectData.php",
+        type: "POST",
+        dataType: 'JSON',
+        data: {
+            "param": "init"
+        },
+        success: function(resp) {
+            console.log(resp);
+            var html = "";
+            for (var i = 0; i < resp.id.length; i++) { //create an <img> for each map
+                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
+            }
+            $('#results').html(html);
+            html = "<div class='btn-toolbar' role='toolbar' aria-label=''><div class='btn-group' role='group' aria-label='pages'>";
+            for (var i = 1; i < resp.totalPages + 1; i++) { //create a page button for each page of results
+                html = html + " <button type='button' class='btn btn-default' id='" + i + "'>" + i + "</button>";
+            }				
+            html = html + "</div><div class='btn-group' role='group' aria-label='close'><button class='btn btn-danger btn-large' id='closeMapPanel' type='button'>Close</button></div>";
+            $('#pages').html(html);
+
+            for (var i = 1; i < resp.totalPages + 1; i++) { //assign click events to each page button
+                (function(n) {
+                    $("#" + n).click(function() {
+                        getNewPage(n);
+                    });
+                })(i)
+            }
+        }
+    });
+};
+
+function getNewPage(p) {
 	$.ajax({
 		url: "mapSelectData.php",
 		type: "POST",
 		dataType: 'JSON', 
-		data: {"param": "init"},
+		data: { 
+			"param": "page",
+			"page": p,
+		},
 		success: function(resp){
-			console.log(resp);
 			var html = "";
-			for(var i=0;i<resp.id.length;i++){
-				html = html + "<div class='col-md-6'><img src='mapImages/"+resp.id[i]+".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap("+resp.id[i]+") type='button'>Select This Map</button></div></div></div>";
-			}
-			$('#results').html(html);
+            for (var i = 0; i < resp.id.length; i++) { //create an <img> for each map
+                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
+            }
+            $('#results').html(html);
 		}
 	});
 };
+
 
 function selectMap(id){
 	console.log("Selected Map ID "+id);

@@ -101,11 +101,14 @@
 	<div class="row-fluid">
 		<div id="mapSelectPanel" class="col-md-9" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
 			<div class="row">
-				<div id="results">
+				<div id="results" class="col-md-12">
 				</div>
-				<div class='input-group'>
-					<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
+				<div id="pages" class="col-md-9">
+					<div class='input-group'>
+						<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
+					</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>
