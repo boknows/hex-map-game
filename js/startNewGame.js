@@ -220,10 +220,7 @@ mapSelectBtn.addEventListener('click', function(e) {
    	$('#mapSelectPanel').show();
 }, false);
 
-var closeMapPanel = document.getElementById('closeMapPanel');
-closeMapPanel.addEventListener('click', function(e) {
-   $('#mapSelectPanel').hide();
-}, false);
+
 
 function initMapSelect() {
     $.ajax({
@@ -254,6 +251,10 @@ function initMapSelect() {
                     });
                 })(i)
             }
+            var closeMapPanel = document.getElementById('closeMapPanel');
+			closeMapPanel.addEventListener('click', function(e) {
+			   $('#mapSelectPanel').hide();
+			}, false);
         }
     });
 };

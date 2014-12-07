@@ -22,7 +22,18 @@
     <link rel="stylesheet" href="css/jquery.simplecolorpicker-glyphicons.css">
     <link href="css/select2-bootstrap.css" rel="stylesheet"/>
 	<link href="css/select2.css" rel="stylesheet"/>
-
+	<style>
+	.col-md-9.panel
+	{
+		border: 1px solid #FFFFFF;
+		border-radius: 0.5em;
+		background-color: #CCCCCC;
+		box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 1), 0 0 2px 2px rgba(255, 255, 255, 0.25);
+		padding: 0.5em;
+		color: rgba(255, 255, 255, 1);
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 1), 1px 1px 3px rgba(0, 0, 0, 1);
+	}
+	</style>
 </head>
 <body>
 <div class="container-fluid">
@@ -99,16 +110,13 @@
 		
 	</div>
 	<div class="row-fluid">
-		<div id="mapSelectPanel" class="col-md-9" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+		<div id="mapSelectPanel" class="col-md-9 panel" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
 			<div class="row">
 				<div id="results" class="col-md-12">
 				</div>
-				<div id="pages" class="col-md-9">
-					<div class='input-group'>
-						<button class="btn btn-danger btn-large" id='closeMapPanel' type='button'>Close</button>
-					</div>
+				<div id="pages" class="col-md-12">
+
 				</div>
-				
 			</div>
 		</div>
 	</div>
