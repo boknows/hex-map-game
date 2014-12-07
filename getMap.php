@@ -72,7 +72,6 @@ if($_POST['param']=="getSingleMap"){
 		$data['mapArray'] = $row['mapArray'];	
 		$data['mapProperties'] = $row['mapProperties'];
 		$data['mapUnits'] = $row['mapUnits'];
-		$data['mapImage'] = $row['mapImage'];
 	}
 	echo JSON_encode($data);
 }
