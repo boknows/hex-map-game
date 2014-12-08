@@ -121,10 +121,13 @@
 			</div>
 		</div>
 	</div>
+	<div id="thumbnailPopup" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+
+	</div>
 </div>
 </body>
 <script>
 $('select[name="colorpicker"]').simplecolorpicker({theme: 'glyphicons'});
 </script>
-<script type="text/javascript" src="js/startNewGame.js?v3"></script>
+<script type="text/javascript" src="js/startNewGame.js?v4"></script>
 </html>

@@ -235,8 +235,11 @@ function initMapSelect() {
             maps.data = resp;
             var html = "";
             for (var i = 0; i < resp.id.length; i++) { //create an <img> for each map
-                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
+            	var mapProperties = JSON.parse(resp.mapProperties[i]);
+            	console.log(mapProperties);
+                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%' class='thumbnail'><div style='display:inline-block'><b>Map Name:</b> " + resp.name[i] + "<br><b>Map Size:</b> " + mapProperties.rows + "x" + mapProperties.cols + "<div class='input-group'><button class='btn btn-sm btn-success' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
             }
+
             $('#results').html(html);
             html = "<div class='btn-toolbar' role='toolbar' aria-label=''><div class='btn-group' role='group' aria-label='pages'>";
             for (var i = 1; i < resp.totalPages + 1; i++) { //create a page button for each page of results
@@ -256,6 +259,13 @@ function initMapSelect() {
 			closeMapPanel.addEventListener('click', function(e) {
 			   $('#mapSelectPanel').hide();
 			}, false);
+
+			$(".thumbnail").click(function() {
+                var html = "<img src='"+this.getAttribute("src")+"' style='display: block;margin-left: auto;margin-right: auto;'>";
+                $('#thumbnailPopup').show();
+                $('#results').hide();
+                $('#thumbnailPopup').html(html);
+            });
         }
     });
 };
@@ -270,15 +280,16 @@ function getNewPage(p) {
 			"page": p,
 		},
 		success: function(resp){
+			maps.data = resp;
+			console.log(resp.mapProperties);
 			var html = "";
             for (var i = 0; i < resp.id.length; i++) { //create an <img> for each map
-                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'>Map Name: " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-large' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
+                html = html + "<div class='col-md-6'><img src='mapImages/" + resp.id[i] + ".png' height='25%' width='25%'><div style='display:inline-block'><b>Map Name:</b> " + resp.name[i] + "<div class='input-group'><button class='btn btn-success btn-sm' onclick=selectMap(" + resp.id[i] + ") type='button'>Select This Map</button></div></div></div>";
             }
             $('#results').html(html);
 		}
 	});
 };
-
 
 function selectMap(id){
 	var html = "";
@@ -290,3 +301,4 @@ function selectMap(id){
 	$('#selectedMapDiv').html(html);
 	$('#mapSelectPanel').hide();
 };
+
