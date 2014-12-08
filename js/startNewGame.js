@@ -220,7 +220,6 @@ mapSelectBtn.addEventListener('click', function(e) {
    	$('#mapSelectPanel').show();
 }, false);
 
-
 var maps = {};
 function initMapSelect() {
     $.ajax({
@@ -261,10 +260,16 @@ function initMapSelect() {
 			}, false);
 
 			$(".thumbnail").click(function() {
-                var html = "<img src='"+this.getAttribute("src")+"' style='display: block;margin-left: auto;margin-right: auto;'>";
+                var html = "<img src='"+this.getAttribute("src")+"' style='display: block;margin-left: auto;margin-right: auto;'><div class='btn-group' role='group' aria-label='close'><button class='btn btn-danger btn-large' id='closeThumbnail' type='button'>Close</button></div>";
                 $('#thumbnailPopup').show();
                 $('#results').hide();
+                $('#pages').hide();
                 $('#thumbnailPopup').html(html);
+                $("#closeThumbnail").click(function() {
+					$('#thumbnailPopup').hide();
+					$('#pages').show();
+					$('#results').show()
+				});
             });
         }
     });
@@ -295,7 +300,7 @@ function selectMap(id){
 	var html = "";
 	for(var i=0;i<maps.data.id.length;i++){
 		if(id == maps.data.id[i]){
-			html = "<div class='input-group col-md-9'><span class='input-group-addon'><b>Selected Map:</b></span><input type='text' class='form-control' value='"+ maps.data.name[i] +"''><input type='hidden' id='selectedMapID' value='"+id+"'</div>";
+			html = "<div class='input-group col-md-9'><span class='input-group-addon'><b>Selected Map:</b></span><input type='text' class='form-control' value='"+ maps.data.name[i] +"' readonly><input type='hidden' id='selectedMapID' value='"+id+"'</div>";
 		}
 	}
 	$('#selectedMapDiv').html(html);

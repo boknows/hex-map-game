@@ -20,6 +20,19 @@
         top: 0px;
         right: 100px;
     }
+    #help
+    {
+        border: 1px solid #FFFFFF;
+        border-radius: 0.5em;
+        background-color: #CCCCCC;
+        box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 1), 0 0 2px 2px rgba(255, 255, 255, 0.25);
+        padding: 0.5em;
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 1), 1px 1px 1px rgba(0, 0, 0, 1);
+    }
+    *.btn.help {
+        margin: 5px 5px 5px 0px;
+    }
 
 	</style>
 </head>
@@ -29,6 +42,7 @@
     <div class="row">
 
         <div class="col-md-3">
+            <button type="button" id ="helpBtn" class="btn btn-success help">Help</button><button class="btn btn-primary help" type="button" id="options">Show/Hide All Options</button>
             <div id="editMapRowsCols">
                 <div class="input-group">
                 <span class='input-group-addon'><b>Rows:</b></span><input type='text' name='rows' class='form-control' id='rows' value='10'>
@@ -39,7 +53,7 @@
                 <div class="input-group">
                 <span class='input-group-addon'><b>Hex Size:</b></span><input type='text' name='size' class='form-control' id='size' value='30'>
                 </div>
-                <button type="button" id ="updateRowCols" class="btn btn-success">Update Map</button>
+                <button type="button" id ="updateRowCols" class="btn btn-primary help">Update Size of Map</button>
             </div>
             <div id="editMap">
                 <div class="input-group">
@@ -64,13 +78,11 @@
                 <div class="input-group">
                 <span class='input-group-addon'><b>Map Name:</b></span><input type='text' name='saveMapName' class='form-control' id='saveMapName' value=''>
                 </div>
-                <button type="button" id ="saveMap" class="btn btn-success">Save Map</button>
-                <br><br>
-                <button class="btn btn-primary" type="button" id="options">Show/Hide All Options</button><br><br>
+                <button type="button" id ="saveMap" class="btn btn-primary help">Save Map</button>
                 <div class="input-group">
                     <span class='input-group-addon'><b>Load Map:</b></span><select type='text' name='loadMap' class='form-control' id='loadMap'></select>
                 </div>
-                <button type="button" id ="loadMapBtn" class="btn btn-success">Load</button>
+                <button type="button" id ="loadMapBtn" class="btn btn-primary help">Load</button>
             </div> 
         </div>
         <div class="col-md-3" id="otherMapOptions" style="display:none">
@@ -124,16 +136,25 @@
                 <span class='input-group-addon'><b>Group 10 Bonus:</b></span><input type='text' name='group10bonus' class='form-control' id='group10bonus' value='0'>
             </div>
         </div>
+        
+    </div>
+    
+</div>
+<div id="help" class="row" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+    <div class="col-md-12">
+        <p></p>
+        <div class='btn-group' role='group' aria-label='close'>
+            <button class='btn btn-danger btn-large help' id='closeHelp' type='button'>Close</button>
+        </div>
     </div>
 </div>
 <br>
    
 
 </body>
-<script src="js/mapEditorRework.js?v6"></script>
-<script src="js/mapEditorData.js?v6"></script>
+<script src="js/mapEditorRework.js?v7"></script>
+<script src="js/mapEditorData.js?v7"></script>
 
 
 </html>
-   
 

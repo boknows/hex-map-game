@@ -531,17 +531,10 @@ var inputFocus = false;
 var updateRowsCols = document.getElementById('updateRowCols');
 updateRowsCols.addEventListener('click', function(e) { //For the map editor
     map.ctx.clearRect(0, 0, map.canvas.width, map.canvas.height);
-    map.dataProp = {
-        "owners": [],
-        "colors": [],
-        "turn": 0,
-        "turnPhase": "fortify",
-        "fortifies": 6,
-        "rows": parseInt($('#rows').val()),
-        "cols": parseInt($('#cols').val()),
-        "hexSize": parseInt($('#size').val()),
-    };
-
+    map.dataProp.rows = parseInt($('#rows').val());
+    map.dataProp.cols = parseInt($('#cols').val());
+    map.dataProp.hexSize = parseInt($('#size').val());
+        
     hexagonGrid.radius = Math.round(map.dataProp.hexSize);
     hexagonGrid.height = Math.round(Math.sqrt(3) * map.dataProp.hexSize);
     hexagonGrid.width = Math.round(2 * map.dataProp.hexSize);
@@ -632,7 +625,7 @@ saveMap.addEventListener('click', function(e) { //For the map editor
              map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":map.dataProp.groupBonus[i]});    
         }
     }
-    delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
+    //delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
 
     //Cut unused hexes out of array
     console.log($('#rows').val());
@@ -1114,7 +1107,14 @@ function updateMap(data, param) {
         type: "POST",
         dataType: 'JSON',
         success: function (r){
-            //window.location.replace("dashboard.php");
+            window.location.replace("dashboard.php");
         }
     });
 };
+
+$("#helpBtn").click(function() {
+    $('#help').show();
+});
+$("#closeHelp").click(function() {
+    $('#help').hide();
+});
