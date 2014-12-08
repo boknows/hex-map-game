@@ -1,29 +1,41 @@
 function singleAttack(hexagonGrid) {
     if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
-        var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units-1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner, "", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
+        var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units - 1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner, "", "", {
+            row: map.attack.attX,
+            col: map.attack.attY
+        }, {
+            row: map.attack.defX,
+            col: map.attack.defY
+        }, hexagonGrid);
         map.dataUnits[map.attack.attX][map.attack.attY].units = map.dataUnits[map.attack.attX][map.attack.attY].units - losses.att;
         map.dataUnits[map.attack.defX][map.attack.defY].units = map.dataUnits[map.attack.defX][map.attack.defY].units - losses.def;
 
         if (map.dataUnits[map.attack.defX][map.attack.defY].units == 0) {
             map.dataProp.winCard = true;
-            var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner);
-            if(units == 0){
+            var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner, true);
+            if (units == 0) {
                 updateLog("--------------------");
                 updateLog(map.dataUnits[map.attack.defX][map.attack.defY].owner + " was eliminated.");
                 map.dataProp.eliminated.push(map.dataUnits[map.attack.defX][map.attack.defY].owner);
             }
             map.dataUnits[map.attack.defX][map.attack.defY].units++;
             map.dataUnits[map.attack.attX][map.attack.attY].units--;
-            var arr = [{"id":"#attack","action":"hide"}];
+            var arr = [{
+                "id": "#attack",
+                "action": "hide"
+            }];
             if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
-                arr.push({"id":"#attackMove","action":"show"});
+                arr.push({
+                    "id": "#attackMove",
+                    "action": "show"
+                });
                 var options = "";
                 for (i = 0; i < map.dataUnits[map.attack.attX][map.attack.attY].units; i++) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
             }
-            showHide(arr,"SingleAttack function.");
+            showHide(arr, "SingleAttack function.");
             map.dataUnits[map.attack.defX][map.attack.defY].owner = map.dataUnits[map.attack.attX][map.attack.attY].owner;
             map.dataUnits[map.attack.defX][map.attack.defY].color = map.dataUnits[map.attack.attX][map.attack.attY].color;
             //$('#endTurn').hide();
@@ -31,73 +43,126 @@ function singleAttack(hexagonGrid) {
         var data = {
             mapProperties: JSON.stringify(map.dataProp),
             mapArray: JSON.stringify(map.data),
+            mapUnits: JSON.stringify(map.dataUnits),
             mapLog: JSON.stringify(map.log)
         };
         updateMap(data, "updateAll");
-        var chk = calcEndState(map.email);
+        var chk = calcEndState(map.username);
         if (chk == true) {
-            map.dataProp.turnPhase = "ended";
             var data = {
-                data: JSON.stringify(map.dataProp)
+                "param": "update",
+                "gameID": $('#game_id').val(),
+                "status": "ended",
             };
-            updateMap(data, "updateMapProperties");
-            data.param = "update";
-            data.gameID = $('#game_id').val();
-            data.status = "ended";
             $.ajax({
                 url: "changeStatus.php",
                 data: data,
                 type: "POST",
-                dataType: 'JSON'
+                dataType: 'JSON',
+                success: function() {
+                    map.dataProp.turnPhase = "ended";
+                    updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.");
+                    var data2 = {
+                        mapProperties: JSON.stringify(map.dataProp),
+                        mapArray: JSON.stringify(map.data),
+                        mapUnits: JSON.stringify(map.dataUnits),
+                        mapLog: JSON.stringify(map.log)
+                    };
+                    data2.param = "updateAll";
+                    data2.gameID = $('#game_id').val();
+                    $.ajax({
+                        url: "getMap.php",
+                        data: data2,
+                        type: "POST",
+                        dataType: 'JSON',
+                        success: function() {
+                            alert("You've won!");
+                            window.location.replace("dashboard.php");
+                        },
+                    });
+                },
             });
+
         }
     } else {
         console.log("Can't attack. Not enough units.");
-        var arr = [{"id":"#attack","action":"hide"}];
-        showHide(arr,"SingleAttack function.");
+        var arr = [{
+            "id": "#attack",
+            "action": "hide"
+        }];
+        showHide(arr, "SingleAttack function.");
     }
 };
 
 function contAttack(hexagonGrid) {
     while (map.dataUnits[map.attack.attX][map.attack.attY].units > 4 && map.dataUnits[map.attack.defX][map.attack.defY].units > 0) {
         if (map.dataUnits[map.attack.attX][map.attack.attY].units > 1) {
-            var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units-1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner,"", "", {row: map.attack.attX , col: map.attack.attY}, {row: map.attack.defX , col: map.attack.defY}, hexagonGrid);
+            var losses = battle(map.dataUnits[map.attack.attX][map.attack.attY].units - 1, map.dataUnits[map.attack.defX][map.attack.defY].units, map.dataUnits[map.attack.attX][map.attack.attY].owner, map.dataUnits[map.attack.defX][map.attack.defY].owner, "", "", {
+                row: map.attack.attX,
+                col: map.attack.attY
+            }, {
+                row: map.attack.defX,
+                col: map.attack.defY
+            }, hexagonGrid);
             map.dataUnits[map.attack.attX][map.attack.attY].units = map.dataUnits[map.attack.attX][map.attack.attY].units - losses.att;
             map.dataUnits[map.attack.defX][map.attack.defY].units = map.dataUnits[map.attack.defX][map.attack.defY].units - losses.def;
             if (map.dataUnits[map.attack.defX][map.attack.defY].units == 0) { //if =0, defender was defeated
                 map.dataProp.winCard = true;
-                var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner);
-                if(units == 0){
+                var units = calcUnits(map.dataUnits[map.attack.defX][map.attack.defY].owner, true);
+                if (units == 0) {
                     updateLog("--------------------");
                     updateLog(map.dataUnits[map.attack.defX][map.attack.defY].owner + " was eliminated.");
                     map.dataProp.eliminated.push(map.dataUnits[map.attack.defX][map.attack.defY].owner);
-                    var chk = calcEndState(map.email);
+                    map.dataUnits[map.attack.defX][map.attack.defY].owner = map.dataUnits[map.attack.attX][map.attack.attY].owner; //switch owners of defending hex to show takeover
+                    map.dataUnits[map.attack.defX][map.attack.defY].color = map.dataUnits[map.attack.attX][map.attack.attY].color; //switch color of defending hex to show takeover
+                    var chk = calcEndState(map.username);
                     if (chk == true) {
-                        map.dataProp.turnPhase = "ended";
-                        updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.")
                         var data = {
-                            data: JSON.stringify(map.dataProp)
+                            "param": "update",
+                            "gameID": $('#game_id').val(),
+                            "status": "ended",
                         };
-                        updateMap(data, "updateMapProperties");
-                        data.param = "update";
-                        data.gameID = $('#game_id').val();
-                        data.status = "ended";
                         $.ajax({
                             url: "changeStatus.php",
                             data: data,
                             type: "POST",
-                            dataType: 'JSON'
+                            dataType: 'JSON',
+                            success: function() {
+                                map.dataProp.turnPhase = "ended";
+                                updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.");
+                                var data2 = {
+                                    mapProperties: JSON.stringify(map.dataProp),
+                                    mapArray: JSON.stringify(map.data),
+                                    mapUnits: JSON.stringify(map.dataUnits),
+                                    mapLog: JSON.stringify(map.log)
+                                };
+                                data2.param = "updateAll";
+                                data2.gameID = $('#game_id').val();
+                                $.ajax({
+                                    url: "getMap.php",
+                                    data: data2,
+                                    type: "POST",
+                                    dataType: 'JSON',
+                                    success: function() {
+                                        alert("You've won!");
+                                        window.location.replace("dashboard.php");
+                                    }
+                                });
+                            },
                         });
-                        var data = {
-                            data: JSON.stringify(map.log)
-                        };
-                        updateMap(data, "updateMapLog");
+
                     }
                 }
                 map.dataUnits[map.attack.defX][map.attack.defY].units++;
                 map.dataUnits[map.attack.attX][map.attack.attY].units--;
-                var arr = [{"id":"#attack","action":"hide"},{"id":"#attackMove","action":"show"}];
-                showHide(arr,"contAttack function.");
+                var arr = [{
+                    "id": "#attack",
+                    "action": "hide"
+                }, {
+                    "id": "#attackMove",
+                    "action": "show"
+                }];
+                showHide(arr, "contAttack function.");
 
                 //update dropdown for move troops screen
                 var options = "";
@@ -105,7 +170,6 @@ function contAttack(hexagonGrid) {
                     options = options + "<option value='" + i + "'>" + i + "</option>";
                 }
                 document.getElementById('attackMoveDrop').innerHTML = options;
-
                 map.dataUnits[map.attack.defX][map.attack.defY].owner = map.dataUnits[map.attack.attX][map.attack.attY].owner; //switch owners of defending hex to show takeover
                 map.dataUnits[map.attack.defX][map.attack.defY].color = map.dataUnits[map.attack.attX][map.attack.attY].color; //switch color of defending hex to show takeover
                 var drawy2 = map.attack.attY % 2 == 0 ? (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 : (map.attack.attX * hexagonGrid.height) + hexagonGrid.canvasOriginY + 6 + (hexagonGrid.height / 2);
@@ -119,6 +183,7 @@ function contAttack(hexagonGrid) {
                 var data = {
                     mapProperties: JSON.stringify(map.dataProp),
                     mapArray: JSON.stringify(map.data),
+                    mapUnits: JSON.stringify(map.dataUnits),
                     mapLog: JSON.stringify(map.log)
                 };
                 updateMap(data, "updateAll");
@@ -130,44 +195,70 @@ function contAttack(hexagonGrid) {
             var data = {
                 mapProperties: JSON.stringify(map.dataProp),
                 mapArray: JSON.stringify(map.data),
+                mapUnits: JSON.stringify(map.dataUnits),
                 mapLog: JSON.stringify(map.log)
             };
             updateMap(data, "updateAll");
-            var chk = calcEndState(map.email);
+            var chk = calcEndState(map.username);
             if (chk == true) {
-                map.dataProp.turnPhase = "ended";
-                updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.")
                 var data = {
-                    data: JSON.stringify(map.dataProp)
+                    "param": "update",
+                    "gameID": $('#game_id').val(),
+                    "status": "ended",
                 };
-                updateMap(data, "updateMapProperties");
-                data.param = "update";
-                data.gameID = $('#game_id').val();
-                data.status = "ended";
                 $.ajax({
                     url: "changeStatus.php",
                     data: data,
                     type: "POST",
-                    dataType: 'JSON'
+                    dataType: 'JSON',
+                    success: function() {
+                        map.dataProp.turnPhase = "ended";
+                        updateLog("The game has ended. " + map.dataProp.users[map.dataProp.turn] + " has won.");
+                        var data2 = {
+                            mapProperties: JSON.stringify(map.dataProp),
+                            mapArray: JSON.stringify(map.data),
+                            mapUnits: JSON.stringify(map.dataUnits),
+                            mapLog: JSON.stringify(map.log)
+                        };
+                        data2.param = "updateAll";
+                        data2.gameID = $('#game_id').val();
+                        $.ajax({
+                            url: "getMap.php",
+                            data: data2,
+                            type: "POST",
+                            dataType: 'JSON',
+                            success: function() {
+                                alert("You've won!");
+                                window.location.replace("dashboard.php");
+                            }
+                        });
+                    },
                 });
-                var data = {
-                    data: JSON.stringify(map.log)
-                };
-                updateMap(data, "updateMapLog");
+
             }
         } else {
             console.log("Can't attack. Not enough units.");
         }
     }
-    var arr = [{"id":"#attack","action":"hide"},{"id":"#fortifyButton","action":"show"}];
-    showHide(arr,"contAttack function.");
+    var arr = [{
+        "id": "#attack",
+        "action": "hide"
+    }, {
+        "id": "#fortifyButton",
+        "action": "show"
+    }];
+    showHide(arr, "contAttack function.");
     var data = {
-        data: JSON.stringify(map.data)
+        mapProperties: JSON.stringify(map.dataProp),
+        mapArray: JSON.stringify(map.data),
+        mapUnits: JSON.stringify(map.dataUnits),
+        mapLog: JSON.stringify(map.log)
     };
     updateMap(data, "updateMap");
 };
 
-function calcUnits(username) {
+function calcUnits(username, elimination) {
+    //elimination param intended for assessing if a single player has been eliminated
     //calc raw units for initial units, based on number of countries held
     var units = 0;
     for (i = 0; i < map.dataUnits.length; i++) {
@@ -177,14 +268,14 @@ function calcUnits(username) {
             }
         }
     }
-    if(units==0){
+    if (units == 0) {
         return 0;
     }
     units = Math.floor(units / 3);
 
     //Calculate Bonuses - Make it more dynamic in the future
     var bonus = [];
-    for (var i=0;i<map.dataProp.mapBonus.length+1;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
+    for (var i = 0; i < map.dataProp.mapBonus.length + 1; i++) { //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
         bonus[i] = 0;
     }
     for (var i = 0; i < map.dataUnits.length; i++) { //calculate how many of each group the player has
@@ -196,15 +287,15 @@ function calcUnits(username) {
     }
 
     //Pull bonus sums and bonus amounts from mapProperties
-    for (var i=0;i<map.dataProp.mapBonus.length;i++){
-        for(var j=0;j<bonus.length;j++){
-            if(j == map.dataProp.mapBonus[i].group && bonus[j] == map.dataProp.mapBonus[i].sum){
+    for (var i = 0; i < map.dataProp.mapBonus.length; i++) {
+        for (var j = 0; j < bonus.length; j++) {
+            if (j == map.dataProp.mapBonus[i].group && bonus[j] == map.dataProp.mapBonus[i].sum) {
                 units = units + map.dataProp.mapBonus[i].amount;
             }
         }
     }
 
-    if (units < 3) {
+    if (units < 3 && elimination == false) {
         units = 3;
     }
     return units;
@@ -230,7 +321,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     if (typeof radius === "undefined") {
         radius = 5;
     }
-    $('#panel').add( "<button type='button' class='btn btn-success'>Card</button>");
+    $('#panel').add("<button type='button' class='btn btn-success'>Card</button>");
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -362,23 +453,23 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowC
         att = 3;
     } else if (att == 2) {
         att = 2;
-    }else if (att == 1){
+    } else if (att == 1) {
         att = 1;
     }
 
     //Add in turn modifiers
-    if(map.dataProp.turnModifiers.length>0){
-        for(var i=0;i<map.dataProp.turnModifiers.length;i++){
-            if(map.dataProp.turnModifiers[i].length>0){
-                if(map.dataProp.turn==i){ //offensive modifiers
-                    for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
-                        if(map.dataProp.turnModifiers[i][j].type=="offensiveBoost"){
+    if (map.dataProp.turnModifiers.length > 0) {
+        for (var i = 0; i < map.dataProp.turnModifiers.length; i++) {
+            if (map.dataProp.turnModifiers[i].length > 0) {
+                if (map.dataProp.turn == i) { //offensive modifiers
+                    for (var j = 0; j < map.dataProp.turnModifiers[i].length; j++) {
+                        if (map.dataProp.turnModifiers[i][j].type == "offensiveBoost") {
                             att++;
                         }
                     }
-                }else{
-                    for(var j=0;j<map.dataProp.turnModifiers[i].length;j++){
-                        if(map.dataProp.turnModifiers[i][j].type=="defensiveBoost"){
+                } else {
+                    for (var j = 0; j < map.dataProp.turnModifiers[i].length; j++) {
+                        if (map.dataProp.turnModifiers[i][j].type == "defensiveBoost") {
                             def++;
                         }
                     }
@@ -387,7 +478,7 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowC
         }
     }
 
-    
+
     for (var i = 0; i < att; i++) { //roll attacker dice
         attArr.push(rollDice());
     }
@@ -403,22 +494,22 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowC
 
     //determine the leasdt amount of dice being rolled, which determines how many losses occur
     var least = 0;
-    if(defArr.length < attArr.length){
-        if(defArr.length == 1){
+    if (defArr.length < attArr.length) {
+        if (defArr.length == 1) {
             least = 1;
-        }else if(defArr.length > 1){
+        } else if (defArr.length > 1) {
             least = 2;
         }
-    }else if(defArr.length > attArr.length){
-        if(defArr.length == 1){
+    } else if (defArr.length > attArr.length) {
+        if (defArr.length == 1) {
             least = 1;
-        }else if(defArr.length > 1){
+        } else if (defArr.length > 1) {
             least = 2;
         }
-    }else if(defArr.length == attArr.length){
-        if(defArr.length < 3){
+    } else if (defArr.length == attArr.length) {
+        if (defArr.length < 3) {
             least = defArr.length;
-        }else{
+        } else {
             least = 2;
         }
     }
@@ -436,22 +527,22 @@ function battle(att, def, attOwner, defOwner, attTer, defTer, attRowCol, defRowC
         least = defArr.length;
     }
     */
-    if(least > map.dataUnits[defRowCol.row][defRowCol.col].units){
+    if (least > map.dataUnits[defRowCol.row][defRowCol.col].units) {
         least = map.dataUnits[defRowCol.row][defRowCol.col].units;
     }
-    if(least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units > map.dataUnits[defRowCol.row][defRowCol.col].units){
+    if (least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units > map.dataUnits[defRowCol.row][defRowCol.col].units) {
         least = map.dataUnits[defRowCol.row][defRowCol.col].units;
     }
-    if(least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units < map.dataUnits[defRowCol.row][defRowCol.col].units){
+    if (least > map.dataUnits[attRowCol.row][attRowCol.col].units && map.dataUnits[attRowCol.row][attRowCol.col].units < map.dataUnits[defRowCol.row][defRowCol.col].units) {
         least = map.dataUnits[attRowCol.row][attRowCol.col].units - 1;
     }
 
 
     for (var i = 0; i < defArr.length; i++) {
         console.log(defArr[i], attArr[i], least);
-        if (defArr[i] >= attArr[i] && (attLoses+defLoses) < least) {
+        if (defArr[i] >= attArr[i] && (attLoses + defLoses) < least) {
             attLoses++;
-        } else if((attLoses+defLoses) < least){
+        } else if ((attLoses + defLoses) < least) {
             defLoses++;
         }
     }
@@ -576,8 +667,11 @@ function compareMap(map) {
 }
 
 function updateLog(msg) {
-	var time = new Date().getTime();
-    map.log.push({time: time, msg: msg});
+    var time = new Date().getTime();
+    map.log.push({
+        time: time,
+        msg: msg
+    });
 }
 
 function updateLogDisp(hexagonGrid) {
@@ -594,7 +688,7 @@ function updateLogDisp(hexagonGrid) {
     $("#log").css(style);
     $("#cardTrade").css(style);
     var style = {
-        left: x0+130,
+        left: x0 + 130,
         top: y0,
         position: "absolute",
         'font-size': '75%'
@@ -602,15 +696,15 @@ function updateLogDisp(hexagonGrid) {
     $("#cardTradeClose").css(style);
     var style = {
         left: x0,
-        top: y0+40,
+        top: y0 + 40,
         position: "absolute",
         'font-size': '75%'
     };
     $("#cardDisp").css(style);
-    if(map.username=="bo_knows"){
+    if (map.username == "bo_knows") {
         var style = {
             left: 0,
-            top: y0*2+100,
+            top: y0 * 2 + 100,
             position: "absolute",
             width: "200px",
             'font-size': '75%'
@@ -619,10 +713,10 @@ function updateLogDisp(hexagonGrid) {
         $("#editMap").show();
     }
 
-    
+
     var msg = document.getElementById('log').innerHTML;
     for (var i = 0; i < map.log.length; i++) {
-		var date = new Date(map.log[i].time);
+        var date = new Date(map.log[i].time);
         msg = msg + "\n[" + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + map.log[i].msg;
     }
     document.getElementById('log').innerHTML = msg;
@@ -630,9 +724,9 @@ function updateLogDisp(hexagonGrid) {
     msgSc.scrollTop = msgSc.scrollHeight;
 }
 
-function drawCard (player){
-    for(var i=0;i<map.dataProp.owners.length;i++){
-        if(player==map.dataProp.users[i]){
+function drawCard(player) {
+    for (var i = 0; i < map.dataProp.owners.length; i++) {
+        if (player == map.dataProp.users[i]) {
             map.dataProp.cardsHeld[i].push(map.dataProp.cardDeck[0]);
             map.dataProp.cardDeck.shift();
         }
@@ -641,44 +735,44 @@ function drawCard (player){
 }
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-  if (typeof stroke == "undefined" ) {
-    stroke = true;
-  }
-  if (typeof radius === "undefined") {
-    radius = 5;
-  }
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + width - radius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-  ctx.lineTo(x + width, y + height - radius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  ctx.lineTo(x + radius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-  ctx.closePath();
-  if (stroke) {
-    ctx.stroke();
-  }
-  if (fill) {
-    ctx.fill();
-  }        
+    if (typeof stroke == "undefined") {
+        stroke = true;
+    }
+    if (typeof radius === "undefined") {
+        radius = 5;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    if (stroke) {
+        ctx.stroke();
+    }
+    if (fill) {
+        ctx.fill();
+    }
 }
 
-function showHide(arr, from){
+function showHide(arr, from) {
     /**  Function to show or hide divs for various reasons
      * @param {array} arr - array of objects, {id: DOM id to change, action: show/hide}
      * @param {Text} from - description of what function triggered this change
      */
-     //console.log(from, " triggered these events", arr);
-     for(var i=0;i<arr.length;i++){
-        if(arr[i].action=="show"){
-            $(arr[i].id).show();   
-        }else if(arr[i].action=="hide"){
-             $(arr[i].id).hide();   
+    //console.log(from, " triggered these events", arr);
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].action == "show") {
+            $(arr[i].id).show();
+        } else if (arr[i].action == "hide") {
+            $(arr[i].id).hide();
         }
-     }
+    }
 }
 
 function shuffle(array) {
@@ -701,8 +795,8 @@ function shuffle(array) {
     return array;
 }
 
-function showCards(userNum){
-    if(map.dataProp.users[userNum]==map.username){
+function showCards(userNum) {
+    if (map.dataProp.users[userNum] == map.username) {
         var cardHTML = "";
         for (var j = 0; j < map.dataProp.cardsHeld[userNum].length; j++) {
             cardHTML = cardHTML + "<tr id='" + map.dataProp.cardsHeld[userNum][j].id + "'><td><input class='cards' type='checkbox' value='" + map.dataProp.cardsHeld[userNum][j].id + "' id='" + map.dataProp.cardsHeld[userNum][j].id + "check'></td><td>" + map.dataProp.cardsHeld[userNum][j].desc + "</td></tr>";

@@ -68,6 +68,8 @@ for($i=0;$i<count($players['gameQueue']);$i++){
 }
 if(count($mapProp->owners) < $data['minPlayers']){
     $ready = false;
+}else if(count($mapProp->owners) >= $data['minPlayers']){
+	$ready = true;
 }
 
 if($ready == true){

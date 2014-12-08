@@ -138,7 +138,7 @@ function updateMap(data, param){
        /* if(mapProperties.turnPhase == "unitPlacement"){
             $("#unitPlacement").show();
             $("#endTurn").hide();
-            var units = calcUnits(map, username);
+            var units = calcUnits(map, username, false);
             var unitMenu = document.getElementById('place').innerHTML;
             for(i=1;i<units+1;i++){
                 unitMenu = unitMenu + "<option value='" + i + "'>" + i + "</option>";   

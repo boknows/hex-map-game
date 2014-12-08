@@ -31,6 +31,7 @@ if($_POST['param'] == "active"){
 			$stmt->bindValue(($k+1), $id);
 		}
 		$stmt->execute();
+		$games = array('gameID' => array(), 'created' => array());
 		foreach ($stmt as $row) {
 			$games['gameID'][] = $row['gameID'];	
 			$games['game_name'][] = $row['game_name'];
@@ -38,21 +39,23 @@ if($_POST['param'] == "active"){
 			$games['mapProperties'][] = json_decode($row['mapProperties']);
 			$games['gameStatus'][] = $row['status'];
 		}
-
-		for($i=0;$i<count($ids);$i++){
-			for($j=0;$j<count($games['gameID']);$j++){
-				if($ids[$i]==$games['gameID'][$j]){
-					$games['playerStatus'][$j]=$status[$i];
+		if(count($games>0)){
+			for($i=0;$i<count($ids);$i++){
+				for($j=0;$j<count($games['gameID']);$j++){
+					if($ids[$i]==$games['gameID'][$j]){
+						$games['playerStatus'][$j]=$status[$i];
+					}
 				}
 			}
-		}
 
-		for ($i=0; $i<count($games['created']); $i++){
-			$epoch = $games['created'][$i]; 
-			$dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
-			$games['created'][$i] = $dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
+			for ($i=0; $i<count($games['created']); $i++){
+				$epoch = $games['created'][$i]; 
+				$dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
+				$games['created'][$i] = $dt->format('Y-m-d H:i:s'); // output = 2012-08-15 00:00:00 
+			}
+			echo JSON_encode($games);
 		}
-		echo JSON_encode($games);
+		
 	}else{
 		echo JSON_encode("None");
 	}

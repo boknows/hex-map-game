@@ -607,62 +607,67 @@ connectConfirm.addEventListener('click', function(e) { //For the map editor
 
 var saveMap = document.getElementById('saveMap');
 saveMap.addEventListener('click', function(e) { //For the map editor
-    //Calculate bonuses and populate map.dataProp.mapBonus
-    var bonus = [];
-    for (var i=0;i<100;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
-        bonus[i] = 0;
-    }
-    for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
-        for (var j = 0; j < map.data[i].length; j++) {
-            if (map.data[i][j].group != "") {
-                bonus[map.data[i][j].group]++;
+    if($('#saveMapName').val().length < 3){
+        alert("Please enter a Map Name of at least 3 characters.")
+    }else{
+        //Calculate bonuses and populate map.dataProp.mapBonus
+        var bonus = [];
+        for (var i=0;i<100;i++){ //Set each bonus counter to 0, for as many bonuses exist in mapBonus.
+            bonus[i] = 0;
+        }
+        for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
+            for (var j = 0; j < map.data[i].length; j++) {
+                if (map.data[i][j].group != "") {
+                    bonus[map.data[i][j].group]++;
+                }
             }
         }
-    }
-    map.dataProp.mapBonus = [];
-    for (var i=0; i<bonus.length;i++){
-        if(bonus[i] != 0){
-             map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":map.dataProp.groupBonus[i]});    
+        map.dataProp.mapBonus = [];
+        for (var i=0; i<bonus.length;i++){
+            if(bonus[i] != 0){
+                 map.dataProp.mapBonus.push({"group":i,"sum":bonus[i],"amount":map.dataProp.groupBonus[i]});    
+            }
         }
-    }
-    //delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
+        //delete map.dataProp.groupBonus; //this isn't used in the production game, only in the mapEditor
 
-    //Cut unused hexes out of array
-    console.log($('#rows').val());
-    var newMap = new Array(parseInt($('#rows').val()));
-    var newMapUnits = new Array(parseInt($('#rows').val()));
-    for (var i = 0; i < newMap.length; i++) {
-        newMap[i] = new Array(parseInt($('#cols').val()));
-    }
-    for (var i = 0; i < newMapUnits.length; i++) {
-        newMapUnits[i] = new Array(parseInt($('#cols').val()));
-    }
-    for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
-        for (var j = 0; j < map.data[i].length; j++) {
-            if (i < parseInt($('#rows').val()) && j < parseInt($('#cols').val())) {
-                newMap[i][j] = map.data[i][j];
+        //Cut unused hexes out of array
+        console.log($('#rows').val());
+        var newMap = new Array(parseInt($('#rows').val()));
+        var newMapUnits = new Array(parseInt($('#rows').val()));
+        for (var i = 0; i < newMap.length; i++) {
+            newMap[i] = new Array(parseInt($('#cols').val()));
+        }
+        for (var i = 0; i < newMapUnits.length; i++) {
+            newMapUnits[i] = new Array(parseInt($('#cols').val()));
+        }
+        for (var i = 0; i < map.data.length; i++) { //calculate how many of each group the player has
+            for (var j = 0; j < map.data[i].length; j++) {
+                if (i < parseInt($('#rows').val()) && j < parseInt($('#cols').val())) {
+                    newMap[i][j] = map.data[i][j];
+                }
             }
         }
-    }
-    for (var i = 0; i < map.dataUnits.length; i++) { //calculate how many of each group the player has
-        for (var j = 0; j < map.dataUnits[i].length; j++) {
-            if (i < parseInt($('#rows').val()) && j < parseInt($('#cols').val())) {
-                newMapUnits[i][j] = map.dataUnits[i][j];
+        for (var i = 0; i < map.dataUnits.length; i++) { //calculate how many of each group the player has
+            for (var j = 0; j < map.dataUnits[i].length; j++) {
+                if (i < parseInt($('#rows').val()) && j < parseInt($('#cols').val())) {
+                    newMapUnits[i][j] = map.dataUnits[i][j];
+                }
             }
         }
+        var mapImage = map.canvas.toDataURL();
+        console.log(mapImage);
+        var data= {
+            mapArray: JSON.stringify(newMap),
+            mapProperties: JSON.stringify(map.dataProp),
+            mapUnits: JSON.stringify(newMapUnits),
+            name: $('#saveMapName').val(),
+            mapImage: mapImage,
+        };
+        updateMap(data, "saveMap");
+        console.log(newMap);
+        console.log(JSON.stringify(map.dataProp));
     }
-    var mapImage = map.canvas.toDataURL();
-    console.log(mapImage);
-    var data= {
-        mapArray: JSON.stringify(newMap),
-        mapProperties: JSON.stringify(map.dataProp),
-        mapUnits: JSON.stringify(newMapUnits),
-        name: $('#saveMapName').val(),
-        mapImage: mapImage,
-    };
-    updateMap(data, "saveMap");
-    console.log(newMap);
-    console.log(JSON.stringify(map.dataProp));
+    
 }, false);
 
 var loadMapBtn = document.getElementById('loadMapBtn');

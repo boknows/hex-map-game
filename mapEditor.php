@@ -27,8 +27,6 @@
         background-color: #CCCCCC;
         box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 1), 0 0 2px 2px rgba(255, 255, 255, 0.25);
         padding: 0.5em;
-        color: rgba(255, 255, 255, 1);
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 1), 1px 1px 1px rgba(0, 0, 0, 1);
     }
     *.btn.help {
         margin: 5px 5px 5px 0px;
@@ -63,10 +61,10 @@
                     <span class='input-group-addon'><b>Group:</b></span><input type='text' name='group' class='form-control' id='group' value=''>
                 </div>
                 <div class="input-group">
-                    <span class='input-group-addon'><b>Neutral Owner Start:</b></span><select name='neutral' id='neutral' class='form-control'><option value="false">No</option><option value="true">Yes</option></select>
+                    <span class='input-group-addon'><b>Neutral Owner at Start:</b></span><select name='neutral' id='neutral' class='form-control'><option value="false">No</option><option value="true">Yes</option></select>
                 </div>
                 <div class="input-group">
-                    <span class='input-group-addon'><b>Neutral Units Start:</b></span><input type='text' name='nUnits' id='nUnits' class='form-control'>
+                    <span class='input-group-addon'><b>Neutral Units at Start:</b></span><input type='text' name='nUnits' id='nUnits' class='form-control'>
                 </div>
                 <div class="input-group">
                     <span class='input-group-addon'><b>Connectors:</b></span>
@@ -140,9 +138,59 @@
     </div>
     
 </div>
-<div id="help" class="row" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(30% - 11em); background-color: #CCCCCC; display:none; z-index:1000;">
+<div id="help" class="row" style="position: absolute; left: calc(30% - 20em); right: calc(30% - 20em); top: calc(5%); background-color: #CCCCCC; display:none; z-index:1000;">
     <div class="col-md-12">
-        <p></p>
+        <h1><u>Info</u></h1>
+        <div class="row">
+            <div class="col-md-12">
+                <p><b>Groups:</b>  When you assign many hexes a group number, the player must occupy all hexes in that group to receive the group bonus. Please provide the group bonus amount for each group in the "Show/Hide Options" menu.</p>
+                <p><b>Connectors:</b>  By default, hexagons can only move/attack other hexagons that are adjacent. To be able to attack across water, or anywhere other than adjacent, use the "Connector" tool. First, click the hex that you want to originate an attack/movement from. Then click the "select" button next to the "Connector" field. Your originating hex will be colored light blue. Every hexagon you click on after that, will turn red, signifying that you'll be able to attack/move to those hexes from the originating hex. Note: This is a one-way action. To attack/move to AND from a hex, you'll need to add connectors for both sides.</p>
+                <p><b>Neutral Units:</b> By changing "Neutral Owner at Start" to a "Yes", you signify that at the beginning of a game, players will not occupy this hex. Dormant "neutral" units will be placed there insde. Enter the "Neutral Units at Start" to tell how many units are in the hex at the beginning of a game. Hexes can be designated as neutral AND be part of a continent bonus group.</p>
+            </div>
+        </div>
+        <h1><u>Keyboard Shortcuts</u></h1>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Borders (on numpad)</h2>
+                <p>Black borders signify "continents" for bonuses. Green borders signify paths of travel.</p>
+                <ul>
+                    <li>'8' - Black Border on Northern edge</li>
+                    <li>'9' - Black Border on North-eastern edge</li>
+                    <li>'3' - Black Border on South-eastern edge</li>
+                    <li>'2' - Black Border on Southern edge</li>
+                    <li>'1' - Black Border on South-western edge</li>
+                    <li>'7' - Black Border on North-western edge</li>
+                    <li>'shift + 8' - Green Border on Northern edge</li>
+                    <li>'shift + 9' - Green Border on North-eastern edge</li>
+                    <li>'shift + 3' - Green Border on South-eastern edge</li>
+                    <li>'shift + 2' - Green Border on Southern edge</li>
+                    <li>'shift + 1' - Green Border on South-western edge</li>
+                    <li>'shift + 7' - Green Border on North-western edge</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h2>Terrain Types</h2>
+                <ul>
+                    <li>'w' - water</li>
+                    <li>'l' - grassland</li>
+                    <li>'m' - mountains</li>
+                    <li>'f' - forest</li>
+                    <li>'d' - desert</li>
+                    <li>'a' - arctic</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h2>Grouping (for bonuses)</h2>
+                <ul>
+                    <li>'1' - Group 1</li>
+                    <li>'2' - Group 2</li>
+                    <li>'3' - Group 3</li>
+                    <li>etc</li>
+                </ul>
+            </div>
+
+        </div>
+        
         <div class='btn-group' role='group' aria-label='close'>
             <button class='btn btn-danger btn-large help' id='closeHelp' type='button'>Close</button>
         </div>
@@ -152,8 +200,8 @@
    
 
 </body>
-<script src="js/mapEditorRework.js?v7"></script>
-<script src="js/mapEditorData.js?v7"></script>
+<script src="js/mapEditorRework.js?r=".time().""></script>
+<script src="js/mapEditorData.js?r=".time().""></script>
 
 
 </html>
