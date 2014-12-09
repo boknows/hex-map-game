@@ -350,28 +350,28 @@
         <div class="row">
             <div class="col-md-12" style="border-bottom: medium solid #000000;">
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    <span class="glyphicon glyphicon-unchecked h-align" id="unitPlacementGlyph"></span><br>
                     Unit Placement
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                    <span class="glyphicon glyphicon-arrow-right v-align" id="unitPlacementToAttackArrow"></span>
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    <span class="glyphicon glyphicon-unchecked h-align" id="attackGlyph"></span><br>
                     Attack
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                    <span class="glyphicon glyphicon-arrow-right v-align" id="attackToFortifyArrow"></span>
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    <span class="glyphicon glyphicon-unchecked h-align" id="fortifyGlyph"></span><br>
                     Fortify
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                    <span class="glyphicon glyphicon-arrow-right v-align" id="fortifyToEndTurnArrow"></span>
                 </div>
                 <div style="display:inline-block">
-                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    <span class="glyphicon glyphicon-unchecked h-align" id="endTurnGlyph"></span><br>
                     End Turn
                 </div>
             </div>

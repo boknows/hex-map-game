@@ -831,3 +831,34 @@ function showCards(userNum) {
         showHide(arr, "Clicked a card.");
     }
 }
+
+function calcNextTurn(turn){
+    var elim = true;
+    while(elim = true){
+        if (map.dataProp.turn == map.dataProp.owners.length - 1) {
+            var trig = false;
+            for(var i=0; i<map.dataProp.eliminated.length; i++){
+                if(map.dataProp.eliminated[i] == map.dataProp.users[0]){
+                    trig = true;
+                }
+            }
+            if(trig == false){
+                return 0;
+            }else{
+                turn++;
+            }
+        }else{
+            var trig = false;
+            for(var i=0; i<map.dataProp.eliminated.length; i++){
+                if(map.dataProp.eliminated[i] == map.dataProp.users[turn+1]){
+                    trig = true;
+                }
+            }
+            if(trig == false){
+                return (turn + 1);
+            }else{
+                turn++;
+            }   
+        }
+    }
+}

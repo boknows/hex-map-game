@@ -425,6 +425,8 @@ map.getData(function(map_data) {
     var fortifyButton = document.getElementById('fortifyButton');
     fortifyButton.addEventListener('click', function(e) {
         if (map.dataProp.users[map.dataProp.turn] == map.username && map.dataProp.turnPhase == "attack") {
+            var msg = "Choose a territory to move troops from, then click on an adjacent territory to move them to.";
+            $('#msg').html(msg);
             map.dataProp.turnPhase = "fortify";
             updateLog("--------------------");
             updateLog("It is now the fortify phase.");
@@ -626,15 +628,7 @@ map.getData(function(map_data) {
                 }
             }
             map.dataProp.winCard = false;
-            var units = calcUnits(map.dataProp.users[map.dataProp.turn], true);
-            if (units == 0) {
-                map.dataProp.eliminated.push(map.dataProp.users[map.dataProp.turn]);
-                if (map.dataProp.turn == map.dataProp.owners.length - 1) {
-                    map.dataProp.turn = 0;
-                } else {
-                    map.dataProp.turn = parseInt(map.dataProp.turn) + 1;
-                }
-            }
+            map.dataProp.turn = calcNextTurn(map.dataProp.turn);
             updateLog("--------------------");
             updateLog("Turn ended.");
             updateLog("--------------------");
@@ -657,7 +651,7 @@ map.getData(function(map_data) {
                     }
                 }
             }
-
+            console.log("turn:", map.dataProp.turn);
             var data = {
                 mapProperties: JSON.stringify(map.dataProp),
                 mapArray: JSON.stringify(map.data),

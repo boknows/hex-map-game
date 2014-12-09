@@ -41,6 +41,7 @@ if($_POST['param']=="updateMap"){
 	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray'], ':mapUnits' => $_POST['mapUnits']));
 }
 if($_POST['param']=="updateAll"){
+	echo $_POST['mapProperties'];
 	$stmt = $db->prepare('UPDATE games SET mapArray = :mapArray, mapProperties = :mapProperties, mapLog = :mapLog, mapUnits = :mapUnits WHERE gameID = :gameID');
 	$stmt->execute(array(':gameID' => $_POST['gameID'], ':mapArray' => $_POST['mapArray'], ':mapProperties' => $_POST['mapProperties'], ':mapLog' => $_POST['mapLog'], ':mapUnits' => $_POST['mapUnits']));
 	echo JSON_encode("Success");
