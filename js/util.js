@@ -701,6 +701,12 @@ function updateLogDisp(hexagonGrid) {
         'font-size': '75%'
     };
     $("#cardDisp").css(style);
+    var style = {
+        left: x0,
+        top: y0 + 225,
+        position: "absolute",
+    };
+    $("#helpBtn").css(style);
     if (map.username == "bo_knows") {
         var style = {
             left: 0,

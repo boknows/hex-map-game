@@ -211,6 +211,7 @@
             <button type="button" id ="updateMap" class="btn btn-success">Update Map</button>
         </div> 
         <textarea id="log" style="width:400px;height:200px" readonly></textarea>
+        <button type="button" id="helpBtn" class="btn btn-lg btn-success">Help</button>
         <table class="table table-striped" id="cardDisp" style="width: 400px;"></table>
         <button type="button" id="cardTrade" class="btn btn-success" style="display:none">Trade in Bonus</button>
         <button type="button" id="cardTradeClose" class="btn btn-danger" style="display:none">Close Cards Window</button>
