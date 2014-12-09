@@ -59,6 +59,24 @@
 	button {
 		margin-top: 3px;
 	}
+    span.glyphicon {
+        font-size: 1.6em;
+        padding: 5px;
+    }
+    .v-align {
+        position: relative;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    .h-align {
+        position: relative;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
 
 	</style>
 </head>
@@ -328,7 +346,37 @@
     <p>Awaiting other players to accept...</p>
     </div>
     
-	
+	<div class="container" id="timeline" style="width: 400px">
+        <div class="row">
+            <div class="col-md-12" style="border-bottom: medium solid #000000;">
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    Unit Placement
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    Attack
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    Fortify
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-arrow-right v-align"></span>
+                </div>
+                <div style="display:inline-block">
+                    <span class="glyphicon glyphicon-unchecked h-align"></span><br>
+                    End Turn
+                </div>
+            </div>
+        </div>
+    </div>
 	
 </body>
 <script>

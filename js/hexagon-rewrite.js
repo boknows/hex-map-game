@@ -778,7 +778,7 @@ map.getData(function(map_data) {
     //UI - Players List
     function showPlayers() {
         var x0 = hexagonGrid.side * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left + 100;
-        var y0 = 25;
+        var y0 = 65;
         for (var i = 0; i < map.dataProp.colors.length; i++) {
             //Draw hex representing player's color
             var numberOfSides = 6,

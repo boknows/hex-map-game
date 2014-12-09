@@ -678,7 +678,7 @@ function updateLogDisp(hexagonGrid) {
     //Calc player list length to determine start point of msg log
     var x0 = hexagonGrid.side * (map.dataProp.cols) + map.canvas.getBoundingClientRect().left + 200;
 
-    var y0 = 25 + ((hexagonGrid.height / 1.5) * map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
+    var y0 = 65 + ((hexagonGrid.height / 1.5) * map.dataProp.owners.length) + hexagonGrid.canvasOriginY + 20;
     var style = {
         left: x0,
         top: y0,
@@ -707,6 +707,13 @@ function updateLogDisp(hexagonGrid) {
         position: "absolute",
     };
     $("#helpBtn").css(style);
+    var style = {
+        left: x0,
+        top: 15,
+        position: "absolute",
+    };
+    $("#timeline").css(style);
+
     if (map.username == "bo_knows") {
         var style = {
             left: 0,
